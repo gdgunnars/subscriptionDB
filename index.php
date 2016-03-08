@@ -7,13 +7,16 @@ require_once('class.sql.php');
   $sql_ComboPayment = new SQL;
   $sql_ComboSubscription = new SQL;
 
+  $boxers_list = '';
   $arr_boxers = $sql_boxers->list_boxers();
   foreach($arr_boxers as $k=>$v){
-    if ($v[2] == '111913209'){
-      $boxers_list .= '<tr class="danger" align="center"><td>' .$v[1]. ' </td><td>' .$v[2]. '</td><td>' .$v[3]. '</td><td>'.$v[4].'</td><td>' .$v[5]. '</td></tr>';
-    }
-    else
-      $boxers_list .= '<tr align="center"><td>' .$v[1]. ' </td><td>' .$v[2]. '</td><td>' .$v[3]. '</td><td>'.$v[4].'</td><td>' .$v[5]. '</td></tr>';
+      $boxers_list .= '<tr>
+                        <td>'.$v[0].'</td>
+                        <td>'.$v[1].'</td>
+                        <td>'.$v[2].'</td>
+                        <td>'.$v[3].'</td>
+                        <td>'.$v[4].'</td>
+                      </tr>';
   }
 
   $boxerCombo = $sql_ComboBoxer->select_boxerCombo();
@@ -29,7 +32,17 @@ require_once('class.sql.php');
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="css/hfh-mgmt.css"
+    <link rel="stylesheet" type="text/css" href="css/hfh-mgmt.css">
+    <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('#boxersTable').DataTable();
+      } );
+      </script>
     <!-- Optional Bootstrap theme -->
 
 </head>
@@ -50,7 +63,7 @@ require_once('class.sql.php');
       <ul class="nav navbar-nav">
         <li class="active"><a href="#tableBoxers">Yfirlit <span class="sr-only">(current)</span></a></li>
         <li><a href="#addBoxer" data-toggle="modal" data-target="#addBoxer">Nýskrá iðkanda</a></li>
-        <li><a href="#updatePayment" data-toggle="modal" data-target="#updatePayment">Uppfæra áskrift</a></li>
+        <li><a href="#updatePayment" data-toggle="modal" data-target="#updatePayment">Kaupa Áskrift</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Senda tilkynningu <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
@@ -69,19 +82,20 @@ require_once('class.sql.php');
 
 <h1><center> HFH Áskriftar Umsjón </center></h1>
 <div class="container">
-    <table class="table table-striped table-hover" id="tableBoxers">
-      <thead>
+  <table id="boxersTable" class="table table-striped table-hover">
+    <thead>
         <tr>
-          <th><center> Name </center></th>
-          <th><center> SSN </center></th>
-          <th><center> Phone </center></th>
-          <th><center> eMail </center></th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>SSN</th>
+            <th>Phone</th>
+            <th>Email</th>
         </tr>
-      </thead>
-      <tbody>
-        <?php print $boxers_list; ?>
-      </tbody>
-    </table>
+    </thead>
+    <tbody>
+          <?php print UTF8_encode($boxers_list); ?>
+    </tbody>
+  </table>
 </div>
 
 <div class="container">
@@ -153,14 +167,6 @@ require_once('class.sql.php');
               </div>
             </div>
             <div class="form-group">
-              <label for="select" class="col-lg-2 control-label">Hópur</label>
-              <div class="col-lg-10">
-                <select class="form-control" id="select" required>
-                  <?php print $groupCombo; ?>
-                </select>
-              </div>
-            </div>
-            <div class="form-group">
               <label for="inputPhone" class="col-lg-2 control-label">Sími</label>
               <div class="col-lg-10">
                 <input type="tel" class="form-control" id="inputPhone" placeholder="símanúmer t.d. 1231234" >
@@ -170,28 +176,6 @@ require_once('class.sql.php');
               <label for="inputEmail" class="col-lg-2 control-label">Netfang</label>
               <div class="col-lg-10">
                 <input type="email" class="form-control" id="inputEmail" placeholder="jon@gmail.com">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="select" class="col-lg-2 control-label">Greiðslumáti</label>
-              <div class="col-lg-10">
-                <select class="form-control" id="select">
-                  <?php print $paymentCombo; ?>
-                </select>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="select" class="col-lg-2 control-label">Tegund áskriftar</label>
-              <div class="col-lg-10">
-                <select class="form-control" id="select">
-                  <?php print $subscriptionCombo; ?>
-                </select>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="inputDate" class="col-lg-2 control-label"> Dagsettning kaupa </label>
-              <div class="col-lg-10">
-                <input type="date" class="form-control" id="inputDate" placeholder="" required>
               </div>
             </div>
             <div class="form-group">
@@ -216,7 +200,7 @@ require_once('class.sql.php');
               <div class="col-lg-10 col-lg-offset-2">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="reset" class="btn btn-danger">Hreinsa</button>
-                <button type="submit" class="btn btn-primary">Uppfæra áskrift</button>
+                <button type="submit" class="btn btn-primary">Skrá Iðkanda</button>
               </div>
             </div>
           </fieldset>
@@ -304,8 +288,6 @@ require_once('class.sql.php');
     </div>
   </div>
 </div>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 </body>
 </html>
