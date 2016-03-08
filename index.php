@@ -86,10 +86,10 @@ require_once('class.sql.php');
     <thead>
         <tr>
             <th>ID</th>
-            <th>Name</th>
-            <th>SSN</th>
-            <th>Phone</th>
-            <th>Email</th>
+            <th>Nafn</th>
+            <th>Kennitala</th>
+            <th>Sími</th>
+            <th>Netfang</th>
         </tr>
     </thead>
     <tbody>
