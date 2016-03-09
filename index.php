@@ -6,17 +6,32 @@ require_once('class.sql.php');
   $sql_ComboGroup = new SQL;
   $sql_ComboPayment = new SQL;
   $sql_ComboSubscription = new SQL;
+  if(isset($_POST['addBoxer'])) {
+    $sql_add_boxer = new SQL;
+    $name = $_POST['name'];
+    $kt = $_POST['kt'];
+    $phone = $_POST['phone'];
+    $email = $_POST['email'];
+    $contact_name = $_POST['contact_name'];
+    $contact_phone = $_POST['contact_phone'];
+    $contact_email = $_POST['contact_email'];
+    if($sql_add_boxer->add_boxer(utf8_decode($name), utf8_decode($kt), utf8_decode($phone), utf8_decode($email), utf8_decode($contact_name), utf8_decode($contact_phone), utf8_decode($contact_email))) {
+      print ('<div class="alert alert-dismissible alert-success">  <button type="button" class="close" data-dismiss="alert">x</button>  <strong>Iðkandi hefur verið skráður</strong>  </div>');
+    } else {
+        print ('<div class="alert alert-dismissible alert-danger">  <button type="button" class="close" data-dismiss="alert">x</button>  <strong>Obbosí!</strong> einhvað fór úrskeiðis, reyndu aftur.  </div>');
+      }
+  }
 
   $boxers_list = '';
   $arr_boxers = $sql_boxers->list_boxers();
   foreach($arr_boxers as $k=>$v){
-      $boxers_list .= '<tr>
-                        <td>'.$v[0].'</td>
-                        <td>'.$v[1].'</td>
-                        <td>'.$v[2].'</td>
-                        <td>'.$v[3].'</td>
-                        <td>'.$v[4].'</td>
-                      </tr>';
+      $boxers_list .= "<tr class='clickable-row' data-href='user.php?boxerID=$v[0]' >
+                        <td> $v[0] </td>
+                        <td> $v[1] </td>
+                        <td> $v[2] </td>
+                        <td> $v[3] </td>
+                        <td> $v[4] </td>
+                      </tr>";
   }
 
   $boxerCombo = $sql_ComboBoxer->select_boxerCombo();
@@ -35,7 +50,7 @@ require_once('class.sql.php');
     <link rel="stylesheet" type="text/css" href="css/hfh-mgmt.css">
     <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-
+    <!-- data tables stuff -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.css"/>
     <script type="text/javascript" src="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.js"></script>
     <script>
@@ -43,6 +58,12 @@ require_once('class.sql.php');
         $('#boxersTable').DataTable();
       } );
       </script>
+      <script>
+        $(document).ready(function($) {
+          $(".clickable-row").click(function() {
+              window.document.location = $(this).data("href");
+          });
+        });</script>
     <!-- Optional Bootstrap theme -->
 
 </head>
@@ -99,24 +120,6 @@ require_once('class.sql.php');
 </div>
 
 <div class="container">
-  <div class="row">
-    <div class="col-md-6">
-      <ul class="nav nav-tabs" id="tilkynningar">
-        <li class="active"><a href="#mail" data-toggle="tab" aria-expanded="true">Senda mail</a></li>
-        <li class=""><a href="#sms" data-toggle="tab" aria-expanded="false">Senda SMS</a></li>
-      </ul>
-      <div id="myTabContent" class="tab-content">
-        <div class="tab-pane fade active in" id="mail">
-          <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
-        </div>
-        <div class="tab-pane fade" id="sms">
-          <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="container">
   <div class ="navbar navbar-default navbar-fixed-bottom" role="navigation">
     <div class="containter">
       <div class ="navbar-text pull-left">
@@ -152,55 +155,55 @@ require_once('class.sql.php');
         <h4 class="modal-title" id="addBoxerLabel">Bæta við Iðkanda</h4>
       </div>
       <div class="modal-body">
-        <form class="form-horizontal" id="addBoxer">
+        <form class="form-horizontal" id="addBoxer" method="POST" action="">
           <fieldset>
             <div class="form-group">
               <label for="inputName" class="col-lg-2 control-label">Nafn</label>
-              <div class="col-lg-10">
-                <input type="text" class="form-control" id="inputName" placeholder="Jon Jonsson" required>
+              <div class="col-lg-8">
+                <input type="text" class="form-control" id="inputName" name="name" placeholder="Jon Jonsson" required>
               </div>
             </div>
             <div class="form-group">
               <label for="inputSSN" class="col-lg-2 control-label">Kennitala</label>
-              <div class="col-lg-10">
-                <input type="number" class="form-control" id="inputSSN" placeholder="Kennitala t.d. 0102034399" maxlength="10" required>
+              <div class="col-lg-8">
+                <input type="number" class="form-control" id="inputSSN" name="kt" placeholder="Kennitala t.d. 0102034399" maxlength="10" required>
               </div>
             </div>
             <div class="form-group">
               <label for="inputPhone" class="col-lg-2 control-label">Sími</label>
-              <div class="col-lg-10">
-                <input type="tel" class="form-control" id="inputPhone" placeholder="símanúmer t.d. 1231234" >
+              <div class="col-lg-8">
+                <input type="tel" class="form-control" id="inputPhone" name="phone" placeholder="símanúmer t.d. 1231234" >
               </div>
             </div>
             <div class="form-group">
               <label for="inputEmail" class="col-lg-2 control-label">Netfang</label>
-              <div class="col-lg-10">
-                <input type="email" class="form-control" id="inputEmail" placeholder="jon@gmail.com">
+              <div class="col-lg-8">
+                <input type="email" class="form-control" id="inputEmail" name="email" placeholder="jon@gmail.com">
               </div>
             </div>
             <div class="form-group">
               <label for="inputContactName" class="col-lg-2 control-label">Tengiliður</label>
-              <div class="col-lg-10">
-                <input type="text" class="form-control" id="inputContectName" placeholder="Jóna Jónsdóttir">
+              <div class="col-lg-8">
+                <input type="text" class="form-control" id="inputContactName" name="contact_name" placeholder="Jóna Jónsdóttir">
               </div>
             </div>
             <div class="form-group">
               <label for="inputContactPhone" class="col-lg-2 control-label">Sími tengiliðar</label>
-              <div class="col-lg-10">
-                <input type="tel" class="form-control" id="inputContactPhone" placeholder="símanúmer">
+              <div class="col-lg-8">
+                <input type="tel" class="form-control" id="inputContactPhone" name="contact_phone" placeholder="símanúmer">
               </div>
             </div>
             <div class="form-group">
               <label for="inputContactEmail" class="col-lg-2 control-label">Netfang tengiliðar</label>
-              <div class="col-lg-10">
-                <input type="email" class="form-control" id="inputContactEmail" placeholder="jona@gmail.com">
+              <div class="col-lg-8">
+                <input type="email" class="form-control" id="inputContactEmail" name="contact_email" placeholder="jona@gmail.com">
               </div>
             </div>
             <div class="form-group">
               <div class="col-lg-10 col-lg-offset-2">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="reset" class="btn btn-danger">Hreinsa</button>
-                <button type="submit" class="btn btn-primary">Skrá Iðkanda</button>
+                <button type="submit" name="addBoxer" class="btn btn-primary">Skrá Iðkanda</button>
               </div>
             </div>
           </fieldset>
