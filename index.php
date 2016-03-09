@@ -22,18 +22,19 @@ require_once('class.sql.php');
       }
   }
 
-  $boxers_list = '';
   $arr_boxers = $sql_boxers->list_boxers();
-  foreach($arr_boxers as $k=>$v){
-      $boxers_list .= "<tr class='clickable-row' data-href='user.php?boxerID=$v[0]' >
-                        <td> $v[0] </td>
-                        <td> $v[1] </td>
-                        <td> $v[2] </td>
-                        <td> $v[3] </td>
-                        <td> $v[4] </td>
-                      </tr>";
-  }
-
+  if(isset($arr_boxers )){
+    $boxers_list = '';
+    foreach($arr_boxers as $k=>$v){
+        $boxers_list .= "<tr class='clickable-row' data-href='user.php?boxerID=$v[0]' >
+                          <td> $v[0] </td>
+                          <td> $v[1] </td>
+                          <td> $v[2] </td>
+                          <td> $v[3] </td>
+                          <td> $v[4] </td>
+                        </tr>";
+    }
+}
   $boxerCombo = $sql_ComboBoxer->select_boxerCombo();
   $groupCombo = $sql_ComboGroup->select_groupCombo();
   $paymentCombo = $sql_ComboPayment->select_paymentCombo();
@@ -114,7 +115,13 @@ require_once('class.sql.php');
         </tr>
     </thead>
     <tbody>
-          <?php print UTF8_encode($boxers_list); ?>
+    <?php
+      if(!isset($boxers_list)){
+        print '<p class="text-danger">There was a problem connecting to the database, contact administrator</p>';
+      } else {
+          print UTF8_encode($boxers_list);
+      }
+    ?>
     </tbody>
   </table>
 </div>
