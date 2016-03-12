@@ -26,9 +26,9 @@ require_once('class.sql.php');
   if(isset($arr_boxers )){
     $boxers_list = '';
     foreach($arr_boxers as $k=>$v){
-        $boxers_list .= "<tr class='clickable-row' data-href='user.php?boxerID=$v[0]' >
+        $boxers_list .= "<tr>
                           <td> $v[0] </td>
-                          <td> $v[1] </td>
+                          <td><a href='user.php?boxerID=$v[0]'><strong> $v[1] </strong></a></td>
                           <td> $v[2] </td>
                           <td> $v[3] </td>
                           <td> $v[4] </td>
@@ -59,12 +59,6 @@ require_once('class.sql.php');
         $('#boxersTable').DataTable();
       } );
       </script>
-      <script>
-        $(document).ready(function($) {
-          $(".clickable-row").click(function() {
-              window.document.location = $(this).data("href");
-          });
-        });</script>
     <!-- Optional Bootstrap theme -->
 
 </head>
