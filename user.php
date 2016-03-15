@@ -13,10 +13,7 @@
       $kt = $v[2];
       $phone = $v[3];
       $email = UTF8_encode($v[4]);
-      if(empty($v[5]) || $v[5] == 0){
-        $contact_name = "n/a"; }
-      else {
-        $contact_name = UTF8_encode($v[5]); }
+      $contact_name = UTF8_encode($v[5]);
       $contact_phone = $v[6];
       $contact_email = UTF8_encode($v[7]);
     }
@@ -41,16 +38,9 @@
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="css/hfh-mgmt.css">
-    <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
-    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <!-- Optional Bootstrap theme -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.css"/>
-    <script type="text/javascript" src="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.js"></script>
-    <script>
-      $(document).ready(function() {
-        $('#boxerInfo').DataTable();
-      } );
-      </script>
+
 
 </head>
 <body>
@@ -70,7 +60,6 @@
         <ul class="nav navbar-nav">
           <li><a href="index.php">Yfirlit <span class="sr-only">(current)</span></a></li>
           <li><a href="#addBoxer" data-toggle="modal" data-target="#addBoxer">Nýskrá iðkanda</a></li>
-          <li><a href="#updatePayment" data-toggle="modal" data-target="#updatePayment">Kaupa Áskrift</a></li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Senda tilkynningu <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
@@ -80,6 +69,9 @@
             </ul>
           </li>
           <li class="active"><a><?php print $name ?> <span class="sr-only">(current)</span></a></li>
+          <!--<li><a href="#updatePayment" data-toggle="modal" data-target="#updatePayment">Kaupa Áskrift</a></li>-->
+          <li><a href="#addSubscription" class="btn btn-success" role="button"> Kaupa Áskrift </a></li>
+          <li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li><a href="http://www.hfh.is">Vefsíða HFH</a></li>
@@ -134,6 +126,15 @@
       </table>
     </div>
   </div>
-  <script src="js/bootstrap.min.js"></script>
-</body
+</body>
+<!-- Scripts ---->
+<script src="js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#boxerInfo').DataTable();
+  } );
+  </script>
 </html>
