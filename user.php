@@ -13,7 +13,10 @@
       $kt = $v[2];
       $phone = $v[3];
       $email = UTF8_encode($v[4]);
-      $contact_name = UTF8_encode($v[5]);
+      if(empty($v[5]) || $v[5] == 0){
+        $contact_name = "n/a"; }
+      else {
+        $contact_name = UTF8_encode($v[5]); }
       $contact_phone = $v[6];
       $contact_email = UTF8_encode($v[7]);
     }
@@ -41,6 +44,13 @@
     <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <!-- Optional Bootstrap theme -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('#boxerInfo').DataTable();
+      } );
+      </script>
 
 </head>
 <body>
@@ -58,7 +68,7 @@
 
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#tableBoxers">Yfirlit <span class="sr-only">(current)</span></a></li>
+          <li><a href="index.php">Yfirlit <span class="sr-only">(current)</span></a></li>
           <li><a href="#addBoxer" data-toggle="modal" data-target="#addBoxer">Nýskrá iðkanda</a></li>
           <li><a href="#updatePayment" data-toggle="modal" data-target="#updatePayment">Kaupa Áskrift</a></li>
           <li class="dropdown">
@@ -69,6 +79,7 @@
               <li><a href="#contact" data-toggle="modal" data-target="#contact">Senda tilkynningu á vefstjóra</a></li>
             </ul>
           </li>
+          <li class="active"><a><?php print $name ?> <span class="sr-only">(current)</span></a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li><a href="http://www.hfh.is">Vefsíða HFH</a></li>
@@ -78,23 +89,28 @@
   </nav>
   <div class="container">
     <div class="col-md-3">
-      <img src='static/img/empty-img.png' width='' height='300'/>
+      <br/>
+      <img src='img/empty-img.png' width='' height='300'/>
+      <?php
+        if(!isset($boxer_info)){
+          print '<h3 class="text-danger">Engar Upplýsingar fundust um þennan notanda</h3>';
+        } else {
+          print "
+          <h4> $name </h4>
+          <ul>
+            <li>Kennitala: $kt </li>
+            <li>Sími: $phone </li>
+            <li>Netfang: $email </li>
+          </ul>
+          <h5>- Tengiliður</h5>
+          <ul>
+            <li>Nafn: $contact_name</li>
+            <li>Sími: $contact_phone</li>
+            <li>Netfang: $contact_email</li>
+          </ul>";
+         } ?>
     </div>
     <div class="col-md-9">
-        <?php
-          if(!isset($boxer_info)){
-            print '<h2 class="text-danger">Engar Upplýsingar fundust um þennan notanda</h2>';
-          } else {
-            print "
-            <h3> $name </h3>
-            <ul>
-              <li>Kennitala: $kt </li>
-              <li>Sími: $phone </li>
-              <li>Netfang: $email </li>
-            </ul>";
-           } ?>
-    </div>
-    <div class="col-md-12">
       <h3><center> Greiðsluupplýsingar</center></h3>
       <table id="boxerInfo" class="table table-striped table-hover">
         <thead>
@@ -118,5 +134,6 @@
       </table>
     </div>
   </div>
+  <script src="js/bootstrap.min.js"></script>
 </body
 </html>
