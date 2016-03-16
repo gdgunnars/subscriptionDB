@@ -2,10 +2,6 @@
 require_once('class.sql.php');
 
   $sql_boxers = new SQL();
-  $sql_ComboBoxer = new SQL;
-  $sql_ComboGroup = new SQL;
-  $sql_ComboPayment = new SQL;
-  $sql_ComboSubscription = new SQL;
   if(isset($_POST['addBoxer'])) {
     $sql_add_boxer = new SQL;
     $name = $_POST['name'];
@@ -35,10 +31,6 @@ require_once('class.sql.php');
                         </tr>";
     }
 }
-  $boxerCombo = $sql_ComboBoxer->select_boxerCombo();
-  $groupCombo = $sql_ComboGroup->select_groupCombo();
-  $paymentCombo = $sql_ComboPayment->select_paymentCombo();
-  $subscriptionCombo = $sql_ComboSubscription->select_subscriptionCombo();
 ?>
 <!DOCTYPE html>
 <html>
@@ -53,12 +45,7 @@ require_once('class.sql.php');
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <!-- data tables stuff -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.css"/>
-    <script type="text/javascript" src="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.js"></script>
-    <script>
-      $(document).ready(function() {
-        $('#boxersTable').DataTable();
-      } );
-      </script>
+
     <!-- Optional Bootstrap theme -->
 
 </head>
@@ -77,9 +64,8 @@ require_once('class.sql.php');
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#tableBoxers">Yfirlit <span class="sr-only">(current)</span></a></li>
+        <li class="active"><a href="">Yfirlit <span class="sr-only">(current)</span></a></li>
         <li><a href="#addBoxer" data-toggle="modal" data-target="#addBoxer">Nýskrá iðkanda</a></li>
-        <li><a href="#updatePayment" data-toggle="modal" data-target="#updatePayment">Kaupa Áskrift</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Senda tilkynningu <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
@@ -167,7 +153,7 @@ require_once('class.sql.php');
             <div class="form-group">
               <label for="inputSSN" class="col-lg-2 control-label">Kennitala</label>
               <div class="col-lg-8">
-                <input type="number" class="form-control" id="inputSSN" name="kt" placeholder="Kennitala t.d. 0102034399" maxlength="10" required>
+                <input type="number" class="form-control" id="inputSSN" name="kt" placeholder="Kennitala t.d. 0102034399" maxlength="10" pattern="((0[1-9])|([12][0-9])|(3[01]))((0[1-9])|(1[0-2]))([0-9]{2})[0-9]{4}" required>
               </div>
             </div>
             <div class="form-group">
@@ -182,6 +168,7 @@ require_once('class.sql.php');
                 <input type="email" class="form-control" id="inputEmail" name="email" placeholder="jon@gmail.com">
               </div>
             </div>
+            <hr>
             <div class="form-group">
               <label for="inputContactName" class="col-lg-2 control-label">Tengiliður</label>
               <div class="col-lg-8">
@@ -216,64 +203,6 @@ require_once('class.sql.php');
   </div>
 </div>
 
-
-<!-- Modal-updateSubscription -->
-<div class="modal fade" id="updatePayment" tabindex="-1" role="dialog" aria-labelledby="updatePaymentLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="updatePaymentLabel">Uppfæra áskrift</h4>
-      </div>
-      <div class="modal-body">
-        <form class="form-horizontal" id="updatePayment">
-          <fieldset>
-            <div class="form-group">
-              <label for="inputName" class="col-lg-2 control-label">Iðkandi</label>
-              <div class="col-lg-10">
-                <select class="form-control" id="select">
-                  <?php print $boxerCombo; ?>
-                </select>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="select" class="col-lg-2 control-label">Greiðslumáti</label>
-              <div class="col-lg-10">
-                <select class="form-control" id="select">
-                  <?php print $paymentCombo; ?>
-                </select>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="select" class="col-lg-2 control-label">Tegund áskriftar</label>
-              <div class="col-lg-10">
-                <select class="form-control" id="select">
-                  <?php print $subscriptionCombo; ?>
-                </select>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="inputDate" class="col-lg-2 control-label"> Dagsettning kaupa </label>
-              <div class="col-lg-10">
-                <input type="date" class="form-control" id="inputDate" placeholder="" required>
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-lg-10 col-lg-offset-2">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="reset" class="btn btn-danger">Hreinsa</button>
-                <button type="submit" class="btn btn-primary">Uppfæra áskrift</button>
-              </div>
-            </div>
-          </fieldset>
-        </form>
-      </div>
-      <div class="modal-footer">
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- Modal -->
 <div class="modal fade" id="contact" tabindex="-1" role="dialog" aria-labelledby="contactLabel">
   <div class="modal-dialog" role="document">
@@ -293,5 +222,11 @@ require_once('class.sql.php');
   </div>
 </div>
     <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('#boxersTable').DataTable();
+      } );
+      </script>
 </body>
 </html>

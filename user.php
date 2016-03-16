@@ -26,7 +26,29 @@
           $subscriptions .= "<tr><td>$v[0]</td><td>$v[2]</td><td>$v[3]</td><td>$v[4]</td><td>$v[5]</td><td>$v[6]</td></tr>";
         }
     }
+    if(isset($_POST['addSubscription'])) {
+      $sql_add_subscription = new SQL;
+      /*$name = $_POST['id'];
+      $kt = $_POST['kt'];
+      $phone = $_POST['phone'];
+      $email = $_POST['email'];
+      $contact_name = $_POST['contact_name'];
+      $contact_phone = $_POST['contact_phone'];
+      $contact_email = $_POST['contact_email'];
+      if($sql_add_boxer->add_boxer(utf8_decode($name), utf8_decode($kt), utf8_decode($phone), utf8_decode($email), utf8_decode($contact_name), utf8_decode($contact_phone), utf8_decode($contact_email))) {
+        print ('<div class="alert alert-dismissible alert-success">  <button type="button" class="close" data-dismiss="alert">x</button>  <strong>Iðkandi hefur verið skráður</strong>  </div>');
+      } else {
+          print ('<div class="alert alert-dismissible alert-danger">  <button type="button" class="close" data-dismiss="alert">x</button>  <strong>Obbosí!</strong> einhvað fór úrskeiðis, reyndu aftur.  </div>');
+        }*/
+        print "got the add";
+    }
   }
+  $sql_ComboGroup = new SQL;
+  $sql_ComboPaymentType = new SQL;
+  $sql_ComboSubscriptionType = new SQL;
+  $groupCombo = $sql_ComboGroup->select_groupCombo();
+  $paymentCombo = $sql_ComboPaymentType->select_paymentTypeCombo();
+  $subscriptionCombo = $sql_ComboSubscriptionType->select_subscriptionTypeCombo();
 }
 ?>
 <!DOCTYPE html>
@@ -38,6 +60,8 @@
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="css/hfh-mgmt.css">
+    <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <!-- Optional Bootstrap theme -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.css"/>
 
@@ -69,9 +93,8 @@
             </ul>
           </li>
           <li class="active"><a><?php print $name ?> <span class="sr-only">(current)</span></a></li>
-          <!--<li><a href="#updatePayment" data-toggle="modal" data-target="#updatePayment">Kaupa Áskrift</a></li>-->
-          <li><a href="#addSubscription" class="btn btn-success" role="button"> Kaupa Áskrift </a></li>
-          <li>
+          <li class="active"><a href="#addSubscription" class="btn btn-success" role="button" data-toggle="modal" data-target="#addSubscription"> Kaupa Áskrift </a></li>
+          <li class="active"><a href="#addSubscription" class="btn btn-warning" role="button" data-toggle="modal" data-target="#addSubscription"> Senda SMS </a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li><a href="http://www.hfh.is">Vefsíða HFH</a></li>
@@ -80,21 +103,24 @@
     </div>
   </nav>
   <div class="container">
+    <div class="row">
+
+    </div>
     <div class="col-md-3">
-      <br/>
+      <input class="btn btn-default" type="button" value="Til baka" onclick="history.back(-1)" />
       <img src='img/empty-img.png' width='' height='300'/>
       <?php
         if(!isset($boxer_info)){
           print '<h3 class="text-danger">Engar Upplýsingar fundust um þennan notanda</h3>';
         } else {
           print "
-          <h4> $name </h4>
+          <h4><strong> $name </strong></h4>
           <ul>
             <li>Kennitala: $kt </li>
             <li>Sími: $phone </li>
             <li>Netfang: $email </li>
           </ul>
-          <h5>- Tengiliður</h5>
+          <h5><strong>- Tengiliður</strong></h5>
           <ul>
             <li>Nafn: $contact_name</li>
             <li>Sími: $contact_phone</li>
@@ -126,11 +152,83 @@
       </table>
     </div>
   </div>
+  <!-- Modal-addSubscription-->
+  <div class="modal fade" id="addSubscription" tabindex="-1" role="dialog" aria-labelledby="addSubscriptionLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="addSubscriptionLabel">Kaupa áskrift</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal" id="addSubscription" method="POST" action="">
+            <fieldset>
+              <div class="form-group">
+                <label for="inputID" class="col-lg-2 control-label">ID</label>
+                <div class="col-lg-10">
+                  <input type="text" class="form-control" id="inputID" name="input_id" value="<?php print $id; ?>" disabled>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputName" class="col-lg-2 control-label">Iðkandi</label>
+                <div class="col-lg-10">
+                  <input type="text" class="form-control" id="inputName" name="input_name" value="<?php print $name; ?>" disabled>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="select" class="col-lg-2 control-label">Hópur</label>
+                <div class="col-lg-10">
+                  <select class="form-control" id="groupID" name="group_id" required>
+                    <?php print UTF8_encode($groupCombo); ?>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="select" class="col-lg-2 control-label">Greiðslumáti</label>
+                <div class="col-lg-10">
+                  <select class="form-control" id="paymentTypeID" name="paymentType_id" required>
+                    <?php print UTF8_encode($paymentCombo); ?>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="select" class="col-lg-2 control-label">Tegund áskriftar</label>
+                <div class="col-lg-10">
+                  <select class="form-control" id="subscriptionTypeID" name="SubscriptionType_id" required>
+                    <?php print UTF8_encode($subscriptionCombo); ?>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputDate" class="col-lg-2 control-label"> Dagsettning kaupa </label>
+                <div class="col-lg-10">
+                  <input type="date" class="form-control" id="beginDate" name="begin_date"placeholder="" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputDate" class="col-lg-2 control-label"> Gildir til</label>
+                <div class="col-lg-10">
+                  <input type="date" class="form-control" id="endDate" name="end_date" placeholder="" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="reset" class="btn btn-danger">Hreinsa</button>
+                  <button type="submit" name="addSubscription" class="btn btn-primary">Kaupa áskrift</button>
+                </div>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 <!-- Scripts ---->
 <script src="js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
-<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.js"></script>
 <script>
   $(document).ready(function() {

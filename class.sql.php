@@ -107,7 +107,7 @@
 			return $kombo;
 		}
 
-		public function select_paymentCombo() {
+		public function select_paymentTypeCombo() {
 			$query = "call list_payment_types()";
 			$result = mysqli_query($this->connection,$query);
 
@@ -119,8 +119,8 @@
 			return $kombo;
 		}
 
-		public function select_subscriptionCombo() {
-			$query = "call list_subscriptions()";
+		public function select_subscriptionTypeCombo() {
+			$query = "call list_subscription_type()";
 			$result = mysqli_query($this->connection,$query);
 
 			$kombo = utf8_decode('<option selected disabled> Veldu tegund áskriftar </option>');
