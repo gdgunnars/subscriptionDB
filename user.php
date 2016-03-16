@@ -103,11 +103,8 @@
     </div>
   </nav>
   <div class="container">
-    <div class="row">
-
-    </div>
     <div class="col-md-3">
-      <input class="btn btn-default" type="button" value="Til baka" onclick="history.back(-1)" />
+      <input class="btn btn-default back-btn" type="button" value="Til baka" onclick="history.back(-1)" />
       <img src='img/empty-img.png' width='' height='300'/>
       <?php
         if(!isset($boxer_info)){
