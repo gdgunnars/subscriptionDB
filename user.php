@@ -92,7 +92,7 @@
             </ul>
           </li>
           <li class="active"><a>
-              <?php if(!isset($name)){print 'No User';} else print $name ?> 
+              <?php if(!isset($name)){print 'No User';} else print $name ?>
               <span class="sr-only">(current)</span></a></li>
           <li class="active"><a href="#addSubscription" class="btn btn-success" role="button" data-toggle="modal" data-target="#addSubscription"> Kaupa Áskrift </a></li>
           <li class="active"><a href="#addSubscription" class="btn btn-warning" role="button" data-toggle="modal" data-target="#addSubscription"> Senda SMS </a></li>
@@ -104,11 +104,8 @@
     </div>
   </nav>
   <div class="container">
-    <div class="row">
-
-    </div>
     <div class="col-md-3">
-      <input class="btn btn-default" type="button" value="Til baka" onclick="history.back(-1)" />
+      <input class="btn btn-default back-btn" type="button" value="Til baka" onclick="history.back(-1)" />
       <img src='img/empty-img.png' width='' height='300'/>
       <?php
         if(!isset($boxer_info)){

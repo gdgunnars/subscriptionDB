@@ -112,18 +112,6 @@ require_once('class.sql.php');
       <div class ="navbar-text pull-left">
         <p> © <?php echo date("Y");?> Hnefaleikafélag Hafnarfjarðar | <a href="mailto:gdg@gdg.is"> GDG.is <i class="fa fa-envelope"></i></a> </p>
       </div>
-      <div class="col-md-4">
-          Virkni síðu
-          <div class="progress">
-            <div class="progress-bar progress-bar-danger" style="width: 60%"> 60% </div>
-          </div>
-      </div>
-      <div class="col-md-4">
-          Útlit Síðu
-          <div class="progress">
-            <div class="progress-bar progress-bar-success" style="width: 85%"> 85 %</div>
-          </div>
-      </div>
       <div class="navbar-text pull-right">
         <a href="mailto:hfh@hfh.is"><i class="fa fa-envelope fa-2x"></i></a>
         <a href="http://www.facebook.com/hfhafnarfjardar" target="_blank"><i class="fa fa-facebook-square fa-2x"></i></a>
