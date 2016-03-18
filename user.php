@@ -1,10 +1,25 @@
 <?php
+  require_once('class.sql.php');
   if(isset($_GET['boxerID'])) {
   $id = $_GET['boxerID'];
   if(!empty($id)){
-    require_once('class.sql.php');
-    $sql_boxer = new SQL();
+    if(isset($_POST['addSubscription'])) {
+      $sql_add_subscription = new SQL;
+      $id = $_POST['boxer_id'];
+      $group_id = $_POST['group_id'];
+      $paymentType_id = $_POST['paymentType_id'];
+      $subscriptionType_id = $_POST['subscriptionType_id'];
+      $begin_date = date("Y-m-d", strtotime($_POST['begin_date']));
+      $end_date = date("Y-m-d", strtotime($_POST['end_date']));
+      print "$id , $group_id , $paymentType_id , $subscriptionType_id , $begin_date , $end_date";
+      if($sql_add_subscription->add_subscription($id, $group_id, $paymentType_id, $subscriptionType_id, $begin_date, $end_date)) {
+        print ('<div class="alert alert-dismissible alert-success">  <button type="button" class="close" data-dismiss="alert">x</button><strong>Áskrift hefur verið skráð</strong>  </div>');
+      } else {
+          print ('<div class="alert alert-dismissible alert-danger">  <button type="button" class="close" data-dismiss="alert">x</button>  <strong>Obbosí!</strong> einhvað fór úrskeiðis, reyndu aftur.  </div>');
+        }
+    }
 
+    $sql_boxer = new SQL();
     $boxer_info = '';
     $arr_boxers = $sql_boxer->list_full_boxer_info($id);
     foreach($arr_boxers as $k=>$v){
@@ -25,22 +40,6 @@
       foreach($arr_subs as $k=>$v){
           $subscriptions .= "<tr><td>$v[0]</td><td>$v[2]</td><td>$v[3]</td><td>$v[4]</td><td>$v[5]</td><td>$v[6]</td></tr>";
         }
-    }
-    if(isset($_POST['addSubscription'])) {
-      $sql_add_subscription = new SQL;
-      /*$name = $_POST['id'];
-      $kt = $_POST['kt'];
-      $phone = $_POST['phone'];
-      $email = $_POST['email'];
-      $contact_name = $_POST['contact_name'];
-      $contact_phone = $_POST['contact_phone'];
-      $contact_email = $_POST['contact_email'];
-      if($sql_add_boxer->add_boxer(utf8_decode($name), utf8_decode($kt), utf8_decode($phone), utf8_decode($email), utf8_decode($contact_name), utf8_decode($contact_phone), utf8_decode($contact_email))) {
-        print ('<div class="alert alert-dismissible alert-success">  <button type="button" class="close" data-dismiss="alert">x</button>  <strong>Iðkandi hefur verið skráður</strong>  </div>');
-      } else {
-          print ('<div class="alert alert-dismissible alert-danger">  <button type="button" class="close" data-dismiss="alert">x</button>  <strong>Obbosí!</strong> einhvað fór úrskeiðis, reyndu aftur.  </div>');
-        }*/
-        print "got the add";
     }
   }
   $sql_ComboGroup = new SQL;
@@ -92,7 +91,9 @@
               <li><a href="#contact" data-toggle="modal" data-target="#contact">Senda tilkynningu á vefstjóra</a></li>
             </ul>
           </li>
-          <li class="active"><a><?php print $name ?> <span class="sr-only">(current)</span></a></li>
+          <li class="active"><a>
+              <?php if(!isset($name)){print 'No User';} else print $name ?> 
+              <span class="sr-only">(current)</span></a></li>
           <li class="active"><a href="#addSubscription" class="btn btn-success" role="button" data-toggle="modal" data-target="#addSubscription"> Kaupa Áskrift </a></li>
           <li class="active"><a href="#addSubscription" class="btn btn-warning" role="button" data-toggle="modal" data-target="#addSubscription"> Senda SMS </a></li>
         </ul>
@@ -166,13 +167,13 @@
               <div class="form-group">
                 <label for="inputID" class="col-lg-2 control-label">ID</label>
                 <div class="col-lg-10">
-                  <input type="text" class="form-control" id="inputID" name="input_id" value="<?php print $id; ?>" disabled>
+                  <input type="text" class="form-control" id="boxer_id" name="boxer_id" value="<?php echo "$id";?>" readonly />
                 </div>
               </div>
               <div class="form-group">
-                <label for="inputName" class="col-lg-2 control-label">Iðkandi</label>
+                <label for="boxerName" class="col-lg-2 control-label">Iðkandi</label>
                 <div class="col-lg-10">
-                  <input type="text" class="form-control" id="inputName" name="input_name" value="<?php print $name; ?>" disabled>
+                  <input type="text" class="form-control" id="boxerName" name="boxer_name" value="<?php print $name; ?>" disabled>
                 </div>
               </div>
               <div class="form-group">
@@ -186,7 +187,7 @@
               <div class="form-group">
                 <label for="select" class="col-lg-2 control-label">Greiðslumáti</label>
                 <div class="col-lg-10">
-                  <select class="form-control" id="paymentTypeID" name="paymentType_id" required>
+                  <select class="form-control" id="paymentType_id" name="paymentType_id" required>
                     <?php print UTF8_encode($paymentCombo); ?>
                   </select>
                 </div>
@@ -194,7 +195,7 @@
               <div class="form-group">
                 <label for="select" class="col-lg-2 control-label">Tegund áskriftar</label>
                 <div class="col-lg-10">
-                  <select class="form-control" id="subscriptionTypeID" name="SubscriptionType_id" required>
+                  <select class="form-control" id="subscriptionType_id" name="subscriptionType_id" required>
                     <?php print UTF8_encode($subscriptionCombo); ?>
                   </select>
                 </div>
@@ -202,13 +203,13 @@
               <div class="form-group">
                 <label for="inputDate" class="col-lg-2 control-label"> Dagsettning kaupa </label>
                 <div class="col-lg-10">
-                  <input type="date" class="form-control" id="beginDate" name="begin_date"placeholder="" required>
+                  <input type="date" class="form-control" id="begin_date" name="begin_date"placeholder="" required>
                 </div>
               </div>
               <div class="form-group">
                 <label for="inputDate" class="col-lg-2 control-label"> Gildir til</label>
                 <div class="col-lg-10">
-                  <input type="date" class="form-control" id="endDate" name="end_date" placeholder="" required>
+                  <input type="date" class="form-control" id="end_date" name="end_date" placeholder="" required>
                 </div>
               </div>
               <div class="form-group">
