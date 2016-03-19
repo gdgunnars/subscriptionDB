@@ -3,22 +3,28 @@
   if(isset($_GET['boxerID'])) {
   $id = $_GET['boxerID'];
   if(!empty($id)){
-    if(isset($_POST['addSubscription'])) {
-      $sql_add_subscription = new SQL;
-      $id = $_POST['boxer_id'];
-      $group_id = $_POST['group_id'];
-      $paymentType_id = $_POST['paymentType_id'];
-      $subscriptionType_id = $_POST['subscriptionType_id'];
-      $begin_date = date("Y-m-d", strtotime($_POST['begin_date']));
-      $end_date = date("Y-m-d", strtotime($_POST['end_date']));
-      print "$id , $group_id , $paymentType_id , $subscriptionType_id , $begin_date , $end_date";
-      if($sql_add_subscription->add_subscription($id, $group_id, $paymentType_id, $subscriptionType_id, $begin_date, $end_date)) {
+  /*if(isset($_POST['addSubscription'])) {
+    $sql_add_subscription = new SQL;
+    $id = $_POST['boxer_id'];
+    $group_id = $_POST['group_id'];
+    $paymentType_id = $_POST['paymentType_id'];
+    $subscriptionType_id = $_POST['subscriptionType_id'];
+    $begin_date = date("Y-m-d", strtotime($_POST['begin_date']));
+    $end_date = date("Y-m-d", strtotime($_POST['end_date']));
+    print "$id , $group_id , $paymentType_id , $subscriptionType_id , $begin_date , $end_date";
+    if($sql_add_subscription->add_subscription($id, $group_id, $paymentType_id, $subscriptionType_id, $begin_date, $end_date)) {
+      print ('<div class="alert alert-dismissible alert-success">  <button type="button" class="close" data-dismiss="alert">x</button><strong>Áskrift hefur verið skráð</strong>  </div>');
+    } else {
+        print ('<div class="alert alert-dismissible alert-danger">  <button type="button" class="close" data-dismiss="alert">x</button>  <strong>Obbosí!</strong> einhvað fór úrskeiðis, reyndu aftur.  </div>');
+      }
+    }*/
+    if(isset($_GET['add'])) {
+      if($_GET['add']==1) {
         print ('<div class="alert alert-dismissible alert-success">  <button type="button" class="close" data-dismiss="alert">x</button><strong>Áskrift hefur verið skráð</strong>  </div>');
       } else {
           print ('<div class="alert alert-dismissible alert-danger">  <button type="button" class="close" data-dismiss="alert">x</button>  <strong>Obbosí!</strong> einhvað fór úrskeiðis, reyndu aftur.  </div>');
         }
     }
-
     $sql_boxer = new SQL();
     $boxer_info = '';
     $arr_boxers = $sql_boxer->list_full_boxer_info($id);
@@ -159,7 +165,7 @@
           <h4 class="modal-title" id="addSubscriptionLabel">Kaupa áskrift</h4>
         </div>
         <div class="modal-body">
-          <form class="form-horizontal" id="addSubscription" method="POST" action="">
+          <form class="form-horizontal" id="addSubscription" method="POST" action="add_subscription.php">
             <fieldset>
               <div class="form-group">
                 <label for="inputID" class="col-lg-2 control-label">ID</label>
