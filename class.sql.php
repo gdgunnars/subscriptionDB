@@ -34,7 +34,8 @@
 			while ($row = mysqli_fetch_row($result)) {
 				$boxers_arr[] = $row;
 			}
-			return $boxers_arr;
+			if(!empty($boxers_arr))
+					return $boxers_arr;
 		}
 
 		public function list_full_boxer_info($id){
@@ -44,7 +45,8 @@
 			while ($row = mysqli_fetch_row($result)){
 				$boxer_info[] = $row;
 			}
-			return $boxer_info;
+			if(!empty($boxer_info))
+				return $boxer_info;
 		}
 
 		public function list_groups() {
@@ -150,8 +152,8 @@
 		 * ---------- Allar update skipanir koma hér ------------------------
 		 */
 
-		public function update_subscription($id,$fk_payment,$fk_subscription,$date) {
-			$query = sprintf ("call update_subscription('%s','%s','%s','%s')",$id,$fk_payment,$fk_subscription,$date);
+		public function update_img($id,$path) {
+			$query = sprintf ("call update_img('%s','%s')",$id,$path);
 			$result = mysqli_query ($this->connection,$query);
 			if(mysqli_affected_rows($this->connection) == 1) {
 				return true;
@@ -166,8 +168,8 @@
 		 *
 		 * ---------- Allar Add skipanir koma hér ------------------------
 		 */
-		 public function add_boxer($name, $kt, $phone, $email, $contact_name, $contact_phone, $contact_email) {
-			 $query = sprintf("call add_boxer('%s','%s','%s','%s','%s','%s','%s')", $name, $kt, $phone, $email, $contact_name, $contact_phone, $contact_email);
+		 public function add_boxer($name, $kt, $phone, $email, $image, $contact_name, $contact_phone, $contact_email) {
+			 $query = sprintf("call add_boxer('%s','%s','%s','%s','%s','%s','%s','%s')", $name, $kt, $phone, $email, $image, $contact_name, $contact_phone, $contact_email);
 			 $result = mysqli_query($this->connection,$query);
 			 if(mysqli_affected_rows($this->connection) == 1){
  				return true;

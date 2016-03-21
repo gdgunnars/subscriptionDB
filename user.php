@@ -3,41 +3,53 @@
   if(isset($_GET['boxerID'])) {
   $id = $_GET['boxerID'];
   if(!empty($id)){
-  /*if(isset($_POST['addSubscription'])) {
-    $sql_add_subscription = new SQL;
-    $id = $_POST['boxer_id'];
-    $group_id = $_POST['group_id'];
-    $paymentType_id = $_POST['paymentType_id'];
-    $subscriptionType_id = $_POST['subscriptionType_id'];
-    $begin_date = date("Y-m-d", strtotime($_POST['begin_date']));
-    $end_date = date("Y-m-d", strtotime($_POST['end_date']));
-    print "$id , $group_id , $paymentType_id , $subscriptionType_id , $begin_date , $end_date";
-    if($sql_add_subscription->add_subscription($id, $group_id, $paymentType_id, $subscriptionType_id, $begin_date, $end_date)) {
-      print ('<div class="alert alert-dismissible alert-success">  <button type="button" class="close" data-dismiss="alert">x</button><strong>Áskrift hefur verið skráð</strong>  </div>');
-    } else {
-        print ('<div class="alert alert-dismissible alert-danger">  <button type="button" class="close" data-dismiss="alert">x</button>  <strong>Obbosí!</strong> einhvað fór úrskeiðis, reyndu aftur.  </div>');
-      }
-    }*/
     if(isset($_GET['add'])) {
       if($_GET['add']==1) {
         print ('<div class="alert alert-dismissible alert-success">  <button type="button" class="close" data-dismiss="alert">x</button><strong>Áskrift hefur verið skráð</strong>  </div>');
       } else {
           print ('<div class="alert alert-dismissible alert-danger">  <button type="button" class="close" data-dismiss="alert">x</button>  <strong>Obbosí!</strong> einhvað fór úrskeiðis, reyndu aftur.  </div>');
         }
-    }
+      }
+      if(isset($_GET['update'])) {
+        if($_GET['update']==1) {
+          print ('<div class="alert alert-dismissible alert-success">  <button type="button" class="close" data-dismiss="alert">x</button><strong>Mynd var uppfærð  </strong>  </div>');
+        } else {
+            print ('<div class="alert alert-dismissible alert-danger">  <button type="button" class="close" data-dismiss="alert">x</button>  <strong>Obbosí!</strong> einhvað fór úrskeiðis, reyndu aftur.  </div>');
+          }
+      }
     $sql_boxer = new SQL();
     $boxer_info = '';
     $arr_boxers = $sql_boxer->list_full_boxer_info($id);
-    foreach($arr_boxers as $k=>$v){
-      $id = $v[0];
-      $name = UTF8_encode($v[1]);
-      $kt = $v[2];
-      $phone = $v[3];
-      $email = UTF8_encode($v[4]);
-      $contact_name = UTF8_encode($v[5]);
-      $contact_phone = $v[6];
-      $contact_email = UTF8_encode($v[7]);
+    if(isset($arr_boxers )){
+      foreach($arr_boxers as $k=>$v){
+        $id = $v[0];
+        $name = UTF8_encode($v[1]);
+        $kt = $v[2];
+        $phone = $v[3];
+        $email = UTF8_encode($v[4]);
+        if(empty($v[5])){
+          $image = 'static/img-profile/no-img.png';
+        } else {
+          $image = $v[5];
+        }
+        if($v[6] == ''){
+          $contact_name = 'n/a';
+        }else {
+            $contact_name = UTF8_encode($v[6]);
+        }
+        if($v[7] == 0){
+          $contact_phone = '';
+        } else {
+          $contact_phone = $v[7];
+        }
+        if($v[8] == ''){
+          $contact_email = 'n/a';
+        } else {
+          $contact_email = UTF8_encode($v[8]);
+        }
+      }
     }
+
     $sql_subscriptions = new SQL();
 
     $arr_subs = $sql_subscriptions->list_subscriptions_for_person($id);
@@ -101,6 +113,7 @@
               <?php if(!isset($name)){print 'No User';} else print $name ?>
               <span class="sr-only">(current)</span></a></li>
           <li class="active"><a href="#addSubscription" class="btn btn-success" role="button" data-toggle="modal" data-target="#addSubscription"> Kaupa Áskrift </a></li>
+          <li class="active"><a href="#updateInfo" class="btn btn-info" role="button" data-toggle="modal" data-target="#updateInfo"> Breyta upplýsingum </a></li>
           <li class="active"><a href="#addSubscription" class="btn btn-warning" role="button" data-toggle="modal" data-target="#addSubscription"> Senda SMS </a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
@@ -111,8 +124,21 @@
   </nav>
   <div class="container">
     <div class="col-md-3">
-      <input class="btn btn-default back-btn" type="button" value="Til baka" onclick="history.back(-1)" />
-      <img src='img/empty-img.png' width='' height='300'/>
+      <!--<input class="btn btn-default back-btn" type="button" value="Til baka" onclick="history.back(-1)" />-->
+      <br />
+      <img src='<?php if(!isset($image)){ echo 'static/img-profile/no-img.png';} else echo $image;?>' width='250' height=''/>
+      <form action="img-upload.php" method="POST" enctype="multipart/form-data" class="form-horizontal">
+        <div class="input-group">
+            <span class="input-group-btn">
+                <span class="btn btn-default btn-file">
+                    Browse&hellip; <input type="file" name="uploadedIMG" >
+                </span>
+            </span>
+            <input type="text" class="form-control" readonly>
+        </div>
+        <input type="number" value="<?php echo $id;?>" name="id" hidden />
+        <button type="submit" name="uploadImage" class="btn btn-default">Uppfæra mynd </button>
+      </form>
       <?php
         if(!isset($boxer_info)){
           print '<h3 class="text-danger">Engar Upplýsingar fundust um þennan notanda</h3>';
@@ -134,7 +160,7 @@
     </div>
     <div class="col-md-9">
       <h3><center> Greiðsluupplýsingar</center></h3>
-      <table id="boxerInfo" class="table table-striped table-hover">
+      <table id="subscription_info" class="table table-striped table-hover">
         <thead>
             <tr>
                 <th>ID</th>
@@ -230,13 +256,83 @@
       </div>
     </div>
   </div>
+  <!-- Modal-update-info-->
+  <div class="modal fade" id="updateInfo" tabindex="-1" role="dialog" aria-labelledby="updateInfoLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="addSubscriptionLabel">Breyta upplýsingum um <?php echo $name;?></h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal" id="updateBoxer" method="POST" action="">
+            <fieldset>
+              <div class="form-group">
+                <label for="inputName" class="col-lg-2 control-label">Nafn</label>
+                <div class="col-lg-8">
+                  <input type="text" class="form-control" id="inputName" name="name" value="<?php if(!isset($name)){print 'Engin notandi';} else echo $name; ?>" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputSSN" class="col-lg-2 control-label">Kennitala</label>
+                <div class="col-lg-8">
+                  <input type="number" class="form-control" id="inputSSN" name="kt" value="<?php if(!isset($kt)){print 'Engin Kt';} else echo $kt; ?>" maxlength="10" pattern="((0[1-9])|([12][0-9])|(3[01]))((0[1-9])|(1[0-2]))([0-9]{2})[0-9]{4}" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputPhone" class="col-lg-2 control-label">Sími</label>
+                <div class="col-lg-8">
+                  <input type="tel" class="form-control" id="inputPhone" name="phone" value="<?php if(!isset($phone)){print 'Ekkert símanúmer';} else echo $phone; ?>" >
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputEmail" class="col-lg-2 control-label">Netfang</label>
+                <div class="col-lg-8">
+                  <input type="email" class="form-control" id="inputEmail" name="email" value="<?php if(!isset($email)){print 'Ekkert netfang';} else echo $email; ?>">
+                </div>
+              </div>
+              <hr>
+              <div class="form-group">
+                <label for="inputContactName" class="col-lg-2 control-label">Tengiliður</label>
+                <div class="col-lg-8">
+                  <input type="text" class="form-control" id="inputContactName" name="contact_name" value="<?php echo $contact_name; ?>">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputContactPhone" class="col-lg-2 control-label">Sími tengiliðar</label>
+                <div class="col-lg-8">
+                  <input type="tel" class="form-control" id="inputContactPhone" name="contact_phone" value="<?php echo $contact_phone; ?>">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputContactEmail" class="col-lg-2 control-label">Netfang tengiliðar</label>
+                <div class="col-lg-8">
+                  <input type="email" class="form-control" id="inputContactEmail" name="contact_email" value="<?php echo $contact_email; ?>">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="submit" name="updateBoxer" class="btn btn-success">Uppfæra notanda</button>
+                </div>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 <!-- Scripts ---->
 <script src="js/bootstrap.min.js"></script>
+<script src="js/file-browser.js "></script>
 <script type="text/javascript" src="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.js"></script>
 <script>
   $(document).ready(function() {
-    $('#boxerInfo').DataTable();
+    $('#subscription_info').DataTable();
   } );
   </script>
 </html>
