@@ -7,7 +7,7 @@
       if($_GET['add']==1) {
         print ('<div class="alert alert-dismissible alert-success">  <button type="button" class="close" data-dismiss="alert">x</button><strong>Áskrift hefur verið skráð</strong>  </div>');
       } else {
-          print ('<div class="alert alert-dismissible alert-danger">  <button type="button" class="close" data-dismiss="alert">x</button>  <strong>Obbosí!</strong> einhvað fór úrskeiðis, reyndu aftur.  </div>');
+          print ('<div class="alert alert-dismissible alert-danger">  <button type="button" class="close" data-dismiss="alert">x</button>  <strong>Obbosí!</strong> einhvað fór úrskeiðis, reyndu aftur. </div>');
         }
       }
       if(isset($_GET['update'])) {
@@ -18,9 +18,10 @@
           }
       }
     $sql_boxer = new SQL();
-    $boxer_info = '';
+    $boxer_found = false;
     $arr_boxers = $sql_boxer->list_full_boxer_info($id);
     if(isset($arr_boxers )){
+      $boxer_found = true;
       foreach($arr_boxers as $k=>$v){
         $id = $v[0];
         $name = UTF8_encode($v[1]);
@@ -81,7 +82,7 @@
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <!-- Optional Bootstrap theme -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.css"/>
-
+    <script src="js/bootstrap.min.js"></script>
 
 </head>
 <body>
@@ -112,7 +113,7 @@
           <li class="active"><a>
               <?php if(!isset($name)){print 'No User';} else print $name ?>
               <span class="sr-only">(current)</span></a></li>
-          <li class="active"><a href="#addSubscription" class="btn btn-success" role="button" data-toggle="modal" data-target="#addSubscription"> Kaupa Áskrift </a></li>
+          <li class="active"><a href="#addSubscriptionModal" class="btn btn-success" role="button" data-toggle="modal" data-target="#addSubscriptionModal"> Kaupa Áskrift </a></li>
           <li class="active"><a href="#updateInfo" class="btn btn-info" role="button" data-toggle="modal" data-target="#updateInfo"> Breyta upplýsingum </a></li>
           <li class="active"><a href="#addSubscription" class="btn btn-warning" role="button" data-toggle="modal" data-target="#addSubscription"> Senda SMS </a></li>
         </ul>
@@ -126,7 +127,7 @@
     <div class="col-md-3">
       <!--<input class="btn btn-default back-btn" type="button" value="Til baka" onclick="history.back(-1)" />-->
       <br />
-      <img src='<?php if(!isset($image)){ echo 'static/img-profile/no-img.png';} else echo $image;?>' width='250' height=''/>
+      <img src='<?php if(!isset($image)){ echo 'static/img-profile/no-img.png';} else echo $image;?>' width='100%' height=''/>
       <form action="img-upload.php" method="POST" enctype="multipart/form-data" class="form-horizontal">
         <div class="input-group">
             <span class="input-group-btn">
@@ -137,30 +138,32 @@
             <input type="text" class="form-control" readonly>
         </div>
         <input type="number" value="<?php echo $id;?>" name="id" hidden />
-        <button type="submit" name="uploadImage" class="btn btn-default">Uppfæra mynd </button>
+        <button type="submit" name="uploadImage" class="btn btn-default form-control">Uppfæra mynd </button>
       </form>
+      <br />
       <?php
-        if(!isset($boxer_info)){
+        if(!($boxer_found)){
           print '<h3 class="text-danger">Engar Upplýsingar fundust um þennan notanda</h3>';
         } else {
           print "
-          <h4><strong> $name </strong></h4>
-          <ul>
-            <li>Kennitala: $kt </li>
-            <li>Sími: $phone </li>
-            <li>Netfang: $email </li>
-          </ul>
-          <h5><strong>- Tengiliður</strong></h5>
-          <ul>
-            <li>Nafn: $contact_name</li>
-            <li>Sími: $contact_phone</li>
-            <li>Netfang: $contact_email</li>
-          </ul>";
+          <div class='panel-group'>
+            <div class='panel panel-success'>
+              <div class='panel-heading'> $name</div>
+              <div class='panel-body' id='infoKT'>kt: $kt</div>
+              <div class='panel-body'>Sími: $phone</div>
+              <div class='panel-body'>Veffang: $email </div>
+
+              <div class='panel-heading'> Tengiliður</div>
+              <div class='panel-body'>Nafn: $contact_name</div>
+              <div class='panel-body'>Sími: $contact_phone</div>
+              <div class='panel-body'>Veffang: $contact_email</div>
+            </div>
+          </div>";
          } ?>
     </div>
     <div class="col-md-9">
       <h3><center> Greiðsluupplýsingar</center></h3>
-      <table id="subscription_info" class="table table-striped table-hover">
+      <table id="subscription_info" class="table table-striped table-hover" width="100%">
         <thead>
             <tr>
                 <th>ID</th>
@@ -183,15 +186,19 @@
     </div>
   </div>
   <!-- Modal-addSubscription-->
-  <div class="modal fade" id="addSubscription" tabindex="-1" role="dialog" aria-labelledby="addSubscriptionLabel">
+  <script src="js/script.js"></script>
+
+
+  <div class="modal fade" id="addSubscriptionModal" tabindex="-1" role="dialog" aria-labelledby="addSubscriptionLabel">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
+        <div id="SubscriptionAddStatus"></div>
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="addSubscriptionLabel">Kaupa áskrift</h4>
         </div>
         <div class="modal-body">
-          <form class="form-horizontal" id="addSubscription" method="POST" action="add_subscription.php">
+          <form class="form-horizontal" id="addSubscription" name="addSubscription" method="POST" action="add_subscription.php">
             <fieldset>
               <div class="form-group">
                 <label for="inputID" class="col-lg-2 control-label">ID</label>
@@ -208,7 +215,7 @@
               <div class="form-group">
                 <label for="select" class="col-lg-2 control-label">Hópur</label>
                 <div class="col-lg-10">
-                  <select class="form-control" id="groupID" name="group_id" required>
+                  <select class="form-control" id="group_id" name="group_id" required>
                     <?php print UTF8_encode($groupCombo); ?>
                   </select>
                 </div>
@@ -327,7 +334,6 @@
 
 </body>
 <!-- Scripts ---->
-<script src="js/bootstrap.min.js"></script>
 <script src="js/file-browser.js "></script>
 <script type="text/javascript" src="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.js"></script>
 <script>

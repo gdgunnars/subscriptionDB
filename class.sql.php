@@ -90,6 +90,18 @@
 			}
 		}
 
+		public function list_subscriptions_for_personJSON($id){
+			$query = "call list_subscriptions_for_person($id)";
+			$result = mysqli_query($this->connection,$query);
+
+			while ($row = mysqli_fetch_row($result)){
+				$subscriptions[] = $row;
+			}
+			if(isset($subscriptions)){
+				return json_encode($subscriptions);
+			}
+		}
+
 		/**
 			 * Fallið skilar skipunum í HTML-kombóboxi
 		 *
