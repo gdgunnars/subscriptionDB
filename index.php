@@ -23,7 +23,6 @@ require_once('class.sql.php');
     $boxers_list = '';
     foreach($arr_boxers as $k=>$v){
         $boxers_list .= "<tr>
-                          <td> $v[0] </td>
                           <td><a href='user.php?boxerID=$v[0]'><strong> $v[1] </strong></a></td>
                           <td> $v[2] </td>
                           <td> $v[3] </td>
@@ -87,7 +86,6 @@ require_once('class.sql.php');
   <table id="boxersTable" class="table table-striped table-hover">
     <thead>
         <tr>
-            <th>ID</th>
             <th>Nafn</th>
             <th>Kennitala</th>
             <th>Sími</th>

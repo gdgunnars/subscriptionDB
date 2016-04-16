@@ -33,21 +33,11 @@
         } else {
           $image = $v[5];
         }
-        if($v[6] == ''){
-          $contact_name = 'n/a';
-        }else {
-            $contact_name = UTF8_encode($v[6]);
-        }
+        $contact_name = UTF8_encode($v[6]);
         if($v[7] == 0){
           $contact_phone = '';
-        } else {
-          $contact_phone = $v[7];
-        }
-        if($v[8] == ''){
-          $contact_email = 'n/a';
-        } else {
-          $contact_email = UTF8_encode($v[8]);
-        }
+        } else $contact_phone = $v[7];
+        $contact_email = UTF8_encode($v[8]);
       }
     }
 
@@ -101,7 +91,7 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li><a href="index.php">Yfirlit <span class="sr-only">(current)</span></a></li>
-          <li><a href="#addBoxer" data-toggle="modal" data-target="#addBoxer">Nýskrá iðkanda</a></li>
+          <!--<li><a href="#addBoxer" data-toggle="modal" data-target="#addBoxer">Nýskrá iðkanda</a></li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Senda tilkynningu <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
@@ -109,13 +99,13 @@
               <li class="divider"></li>
               <li><a href="#contact" data-toggle="modal" data-target="#contact">Senda tilkynningu á vefstjóra</a></li>
             </ul>
-          </li>
+          </li>-->
           <li class="active"><a>
               <?php if(!isset($name)){print 'No User';} else print $name ?>
               <span class="sr-only">(current)</span></a></li>
           <li class="active"><a href="#addSubscriptionModal" class="btn btn-success" role="button" data-toggle="modal" data-target="#addSubscriptionModal"> Kaupa Áskrift </a></li>
           <li class="active"><a href="#updateInfo" class="btn btn-info" role="button" data-toggle="modal" data-target="#updateInfo"> Breyta upplýsingum </a></li>
-          <li class="active"><a href="#addSubscription" class="btn btn-warning" role="button" data-toggle="modal" data-target="#addSubscription"> Senda SMS </a></li>
+          <li class="active"><a href="#" class="btn btn-warning" role="button" data-toggle="modal" data-target="#"> Senda SMS </a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li><a href="http://www.hfh.is">Vefsíða HFH</a></li>
@@ -125,8 +115,8 @@
   </nav>
   <div class="container">
     <div class="col-md-3">
-      <!--<input class="btn btn-default back-btn" type="button" value="Til baka" onclick="history.back(-1)" />-->
       <br />
+      <!-- Boxer image -->
       <img src='<?php if(!isset($image)){ echo 'static/img-profile/no-img.png';} else echo $image;?>' width='100%' height=''/>
       <form action="img-upload.php" method="POST" enctype="multipart/form-data" class="form-horizontal">
         <div class="input-group">
@@ -141,6 +131,7 @@
         <button type="submit" name="uploadImage" class="btn btn-default form-control">Uppfæra mynd </button>
       </form>
       <br />
+       <!-- Boxer info -->
       <?php
         if(!($boxer_found)){
           print '<h3 class="text-danger">Engar Upplýsingar fundust um þennan notanda</h3>';
@@ -161,6 +152,7 @@
           </div>";
          } ?>
     </div>
+    <!-- Greiðslu upplýsingar -->
     <div class="col-md-9">
       <h3><center> Greiðsluupplýsingar</center></h3>
       <table id="subscription_info" class="table table-striped table-hover" width="100%">
@@ -185,10 +177,9 @@
       </table>
     </div>
   </div>
-  <!-- Modal-addSubscription-->
+
   <script src="js/script.js"></script>
-
-
+  <!--  Add Subscription modal -->
   <div class="modal fade" id="addSubscriptionModal" tabindex="-1" role="dialog" aria-labelledby="addSubscriptionLabel">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -263,13 +254,18 @@
       </div>
     </div>
   </div>
-  <!-- Modal-update-info-->
+  <!-- Update-info modal -->
   <div class="modal fade" id="updateInfo" tabindex="-1" role="dialog" aria-labelledby="updateInfoLabel">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="addSubscriptionLabel">Breyta upplýsingum um <?php echo $name;?></h4>
+          <h4 class="modal-title" id="addSubscriptionLabel"><strong> Ekki búið að útfæra þennan flipa </strong></h4>
+        </div>
+<!--
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="addSubscriptionLabel">Breyta upplýsingum um <strong> <?php echo $name;?> </strong></h4>
         </div>
         <div class="modal-body">
           <form class="form-horizontal" id="updateBoxer" method="POST" action="">
@@ -328,9 +324,11 @@
         </div>
         <div class="modal-footer">
         </div>
+            -->
       </div>
     </div>
   </div>
+
 
 </body>
 <!-- Scripts ---->

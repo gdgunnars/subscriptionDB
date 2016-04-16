@@ -1,12 +1,12 @@
 #####################
 ## Create database ##
 #####################
- 
+
 -- Database: `hfh_db`
 #drop database if exists `hfh_db`;
- 
+
 create database `hfh_db` default CHARACTER SET utf8;
- 
+
 use hfh_db;
 ##################
 ## Create table ##
@@ -26,7 +26,8 @@ create table `Boxer`(
 	`contact_name` varchar(255),
 	`contact_phone` int,
 	`contact_email` varchar(255),
-PRIMARY KEY (`ID`)
+PRIMARY KEY (`ID`),
+UNIQUE (`kt`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Table containing Boxers, and their information';
 
 create table `Groups`(
