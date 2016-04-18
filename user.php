@@ -87,7 +87,6 @@
         </button>
         <a class="navbar-brand" href="#">Hnefaleikafélag Hafnarfjarðar</a>
       </div>
-
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li><a href="index.php">Yfirlit <span class="sr-only">(current)</span></a></li>
@@ -189,7 +188,7 @@
           <h4 class="modal-title" id="addSubscriptionLabel">Kaupa áskrift</h4>
         </div>
         <div class="modal-body">
-          <form class="form-horizontal" id="addSubscription" name="addSubscription" method="POST" action="add_subscription.php">
+          <form class="form-horizontal" id="addSubscription" name="addSubscription" method="POST" action="class.controllerForm.php">
             <fieldset>
               <div class="form-group">
                 <label for="inputID" class="col-lg-2 control-label">ID</label>

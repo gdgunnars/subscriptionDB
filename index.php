@@ -64,7 +64,7 @@ require_once('class.sql.php');
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li class="active"><a href="">Yfirlit <span class="sr-only">(current)</span></a></li>
-        <li><a href="#addBoxer" data-toggle="modal" data-target="#addBoxer">Nýskrá iðkanda</a></li>
+        <li><a href="#addBoxerModal" data-toggle="modal" data-target="#addBoxerModal">Nýskrá iðkanda</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Senda tilkynningu <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
@@ -81,7 +81,7 @@ require_once('class.sql.php');
   </div>
 </nav>
 
-<h1><center> HFH Áskriftar Umsjón </center></h1>
+<h1><center> Yfirlitskerfi Hnefaleikafélags Hafnarfjarðar </center></h1>
 <div class="container">
   <table id="boxersTable" class="table table-striped table-hover">
     <thead>
@@ -119,8 +119,9 @@ require_once('class.sql.php');
   </div>
 </div>
 
+<script src="js/script.js"></script>
 <!-- Modal - addBoxer-->
-<div class="modal fade" id="addBoxer" tabindex="-1" role="dialog" aria-labelledby="addBoxerLabel">
+<div class="modal fade" id="addBoxerModal" tabindex="-1" role="dialog" aria-labelledby="addBoxerLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -128,7 +129,7 @@ require_once('class.sql.php');
         <h4 class="modal-title" id="addBoxerLabel">Bæta við Iðkanda</h4>
       </div>
       <div class="modal-body">
-        <form class="form-horizontal" id="addBoxer" method="POST" action="">
+        <form class="form-horizontal" id="addBoxer" method="POST" action="class.controllerForm.php">
           <fieldset>
             <div class="form-group">
               <label for="inputName" class="col-lg-2 control-label">Nafn</label>
