@@ -56,7 +56,8 @@
 			while ($row = mysqli_fetch_row($result)){
 				$groups_arr[] = $row;
 			}
-			return $groups_arr;
+			if(!empty($groups_arr))
+				return $groups_arr;
 		}
 		public function list_payments(){
 			$query = "call list_payments()";
@@ -65,7 +66,8 @@
 			while ($row = mysqli_fetch_row($result)) {
 				$payments_arr[] = $row;
 			}
-			return $payments_arr;
+			if(!empty($payments_arr))
+				return $payments_arr;
 		}
 
 		public function list_subscriptions() {
@@ -75,7 +77,8 @@
 			while ($row = mysqli_fetch_row($result)) {
 				$subscriptions_arr[] = $row;
 			}
-			return $subscriptions_arr;
+			if(!empty($subscriptions_arr))
+				return $subscriptions_arr;
 		}
 
 		public function list_subscriptions_for_person($id){
