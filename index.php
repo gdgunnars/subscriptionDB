@@ -30,58 +30,14 @@ require_once('class.sql.php');
                         </tr>";
     }
 }
+
+$pageTitle = "Heim";
+include_once "common/head.php";
+include_once "common/nav-def.php";
+include_once "common/scripts.php";
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>HFH Áskriftar Umsjón</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="css/hfh-mgmt.css">
-    <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
-    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-    <!-- data tables stuff -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.css"/>
 
-    <!-- Optional Bootstrap theme -->
-
-</head>
-<body>
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">Hnefaleikafélag Hafnarfjarðar</a>
-    </div>
-
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="">Yfirlit <span class="sr-only">(current)</span></a></li>
-        <li><a href="#addBoxerModal" data-toggle="modal" data-target="#addBoxerModal">Nýskrá iðkanda</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Senda tilkynningu <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="#tilkynningar">Senda tilkynningu á netfang eða SMS</a></li>
-            <li class="divider"></li>
-            <li><a href="#contact" data-toggle="modal" data-target="#contact">Senda tilkynningu á vefstjóra</a></li>
-          </ul>
-        </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="http://www.hfh.is">Vefsíða HFH</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
-<h1><center> Yfirlitskerfi Hnefaleikafélags Hafnarfjarðar </center></h1>
+    <h1><center><img src="img/HFHLogo-192x192.png" alt="hfh logo"> Yfirlitskerfi Hnefaleikafélags Hafnarfjarðar </center></h1>
 <div class="container">
   <table id="boxersTable" class="table table-striped table-hover">
     <thead>
@@ -104,116 +60,13 @@ require_once('class.sql.php');
   </table>
 </div>
 
-<div class="container">
-  <div class ="navbar navbar-default navbar-fixed-bottom" role="navigation">
-    <div class="containter">
-      <div class ="navbar-text pull-left">
-        <p> © <?php echo date("Y");?> Hnefaleikafélag Hafnarfjarðar | <a href="mailto:gdg@gdg.is"> GDG.is <i class="fa fa-envelope"></i></a> </p>
-      </div>
-      <div class="navbar-text pull-right">
-        <a href="mailto:hfh@hfh.is"><i class="fa fa-envelope fa-2x"></i></a>
-        <a href="http://www.facebook.com/hfhafnarfjardar" target="_blank"><i class="fa fa-facebook-square fa-2x"></i></a>
-        <a href="https://goo.gl/maps/zSRYFkH6M2E2" target="_blank"><i class="fa fa-map fa-2x"></i></a>
-      </div>
-    </div>
-  </div>
-</div>
+    
 
-<script src="js/script.js"></script>
-<!-- Modal - addBoxer-->
-<div class="modal fade" id="addBoxerModal" tabindex="-1" role="dialog" aria-labelledby="addBoxerLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="addBoxerLabel">Bæta við Iðkanda</h4>
-      </div>
-      <div class="modal-body">
-        <form class="form-horizontal" id="addBoxer" method="POST" action="class.controllerForm.php">
-          <fieldset>
-            <div class="form-group">
-              <label for="inputName" class="col-lg-2 control-label">Nafn</label>
-              <div class="col-lg-8">
-                <input type="text" class="form-control" id="inputName" name="name" placeholder="Jon Jonsson" required>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="inputSSN" class="col-lg-2 control-label">Kennitala</label>
-              <div class="col-lg-8">
-                <input type="number" class="form-control" id="inputSSN" name="kt" placeholder="Kennitala t.d. 0102034399" maxlength="10" pattern="((0[1-9])|([12][0-9])|(3[01]))((0[1-9])|(1[0-2]))([0-9]{2})[0-9]{4}" required>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="inputPhone" class="col-lg-2 control-label">Sími</label>
-              <div class="col-lg-8">
-                <input type="tel" class="form-control" id="inputPhone" name="phone" placeholder="símanúmer t.d. 1231234" >
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="inputEmail" class="col-lg-2 control-label">Netfang</label>
-              <div class="col-lg-8">
-                <input type="email" class="form-control" id="inputEmail" name="email" placeholder="jon@gmail.com">
-              </div>
-            </div>
-            <hr>
-            <div class="form-group">
-              <label for="inputContactName" class="col-lg-2 control-label">Tengiliður</label>
-              <div class="col-lg-8">
-                <input type="text" class="form-control" id="inputContactName" name="contact_name" placeholder="Jóna Jónsdóttir">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="inputContactPhone" class="col-lg-2 control-label">Sími tengiliðar</label>
-              <div class="col-lg-8">
-                <input type="tel" class="form-control" id="inputContactPhone" name="contact_phone" placeholder="símanúmer">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="inputContactEmail" class="col-lg-2 control-label">Netfang tengiliðar</label>
-              <div class="col-lg-8">
-                <input type="email" class="form-control" id="inputContactEmail" name="contact_email" placeholder="jona@gmail.com">
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-lg-10 col-lg-offset-2">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="reset" class="btn btn-danger">Hreinsa</button>
-                <button type="submit" name="addBoxer" class="btn btn-primary">Skrá Iðkanda</button>
-              </div>
-            </div>
-          </fieldset>
-        </form>
-      </div>
-    </div>
-  </div>
-  <div class="modal-footer">
-  </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="contact" tabindex="-1" role="dialog" aria-labelledby="contactLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="contactLabel">Tilkynningar</h4>
-      </div>
-      <div class="modal-body">
-        <h5> Allar ábendingar um lagfæringar eða viðbætur  sendist á vefstjóra með tölvupósti á netfangið gdg@gdg.is . </h5>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="mailto:gdg@gdg.is">Senda póst</button>
-      </div>
-    </div>
-  </div>
-</div>
-    <script src="js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.js"></script>
     <script>
       $(document).ready(function() {
         $('#boxersTable').DataTable();
       } );
       </script>
-</body>
-</html>
+
+<?php
+include_once "common/footer.php";

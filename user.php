@@ -1,8 +1,11 @@
 <?php
-  require_once('class.sql.php');
-  if(isset($_GET['boxerID'])) {
-  $id = $_GET['boxerID'];
-  if(!empty($id)){
+$pageTitle = "Greiðsluupplsýingar";
+include_once "common/head.php";
+include_once "common/scripts.php";
+$user = true;
+  if(!empty($_GET['boxerID'])):
+    require_once('class.sql.php');
+    $id = $_GET['boxerID'];
     if(isset($_GET['add'])) {
       if($_GET['add']==1) {
         print ('<div class="alert alert-dismissible alert-success">  <button type="button" class="close" data-dismiss="alert">x</button><strong>Áskrift hefur verið skráð</strong>  </div>');
@@ -50,68 +53,16 @@
           $subscriptions .= "<tr><td>$v[0]</td><td>$v[2]</td><td>$v[3]</td><td>$v[4]</td><td>$v[5]</td><td>$v[6]</td></tr>";
         }
     }
-  }
   $sql_ComboGroup = new SQL;
   $sql_ComboPaymentType = new SQL;
   $sql_ComboSubscriptionType = new SQL;
   $groupCombo = $sql_ComboGroup->select_groupCombo();
   $paymentCombo = $sql_ComboPaymentType->select_paymentTypeCombo();
   $subscriptionCombo = $sql_ComboSubscriptionType->select_subscriptionTypeCombo();
-}
-?>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>HFH Áskriftar Umsjón</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="css/hfh-mgmt.css">
-    <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
-    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-    <!-- Optional Bootstrap theme -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.css"/>
-    <script src="js/bootstrap.min.js"></script>
 
-</head>
-<body>
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">Hnefaleikafélag Hafnarfjarðar</a>
-      </div>
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li><a href="index.php">Yfirlit <span class="sr-only">(current)</span></a></li>
-          <!--<li><a href="#addBoxer" data-toggle="modal" data-target="#addBoxer">Nýskrá iðkanda</a></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Senda tilkynningu <span class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="#tilkynningar">Senda tilkynningu á netfang eða SMS</a></li>
-              <li class="divider"></li>
-              <li><a href="#contact" data-toggle="modal" data-target="#contact">Senda tilkynningu á vefstjóra</a></li>
-            </ul>
-          </li>-->
-          <li class="active"><a>
-              <?php if(!isset($name)){print 'No User';} else print $name ?>
-              <span class="sr-only">(current)</span></a></li>
-          <li class="active"><a href="#addSubscriptionModal" class="btn btn-success" role="button" data-toggle="modal" data-target="#addSubscriptionModal"> Kaupa Áskrift </a></li>
-          <li class="active"><a href="#updateInfo" class="btn btn-info" role="button" data-toggle="modal" data-target="#updateInfo"> Breyta upplýsingum </a></li>
-          <li class="active"><a href="#" class="btn btn-warning" role="button" data-toggle="modal" data-target="#"> Senda SMS </a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="http://www.hfh.is">Vefsíða HFH</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  include_once "common/nav-def.php";
+?>
+
   <div class="container">
     <div class="col-md-3">
       <br />
@@ -139,14 +90,13 @@
           <div class='panel-group'>
             <div class='panel panel-success'>
               <div class='panel-heading'> $name</div>
-              <div class='panel-body' id='infoKT'>kt: $kt</div>
-              <div class='panel-body'>Sími: $phone</div>
-              <div class='panel-body'>Veffang: $email </div>
-
-              <div class='panel-heading'> Tengiliður</div>
-              <div class='panel-body'>Nafn: $contact_name</div>
-              <div class='panel-body'>Sími: $contact_phone</div>
-              <div class='panel-body'>Veffang: $contact_email</div>
+              <div class='panel-body' id='infoKT'><strong>kt:</strong> $kt</div>
+              <div class='panel-body'><strong>Sími:</strong> $phone</div>
+              <div class='panel-body'><strong>Veffang:</strong> $email </div>
+                <hr />
+              <div class='panel-body'><strong>Tengiliður: </strong> $contact_name</div>
+              <div class='panel-body'><strong>Sími:</strong> $contact_phone</div>
+              <div class='panel-body'><strong>Veffang:</strong> $contact_email</div>
             </div>
           </div>";
          } ?>
@@ -177,79 +127,79 @@
     </div>
   </div>
 
-  <script src="js/script.js"></script>
+
   <!--  Add Subscription modal -->
   <div class="modal fade" id="addSubscriptionModal" tabindex="-1" role="dialog" aria-labelledby="addSubscriptionLabel">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div id="SubscriptionAddStatus"></div>
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="addSubscriptionLabel">Kaupa áskrift</h4>
-        </div>
-        <div class="modal-body">
-          <form class="form-horizontal" id="addSubscription" name="addSubscription" method="POST" action="class.controllerForm.php">
-            <fieldset>
-              <div class="form-group">
-                <label for="inputID" class="col-lg-2 control-label">ID</label>
-                <div class="col-lg-10">
-                  <input type="text" class="form-control" id="boxer_id" name="boxer_id" value="<?php echo "$id";?>" readonly />
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="boxerName" class="col-lg-2 control-label">Iðkandi</label>
-                <div class="col-lg-10">
-                  <input type="text" class="form-control" id="boxerName" name="boxer_name" value="<?php print $name; ?>" disabled>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="select" class="col-lg-2 control-label">Hópur</label>
-                <div class="col-lg-10">
-                  <select class="form-control" id="group_id" name="group_id" required>
-                    <?php print UTF8_encode($groupCombo); ?>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="select" class="col-lg-2 control-label">Greiðslumáti</label>
-                <div class="col-lg-10">
-                  <select class="form-control" id="paymentType_id" name="paymentType_id" required>
-                    <?php print UTF8_encode($paymentCombo); ?>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="select" class="col-lg-2 control-label">Tegund áskriftar</label>
-                <div class="col-lg-10">
-                  <select class="form-control" id="subscriptionType_id" name="subscriptionType_id" required>
-                    <?php print UTF8_encode($subscriptionCombo); ?>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="inputDate" class="col-lg-2 control-label"> Dagsettning kaupa </label>
-                <div class="col-lg-10">
-                  <input type="date" class="form-control" id="begin_date" name="begin_date"placeholder="" required>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="inputDate" class="col-lg-2 control-label"> Gildir til</label>
-                <div class="col-lg-10">
-                  <input type="date" class="form-control" id="end_date" name="end_date" placeholder="" required>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-lg-10 col-lg-offset-2">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  <button type="reset" class="btn btn-danger">Hreinsa</button>
-                  <button type="submit" name="addSubscription" class="btn btn-primary">Kaupa áskrift</button>
-                </div>
-              </div>
-            </fieldset>
-          </form>
-        </div>
-        <div class="modal-footer">
-        </div>
+
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="addSubscriptionLabel">Kaupa áskrift</h4>
+          </div>
+          <div class="modal-body">
+              <form class="form-horizontal" id="addSubscription" name="addSubscription" method="POST" action="class.controllerForm.php">
+                  <fieldset>
+                      <div class="form-group">
+                          <label for="inputID" class="col-lg-2 control-label">ID</label>
+                          <div class="col-lg-10">
+                              <input type="text" class="form-control" id="boxer_id" name="boxer_id" value="<?php echo $id;?>" readonly />
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="boxerName" class="col-lg-2 control-label">Iðkandi</label>
+                          <div class="col-lg-10">
+                              <input type="text" class="form-control" id="boxerName" name="boxer_name" value="<?php print $name; ?>" disabled>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="select" class="col-lg-2 control-label">Hópur</label>
+                          <div class="col-lg-10">
+                              <select class="form-control" id="group_id" name="group_id" required>
+                                  <?php print UTF8_encode($groupCombo); ?>
+                              </select>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="select" class="col-lg-2 control-label">Greiðslumáti</label>
+                          <div class="col-lg-10">
+                              <select class="form-control" id="paymentType_id" name="paymentType_id" required>
+                                  <?php print UTF8_encode($paymentCombo); ?>
+                              </select>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="select" class="col-lg-2 control-label">Tegund áskriftar</label>
+                          <div class="col-lg-10">
+                              <select class="form-control" id="subscriptionType_id" name="subscriptionType_id" required>
+                                  <?php print UTF8_encode($subscriptionCombo); ?>
+                              </select>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="inputDate" class="col-lg-2 control-label"> Dagsettning kaupa </label>
+                          <div class="col-lg-10">
+                              <input type="date" class="form-control" id="begin_date" name="begin_date"placeholder="" required>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="inputDate" class="col-lg-2 control-label"> Gildir til</label>
+                          <div class="col-lg-10">
+                              <input type="date" class="form-control" id="end_date" name="end_date" placeholder="" required>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <div class="col-lg-10 col-lg-offset-2">
+                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                              <button type="reset" class="btn btn-danger">Hreinsa</button>
+                              <button type="submit" name="addSubscription" class="btn btn-primary">Kaupa áskrift</button>
+                          </div>
+                      </div>
+                  </fieldset>
+              </form>
+          </div>
+
       </div>
     </div>
   </div>
@@ -327,15 +277,39 @@
       </div>
     </div>
   </div>
-
-
-</body>
+  <!-- Modal - addBoxer-->
+  <div class="modal fade" id="addBoxerModal" tabindex="-1" role="dialog" aria-labelledby="addBoxerLabel">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+          </div>
+      </div>
+  </div>
 <!-- Scripts ---->
 <script src="js/file-browser.js "></script>
-<script type="text/javascript" src="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.js"></script>
 <script>
   $(document).ready(function() {
     $('#subscription_info').DataTable();
   } );
   </script>
-</html>
+
+<?php
+else :
+    echo '<div class="modal show" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" onclick="goBack()" aria-label="GoBack"><span aria-hidden="true">&laquo;</span></button>
+                        <h4 class="modal-title" id="addSubscriptionLabel">Villa hefur komið upp </h4>
+                        <p class="text-danger"> Ekki náðist að sækja upplýsingar um notandann </p>
+                    </div>
+                </div>
+              </div>
+            </div>';
+      echo "<script>
+                function goBack() {
+                    window.history.back();
+                }
+            </script>";
+endif;
+include_once "common/footer.php";
+?>
