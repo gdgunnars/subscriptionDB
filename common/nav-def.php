@@ -17,7 +17,7 @@ include_once "common/scripts.php";
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.php">Hnefaleikafélag Hafnarfjarðar</a> <img src="img/android-icon-48x48.png" style="margin:5px;"/>
+            <a class="navbar-brand" href="index.php">Hnefaleikafélag Hafnarfjarðar</a> <img src="img/HFHLogo-48x48.png" style="margin:5px;"/>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
