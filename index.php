@@ -70,3 +70,4 @@ include_once "common/scripts.php";
 
 <?php
 include_once "common/footer.php";
+?>

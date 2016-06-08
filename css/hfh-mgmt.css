@@ -27,3 +27,12 @@ input[readonly] {
     background-color: white !important;
     cursor: text !important;
 }
+
+.login-window {
+    background-image: url(../img/HFHLogo.png);
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-position:center;
+    padding-top: 35%;
+
+}
