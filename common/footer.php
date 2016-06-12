@@ -13,7 +13,7 @@
     <div class ="navbar navbar-default navbar-fixed-bottom" role="navigation">
         <div class="containter">
             <div class ="navbar-text pull-left">
-                <p> © <?php echo date("Y");?> Hnefaleikafélag Hafnarfjarðar | <a href="mailto:gdg@gdg.is"> GDG.is <i class="fa fa-envelope"></i></a> </p>
+                <p> © <?php //echo date("Y");?> Hnefaleikafélag Hafnarfjarðar | <a href="mailto:gdg@gdg.is"> GDG.is <i class="fa fa-envelope"></i></a> </p>
             </div>
             <div class="navbar-text pull-right">
                 <a href="mailto:hfh@hfh.is"><i class="fa fa-envelope fa-2x"></i></a>

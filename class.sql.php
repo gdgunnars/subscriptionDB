@@ -19,7 +19,8 @@
 		public function __construct() {
 			//$this->connection = mysqli_connect("SERVER","USERNAME","PASSWORD","DATABASE");
 			$config = parse_ini_file('hfhDbConfig.ini');
-			$this->connection = mysqli_connect($config['server'],$config['username'],$config['password'],$config['dbname']);
+			$this->connection = mysqli_connect($config['server'],$config['username'],$config['password'],$config['dbname'])
+				or die(mysqli_error($this->connection));
 		}
 
 		public function __desctruct() {
