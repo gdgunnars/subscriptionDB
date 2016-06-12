@@ -1,12 +1,12 @@
 <?php
-$pageTitle = "Greiðsluupplsýingar";
+$pageTitle = "Greiðsluupplýsingar";
 include_once "common/head.php";
 include_once "common/scripts.php";
 $user = true;
   if(!empty($_GET['boxerID'])):
     require_once('class.sql.php');
     $id = $_GET['boxerID'];
-    if(isset($_GET['add'])) {
+    /*if(isset($_GET['add'])) {
       if($_GET['add']==1) {
         print ('<div class="alert alert-dismissible alert-success">  <button type="button" class="close" data-dismiss="alert">x</button><strong>Áskrift hefur verið skráð</strong>  </div>');
       } else {
@@ -19,9 +19,9 @@ $user = true;
         } else {
             print ('<div class="alert alert-dismissible alert-danger">  <button type="button" class="close" data-dismiss="alert">x</button>  <strong>Obbosí!</strong> einhvað fór úrskeiðis, reyndu aftur.  </div>');
           }
-      }
-    $sql_boxer = new SQL();
+      }*/
     $boxer_found = false;
+    $sql_boxer = new SQL();
     $arr_boxers = $sql_boxer->list_full_boxer_info($id);
     if(isset($arr_boxers )){
       $boxer_found = true;
@@ -45,12 +45,11 @@ $user = true;
     }
 
     $sql_subscriptions = new SQL();
-
     $arr_subs = $sql_subscriptions->list_subscriptions_for_person($id);
     if(isset($arr_subs)){
       $subscriptions ='';
       foreach($arr_subs as $k=>$v){
-          $subscriptions .= "<tr><td>$v[0]</td><td>$v[2]</td><td>$v[3]</td><td>$v[4]</td><td>$v[5]</td><td>$v[6]</td></tr>";
+          $subscriptions .= "<tr><td>$v[2]</td><td>$v[3]</td><td>$v[4]</td><td>$v[5]</td><td>$v[6]</td></tr>";
         }
     }
   $sql_ComboGroup = new SQL;
@@ -107,10 +106,9 @@ $user = true;
       <table id="subscription_info" class="table table-striped table-hover" width="100%">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Hópur</th>
                 <th>Greiðsluaðferð</th>
-                <th>Lengd skráningar</th>
+                <th>Tegund skráningar</th>
                 <th>Keypt þann</th>
                 <th>Rennur út</th>
             </tr>
@@ -132,7 +130,7 @@ $user = true;
   <div class="modal fade" id="addSubscriptionModal" tabindex="-1" role="dialog" aria-labelledby="addSubscriptionLabel">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <div id="SubscriptionAddStatus"></div>
+        <div id="FormStatus"></div>
 
           <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -211,69 +209,6 @@ $user = true;
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="addSubscriptionLabel"><strong> Ekki búið að útfæra þennan flipa </strong></h4>
         </div>
-<!--
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="addSubscriptionLabel">Breyta upplýsingum um <strong> <?php echo $name;?> </strong></h4>
-        </div>
-        <div class="modal-body">
-          <form class="form-horizontal" id="updateBoxer" method="POST" action="">
-            <fieldset>
-              <div class="form-group">
-                <label for="inputName" class="col-lg-2 control-label">Nafn</label>
-                <div class="col-lg-8">
-                  <input type="text" class="form-control" id="inputName" name="name" value="<?php if(!isset($name)){print 'Engin notandi';} else echo $name; ?>" required>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="inputSSN" class="col-lg-2 control-label">Kennitala</label>
-                <div class="col-lg-8">
-                  <input type="number" class="form-control" id="inputSSN" name="kt" value="<?php if(!isset($kt)){print 'Engin Kt';} else echo $kt; ?>" maxlength="10" pattern="((0[1-9])|([12][0-9])|(3[01]))((0[1-9])|(1[0-2]))([0-9]{2})[0-9]{4}" required>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="inputPhone" class="col-lg-2 control-label">Sími</label>
-                <div class="col-lg-8">
-                  <input type="tel" class="form-control" id="inputPhone" name="phone" value="<?php if(!isset($phone)){print 'Ekkert símanúmer';} else echo $phone; ?>" >
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="inputEmail" class="col-lg-2 control-label">Netfang</label>
-                <div class="col-lg-8">
-                  <input type="email" class="form-control" id="inputEmail" name="email" value="<?php if(!isset($email)){print 'Ekkert netfang';} else echo $email; ?>">
-                </div>
-              </div>
-              <hr>
-              <div class="form-group">
-                <label for="inputContactName" class="col-lg-2 control-label">Tengiliður</label>
-                <div class="col-lg-8">
-                  <input type="text" class="form-control" id="inputContactName" name="contact_name" value="<?php echo $contact_name; ?>">
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="inputContactPhone" class="col-lg-2 control-label">Sími tengiliðar</label>
-                <div class="col-lg-8">
-                  <input type="tel" class="form-control" id="inputContactPhone" name="contact_phone" value="<?php echo $contact_phone; ?>">
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="inputContactEmail" class="col-lg-2 control-label">Netfang tengiliðar</label>
-                <div class="col-lg-8">
-                  <input type="email" class="form-control" id="inputContactEmail" name="contact_email" value="<?php echo $contact_email; ?>">
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-lg-10 col-lg-offset-2">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  <button type="submit" name="updateBoxer" class="btn btn-success">Uppfæra notanda</button>
-                </div>
-              </div>
-            </fieldset>
-          </form>
-        </div>
-        <div class="modal-footer">
-        </div>
-            -->
       </div>
     </div>
   </div>

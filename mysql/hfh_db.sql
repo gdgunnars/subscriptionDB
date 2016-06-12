@@ -15,7 +15,7 @@ use hfh_db;
 #drop table if Exists Groups;
 #drop table if Exists Payment_type;
 #drop table if Exists Subscription_type;
-#drop talbe if Exists Subscriptions;
+#drop table if Exists Subscriptions;
 
 create table `Boxer`(
 	`ID` int not null auto_increment,
@@ -23,6 +23,7 @@ create table `Boxer`(
 	`kt` int,
 	`phone` int,
 	`email` varchar(255),
+	`image` varchar(255),
 	`contact_name` varchar(255),
 	`contact_phone` int,
 	`contact_email` varchar(255),

@@ -16,13 +16,14 @@ create procedure `hfh_db`.`add_boxer`(
 	kt int,
 	phone int,
 	email varchar (255),
+    image varchar(255),
 	contact_name varchar(255),
 	contact_phone int,
 	contact_email varchar(255)
 )
 BEGIN
-    insert into Boxer(name, kt, phone, email, contact_name, contact_phone, contact_email)
-    values (name, kt, phone, email, contact_name, contact_phone, contact_email);
+    insert into Boxer(name, kt, phone, email, image, contact_name, contact_phone, contact_email)
+    values (name, kt, phone, email, image, contact_name, contact_phone, contact_email);
 END $$
 DELIMITER ;
 
@@ -213,6 +214,7 @@ select Subscriptions.ID,
 	order by Subscriptions.ID desc;
 END $$
 DELIMITER ;
+
 #call list_subscriptions();
 
 #---------------------
@@ -264,9 +266,26 @@ BEGIN
 END $$
 
 
-#---------------------
-#----    search   ----
-#---------------------
+#---------------------------
+#----    search & find  ----
+#---------------------------
+
+#########################
+#### find user by KT  ####
+#########################
+
+drop procedure IF exists `find_user_by_kt`;
+
+DELIMITER $$
+use `hfh_db`$$
+create procedure `hfh_db`.`find_user_by_kt`(
+	kt_find int
+)
+BEGIN 
+	select ID from Boxer where kt = kt_find;
+END$$
+
+#call find_user_by_kt(2011892769);
 
 #########################
 #### search by name  ####
@@ -276,9 +295,25 @@ END $$
 select * from Boxer
     where name like '%g%';
 
+##########################################
+#### Get newest subscription from id  ####
+##########################################
+drop procedure IF exists `get_newest_subscription_from_id`;
+
+DELIMITER $$
+use `hfh_db`$$
+create procedure `hfh_db`.`get_newest_subscription_from_id`(
+	id_find int
+)
+BEGIN
+	SELECT expires_date FROM Subscriptions where boxer_ID = id_find ORDER BY expires_date DESC LIMIT 1;
+END$$
+
+
+#call get_newest_subscription_from_id(2);
 #call add_subscription(1,1,1,1,'2016-04-03','2016-06-06');
 #call add_subscription(2,1,3,3,'2016-03-03','2016-03-07');
 #call update_subscription(1,1,'2015-10-11');
 #call list_boxers();
 #call list_payments();
-#call add_boxer('Helga Valdís Björnsdóttir',0111913209,1,8670468,'helgavaldisb@gmail.com',1,2,'2015-08-8','n/a',0000000,'n/a');
+#call add_boxer('Jón Jónsson',1234567890,58123456,'helgavaldisb@gmail.com','',,'');

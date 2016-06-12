@@ -52,7 +52,7 @@ include_once "common/scripts.php";
             </ul>
         </div>
     </div>
-
+    <noscript>This site will have serious problems and will not work properly if javascript is disabled</noscript>
     <!-- Modal - addBoxer-->
     <div class="modal fade" id="addBoxerModal" tabindex="-1" role="dialog" aria-labelledby="addBoxerLabel">
         <div class="modal-dialog" role="document">
