@@ -26,6 +26,10 @@ class CheckIn
         }
     }
 
+    /**
+     * Checks a user in using couple of 
+     * @return string
+     */
     public function check_user_in(){
         $kt = trim($_POST['inputID']);
         $id = $this->get_id_of_kt($kt);
@@ -44,7 +48,7 @@ class CheckIn
 
         $currDate = date('Y-m-d');
         if($currDate > $subDate){
-            return "<h2> Your subscription has passed </h2>";
+            return "<h2> Your subscription has passed, please renew it as soon as possible </h2>";
         }
         else{
             return "<h2> You have now been signed in </h2>";
