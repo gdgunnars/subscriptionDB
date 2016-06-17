@@ -2,71 +2,45 @@
 $pageTitle = "Greiðsluupplýsingar";
 include_once "common/head.php";
 include_once "common/scripts.php";
+
+
 $user = true;
-  if(!empty($_GET['boxerID'])):
-    require_once('class.sql.php');
-    $id = $_GET['boxerID'];
-    /*if(isset($_GET['add'])) {
-      if($_GET['add']==1) {
-        print ('<div class="alert alert-dismissible alert-success">  <button type="button" class="close" data-dismiss="alert">x</button><strong>Áskrift hefur verið skráð</strong>  </div>');
-      } else {
-          print ('<div class="alert alert-dismissible alert-danger">  <button type="button" class="close" data-dismiss="alert">x</button>  <strong>Obbosí!</strong> einhvað fór úrskeiðis, reyndu aftur. </div>');
-        }
-      }
-      if(isset($_GET['update'])) {
-        if($_GET['update']==1) {
-          print ('<div class="alert alert-dismissible alert-success">  <button type="button" class="close" data-dismiss="alert">x</button><strong>Mynd var uppfærð  </strong>  </div>');
-        } else {
-            print ('<div class="alert alert-dismissible alert-danger">  <button type="button" class="close" data-dismiss="alert">x</button>  <strong>Obbosí!</strong> einhvað fór úrskeiðis, reyndu aftur.  </div>');
-          }
-      }*/
-    $boxer_found = false;
-    $sql_boxer = new SQL();
-    $arr_boxers = $sql_boxer->list_full_boxer_info($id);
-    if(isset($arr_boxers )){
-      $boxer_found = true;
-      foreach($arr_boxers as $k=>$v){
-        $id = $v[0];
-        $name = UTF8_encode($v[1]);
-        $kt = $v[2];
-        $phone = $v[3];
-        $email = UTF8_encode($v[4]);
-        if(empty($v[5])){
-          $image = 'static/img-profile/no-img.png';
-        } else {
-          $image = $v[5];
-        }
-        $contact_name = UTF8_encode($v[6]);
-        if($v[7] == 0){
-          $contact_phone = '';
-        } else $contact_phone = $v[7];
-        $contact_email = UTF8_encode($v[8]);
-      }
-    }
+    if(!empty($_GET['boxerID'])):
+        include_once "common/base.php";
+        include_once "class.sql.php";
+        $id = $_GET['boxerID'];
 
-    $sql_subscriptions = new SQL();
-    $arr_subs = $sql_subscriptions->list_subscriptions_for_person($id);
-    if(isset($arr_subs)){
-      $subscriptions ='';
-      foreach($arr_subs as $k=>$v){
-          $subscriptions .= "<tr><td>$v[2]</td><td>$v[3]</td><td>$v[4]</td><td>$v[5]</td><td>$v[6]</td></tr>";
+        $newSQL = new newSQL();
+        $fullInfoOfBoxer = $newSQL->list_full_boxer_info($id);
+        if($fullInfoOfBoxer){
+            $name = UTF8_ENCODE($fullInfoOfBoxer['Name']);
+            $infoSideBar = "<div class='panel-group'>"
+                . "<div class='panel panel-success'>"
+                . "<div class='panel-heading'>" . UTF8_ENCODE($fullInfoOfBoxer['Name']) . "</div>"
+                . "<div class='panel-body' id='infoKT'><strong>kt:</strong>" . UTF8_ENCODE($fullInfoOfBoxer['kt']) ."</div>"
+                . "<div class='panel-body'><strong>Sími:</strong>" . $fullInfoOfBoxer['phone'] . "</div>"
+                . "<div class='panel-body'><strong>Veffang:</strong>" . UTF8_ENCODE($fullInfoOfBoxer['email']) . "</div><hr />"
+                . "<div class='panel-body'><strong>Tengiliður: </strong>" . UTF8_ENCODE($fullInfoOfBoxer['contact_name']) . "</div>"
+                . "<div class='panel-body'><strong>Sími:</strong>" . $fullInfoOfBoxer['contact_phone'] . "</div>"
+                . "<div class='panel-body'><strong>Veffang:</strong>" . UTF8_ENCODE($fullInfoOfBoxer['contact_email']) . "</div></div></div>";
         }
-    }
-  $sql_ComboGroup = new SQL;
-  $sql_ComboPaymentType = new SQL;
-  $sql_ComboSubscriptionType = new SQL;
-  $groupCombo = $sql_ComboGroup->select_groupCombo();
-  $paymentCombo = $sql_ComboPaymentType->select_paymentTypeCombo();
-  $subscriptionCombo = $sql_ComboSubscriptionType->select_subscriptionTypeCombo();
 
-  include_once "common/nav-def.php";
+        $listOfPayedSubscriptions = $newSQL->list_payed_subscriptions($id);
+        if($listOfPayedSubscriptions){
+          $subscriptions ='';
+          foreach($listOfPayedSubscriptions as $k=>$v){
+              $subscriptions .= "<tr><td>$v[2]</td><td>$v[3]</td><td>$v[4]</td><td>$v[5]</td><td>$v[6]</td></tr>";
+            }
+        }
+
+        include_once "common/nav-def.php";
 ?>
 
   <div class="container">
     <div class="col-md-3">
       <br />
       <!-- Boxer image -->
-      <img src='<?php if(!isset($image)){ echo 'static/img-profile/no-img.png';} else echo $image;?>' width='100%' height=''/>
+      <img src='<?php if(empty($fullInfoOfBoxer['image'])){ echo 'static/img-profile/no-img.png';} else echo $fullInfoOfBoxer['image'];?>' width='100%' height=''/>
       <form action="img-upload.php" method="POST" enctype="multipart/form-data" class="form-horizontal">
         <div class="input-group">
             <span class="input-group-btn">
@@ -82,22 +56,10 @@ $user = true;
       <br />
        <!-- Boxer info -->
       <?php
-        if(!($boxer_found)){
+        if(!$fullInfoOfBoxer){
           print '<h3 class="text-danger">Engar Upplýsingar fundust um þennan notanda</h3>';
         } else {
-          print "
-          <div class='panel-group'>
-            <div class='panel panel-success'>
-              <div class='panel-heading'> $name</div>
-              <div class='panel-body' id='infoKT'><strong>kt:</strong> $kt</div>
-              <div class='panel-body'><strong>Sími:</strong> $phone</div>
-              <div class='panel-body'><strong>Veffang:</strong> $email </div>
-                <hr />
-              <div class='panel-body'><strong>Tengiliður: </strong> $contact_name</div>
-              <div class='panel-body'><strong>Sími:</strong> $contact_phone</div>
-              <div class='panel-body'><strong>Veffang:</strong> $contact_email</div>
-            </div>
-          </div>";
+          print $infoSideBar;
          } ?>
     </div>
     <!-- Greiðslu upplýsingar -->
@@ -115,7 +77,7 @@ $user = true;
         </thead>
         <tbody>
               <?php
-                if(!isset($subscriptions)){
+                if(!$listOfPayedSubscriptions){
                   print '<p class="text-danger">Engar Greiðsluupplýsingar fundust um þennan iðkanda</p>';
                 } else {
                   print UTF8_encode($subscriptions);
@@ -155,7 +117,7 @@ $user = true;
                           <label for="select" class="col-lg-2 control-label">Hópur</label>
                           <div class="col-lg-10">
                               <select class="form-control" id="group_id" name="group_id" required>
-                                  <?php print UTF8_encode($groupCombo); ?>
+                                  <?php print UTF8_encode($newSQL->combo_box_group()); ?>
                               </select>
                           </div>
                       </div>
@@ -163,7 +125,7 @@ $user = true;
                           <label for="select" class="col-lg-2 control-label">Greiðslumáti</label>
                           <div class="col-lg-10">
                               <select class="form-control" id="paymentType_id" name="paymentType_id" required>
-                                  <?php print UTF8_encode($paymentCombo); ?>
+                                  <?php print UTF8_encode($newSQL->combo_box_paymentType()); ?>
                               </select>
                           </div>
                       </div>
@@ -171,7 +133,7 @@ $user = true;
                           <label for="select" class="col-lg-2 control-label">Tegund áskriftar</label>
                           <div class="col-lg-10">
                               <select class="form-control" id="subscriptionType_id" name="subscriptionType_id" required>
-                                  <?php print UTF8_encode($subscriptionCombo); ?>
+                                  <?php print UTF8_encode($newSQL->combo_box_subscriptionType()); ?>
                               </select>
                           </div>
                       </div>

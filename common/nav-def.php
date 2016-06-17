@@ -27,7 +27,7 @@ include_once "common/scripts.php";
                 <li><a href="index.php">Yfirlit <span class="sr-only">(current)</span></a></li>
                 <li><a href="modals/addBoxer.php" data-toggle="modal" data-target="#addBoxerModal">Nýskrá iðkanda</a></li>
                 <li class="active"><a>
-                        <?php if(!isset($name)){print 'No User';} else print $name ?>
+                        <?php if(!isset($name)){print 'No username found';} else print $name ?>
                 <span class="sr-only">(current)</span></a></li>
                 <li class="active"><a href="#addSubscriptionModal" class="btn btn-success" role="button" data-toggle="modal" data-target="#addSubscriptionModal"> Kaupa Áskrift </a></li>
                 <li class="active"><a href="#updateInfo" class="btn btn-info" role="button" data-toggle="modal" data-target="#updateInfo"> Breyta upplýsingum </a></li>
