@@ -32,18 +32,16 @@ class CheckIn
      */
     public function check_user_in(){
         $kt = trim($_POST['inputID']);
-        $id = $this->get_id_of_kt($kt);
+        ;
 
-        if($id == false){
+        if(!$id = $this->get_id_of_kt($kt)){
             return "<h2> Error </h2>"
             . "<p> Sorry, you are nowhere to be found in the database</p>";
         }
 
-        $subDate = $this->get_subscription_end_date_from_id($id['ID']);
-
-        if($subDate == false){
+        if(!$subDate = $this->get_subscription_end_date_from_id($id['ID'])){
             return "<h2> Error </h2>"
-                    . "<p>Sorry, We did not find any subscription with your identity</p>";
+                    . "<p>Sorry, We did not find any subscription on your account</p>";
         }
 
         $currDate = date('Y-m-d');
@@ -65,14 +63,8 @@ class CheckIn
                 $stmt->closeCursor();
                 return $row;
             }
-            else {
-                return false;
-            }
         }
-        else {
-            return "<h2> Error </h2>"
-                    . "<p>Sorry, There was a problem connecting to the database</p>";
-        }
+        return false;
     }
 
     public function get_subscription_end_date_from_id($id) {
@@ -85,14 +77,8 @@ class CheckIn
                 $stmt->closeCursor();
                 return $result;
             }
-            else {
-                return false;
-            }
         }
-        else {
-            return "<h2> Error </h2>"
-            . "<p>Sorry, There was a problem connecting to the database</p>";
-        }
+        return false;
     }
 
 }

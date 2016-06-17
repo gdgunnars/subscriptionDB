@@ -28,15 +28,224 @@
             }
         }
 
-        public function list_boxers(){
+		/**
+		 * @return array|bool
+		 * Lists all the boxers that are in the database.
+         */
+		public function list_boxers(){
             $sql = "call list_boxers()";
-            if($stmt = $this->_db->prepare($sql)){
+            try {
+                $stmt = $this->_db->prepare($sql);
                 $stmt->execute();
-                $row = $stmt->fetchAll();
-                return $row;
+                $rows = $stmt->fetchAll();
+                $stmt->closeCursor();
+                return $rows;
             }
-            return false;
+            catch(PDOException $e) {
+                return FALSE;
+            }
         }
+
+		/**
+		 * @param $id
+		 * @return bool|mixed
+		 * List full detail of boxer with the given id
+         */
+		public function list_full_boxer_info($id){
+            $sql = "call list_full_boxer_info(:id)";
+            try {
+                $stmt = $this->_db->prepare($sql);
+                $stmt->bindParam(":id",$id,PDO::PARAM_STR);
+                $stmt->execute();
+                $row = $stmt->fetch();
+                $stmt->closeCursor();
+                if(!empty($row)) {
+                    return $row;
+                }
+                else
+                    return FALSE;
+            }
+            catch(PDOException $e) {
+                return FALSE;
+            }
+        }
+
+		/**
+		 * @param $id
+		 * @return array|bool
+		 * Gives an array of all subscription that a user had payed for
+         */
+		public function list_payed_subscriptions($id){
+            $sql = "call list_subscriptions_for_person(:id)";
+            try {
+                $stmt = $this->_db->prepare($sql);
+                $stmt->bindParam(":id",$id,PDO::PARAM_STR);
+                $stmt->execute();
+                $rows = $stmt->fetchAll();
+                $stmt->closeCursor();
+                if(!empty($rows)){
+                    return $rows;
+                }
+                else
+                    return FALSE;
+            }
+            catch(PDOException $e) {
+                return FALSE;
+            }
+        }
+
+		/**
+		 * @return array|bool
+		 * Gives a list of all groups that users can be assigned to
+         */
+		public function list_groups(){
+            $sql = "call list_groups()";
+            try {
+                $stmt = $this->_db->prepare($sql);
+                $stmt->execute();
+                $rows = $stmt->fetchAll();
+                $stmt->closeCursor();
+                if(!empty($rows)){
+                    return $rows;
+                }
+                else
+                    return FALSE;
+            }
+            catch(PDOException $e) {
+                return FALSE;
+            }
+        }
+
+		/**
+		 * @return bool|string
+		 * gives an option list for a select html tag of groups available
+         */
+		public function combo_box_group() {
+            if($groups = $this->list_groups()) {
+                $dropDown = utf8_decode('<option selected disabled> Veldu hóp </option>');
+                foreach($groups as $k=>$v){
+                    $dropDown .= '<option value="'.$v[0].'">'.$v[1].'</option>';
+                }
+                return $dropDown;
+            }
+            else
+                return FALSE;
+        }
+
+		/**
+		 * @return array|bool
+		 * gives a list of all payment types that users can be assigned to
+         */
+		public function list_paymentType() {
+            $sql = "call list_payment_types()";
+            try {
+                $stmt = $this->_db->prepare($sql);
+                $stmt->execute();
+                $rows = $stmt->fetchAll();
+                $stmt->closeCursor();
+                if(!empty($rows)){
+                    return $rows;
+                }
+                else
+                    return FALSE;
+            }
+            catch(PDOException $e) {
+                return FALSE;
+            }
+        }
+
+		/**
+		 * @return bool|string
+		 * gives an option list for a select html tag of payment types available
+         */
+		public function combo_box_paymentType() {
+            if($groups = $this->list_paymentType()) {
+                $dropDown = utf8_decode('<option selected disabled> Veldu greiðsluhátt  </option>');
+                foreach($groups as $k=>$v) {
+                    $dropDown .= '<option value="'.$v[0].'">'.$v[1].'</option>';
+                }
+                return $dropDown;
+            }
+            else
+                return FALSE;
+        }
+
+		/**
+		 * @return array|bool
+		 * gives a list of all subscription types that users can be assigned to
+         */
+		public function list_subscriptionType() {
+            $sql = "call list_subscription_type()";
+            try{
+                $stmt = $this->_db->prepare($sql);
+                $stmt->execute();
+                $rows = $stmt->fetchAll();
+                $stmt->closeCursor();
+                if(!empty($rows)){
+                    return $rows;
+                }
+                else
+                    return FALSE;
+            }
+            catch(PDOException $e) {
+                return FALSE;
+            }
+
+        }
+
+		/**
+		 * @return bool|string
+		 * gives an option list for a select html tag of subscription types available
+         */
+		public function combo_box_subscriptionType(){
+            if($groups = $this->list_subscriptionType()){
+                $dropDown = utf8_decode('<option selected disabled> Veldu tegund áskriftar  </option>');
+                foreach($groups as $k=>$v){
+                    $dropDown .= '<option value="'.$v[0].'">'.$v[1].'</option>';
+                }
+                return $dropDown;
+            }
+            else
+                return FALSE;
+        }
+
+		public function update_image($id, $imgPath) {
+            $sql = "call update_img(:id, :path";
+            try{
+                $stmt = $this->_db->prepare($sql);
+                $stmt->bindParam(":id",$id, PDO::PARAM_INT);
+                $stmt->bindParam(":path",$imgPath, PDO::PARAM_STR);
+                $stmt->execute();
+                $stmt->closeCursor();
+                return true;
+            }
+            catch(PDOException $e){
+                return FALSE;
+            }
+        }
+
+        public function subscription($boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date) {
+            $sql = "call add_subscription(:boxer_ID, :group_ID, :payment_ID, :subscription_ID, :bought_date, :expires_date";
+            try {
+                $stmt = $this->_db->prepare($sql);
+                $stmt->bindParam(":boxer_ID", $boxer_ID, PDO::PARAM_INT);
+                $stmt->bindParam(":group_ID", $group_ID, PDO::PARAM_INT);
+                $stmt->bindParam(":payment_ID", $payment_ID, PDO::PARAM_INT);
+                $stmt->bindParam(":subscription_ID", $subscription_ID, PDO::PARAM_INT);
+                $stmt->bindParam(":bought_date", $bought_date, PDO::PARAM_STR);
+                $stmt->bindParam(":expires_date", $expires_date, PDO::PARAM_STR);
+                $stmt->execute();
+                if($stmt->rowCount() != 0) {
+                    return TRUE;
+                }
+                return FALSE;
+            }
+            catch (PDOException $e) {
+                return FALSE;
+            }
+        }
+
+
     }
 	class SQL
 	{
@@ -58,156 +267,6 @@
 			mysqli_close($$this->connection);
 		}
 
-		public function list_boxers() {
-			$query = "call list_boxers()";
-			$result = mysqli_query($this->connection,$query);
-
-			while ($row = mysqli_fetch_row($result)) {
-				$boxers_arr[] = $row;
-			}
-			if(!empty($boxers_arr))
-					return $boxers_arr;
-		}
-
-		public function list_full_boxer_info($id){
-			$query = "call list_full_boxer_info($id)";
-			$result = mysqli_query($this->connection,$query);
-
-			while ($row = mysqli_fetch_row($result)){
-				$boxer_info[] = $row;
-			}
-			if(!empty($boxer_info))
-				return $boxer_info;
-		}
-
-		public function list_groups() {
-			$query = "call list_groups()";
-			$result = mysqli_query($this->connection,$query);
-
-			while ($row = mysqli_fetch_row($result)){
-				$groups_arr[] = $row;
-			}
-			if(!empty($groups_arr))
-				return $groups_arr;
-		}
-		public function list_payments(){
-			$query = "call list_payments()";
-			$result = mysqli_query($this->connection,$query);
-
-			while ($row = mysqli_fetch_row($result)) {
-				$payments_arr[] = $row;
-			}
-			if(!empty($payments_arr))
-				return $payments_arr;
-		}
-
-		public function list_subscriptions() {
-			$query = "call list_subscriptions()";
-			$result = mysqli_query($this->connection,$query);
-
-			while ($row = mysqli_fetch_row($result)) {
-				$subscriptions_arr[] = $row;
-			}
-			if(!empty($subscriptions_arr))
-				return $subscriptions_arr;
-		}
-
-		public function list_subscriptions_for_person($id){
-			$query = "call list_subscriptions_for_person($id)";
-			$result = mysqli_query($this->connection,$query);
-
-			while ($row = mysqli_fetch_row($result)){
-				$subscriptions[] = $row;
-			}
-			if(isset($subscriptions)){
-				return $subscriptions;
-			}
-		}
-
-		public function list_subscriptions_for_personJSON($id){
-			$query = "call list_subscriptions_for_person($id)";
-			$result = mysqli_query($this->connection,$query);
-
-			while ($row = mysqli_fetch_row($result)){
-				$subscriptions[] = $row;
-			}
-			if(isset($subscriptions)){
-				return json_encode($subscriptions);
-			}
-		}
-
-		/**
-			 * Fallið skilar skipunum í HTML-kombóboxi
-		 *
-		 * @return string
-		 *
-		 * ---------- Öll KomboBox Koma hér fyrir ------------------------
-		 */
-		public function select_groupCombo() {
-			$query = "call list_groups()";
-			$result = mysqli_query($this->connection,$query);
-
-			$kombo = utf8_decode('<option selected disabled> Veldu hóp </option>');
-			while ($row = mysqli_fetch_row($result)) {
-				$kombo.= '<option value="'.$row[0].'">'.$row[1].'</option>';
-	        }
-
-			return $kombo;
-		}
-
-		public function select_paymentTypeCombo() {
-			$query = "call list_payment_types()";
-			$result = mysqli_query($this->connection,$query);
-
-			$kombo = utf8_decode('<option selected disabled> Veldu greiðsluhátt </option>');
-			while ($row = mysqli_fetch_row($result)) {
-				$kombo.= '<option value="'.$row[0].'">'.$row[1].'</option>';
-	        }
-
-			return $kombo;
-		}
-
-		public function select_subscriptionTypeCombo() {
-			$query = "call list_subscription_type()";
-			$result = mysqli_query($this->connection,$query);
-
-			$kombo = utf8_decode('<option selected disabled> Veldu tegund áskriftar </option>');
-			while ($row = mysqli_fetch_row($result)) {
-				$kombo.= '<option value="'.$row[0].'">'.$row[1].'</option>';
-	        }
-
-			return $kombo;
-		}
-
-		public function select_boxerCombo() {
-			$query = "call list_boxers()";
-			$result = mysqli_query($this->connection,$query);
-
-			$kombo = utf8_decode('<option selected disabled> Veldu iðkanda </option>');
-			while ($row = mysqli_fetch_row($result)) {
-				$kombo.= '<option value="'.$row[0].'">'.$row[1].' - kt: '.$row[2].'</option>';
-	        }
-
-			return $kombo;
-		}
-
-		/**
-		 * Fallið tekur við upplýsingum af síðu og sendir í gagnagrunninn
-		 *
-		 *
-		 * ---------- Allar update skipanir koma hér ------------------------
-		 */
-
-		public function update_img($id,$path) {
-			$query = sprintf ("call update_img('%s','%s')",$id,$path);
-			$result = mysqli_query ($this->connection,$query);
-			if(mysqli_affected_rows($this->connection) == 1) {
-				return true;
-			}
-				return false;
-		}
-
-
 		/**
 		 * Fallið tekur við upplýsingum af síðu og sendir í gagnagrunninn
 		 *
@@ -221,7 +280,7 @@
  				return true;
 	 		 }
 	 		 else
-	 			return false;
+	 			return FALSE;
 		 }
 
 		 public function add_group($group_name) {
@@ -231,7 +290,7 @@
  				return true;
 	 		 }
 	 		 else
-	 			return false;
+	 			return FALSE;
 		 }
 
 		 public function add_payment_type($payment_type) {
@@ -241,7 +300,7 @@
  				return true;
 	 		 }
 	 		 else
-	 			return false;
+	 			return FALSE;
 		 }
 
 		 public function add_subscription_type($subscription_type) {
@@ -251,17 +310,17 @@
  				return true;
 	 		 }
 	 		 else
-	 			return false;
+	 			return FALSE;
 		 }
 
-		 public function add_subscription($boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date) {
+             public function add_subscription($boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date) {
 			 $query = sprintf("call add_subscription('%s','%s','%s','%s','%s','%s')", $boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date);
 			 $result = mysqli_query($this->connection,$query);
 			 if(mysqli_affected_rows($this->connection) == 1){
  				return true;
 	 		 }
 	 		 else
-	 			return false;
+	 			return FALSE;
 		 }
 		 /**
  		 * Fallið tekur við upplýsingum af síðu og sendir í gagnagrunninn
@@ -277,7 +336,7 @@
  				return true;
 	 		 }
 	 		 else
-	 			return false;
+	 			return FALSE;
 		 }
 
 		 public function delete_payment($payment_id) {
@@ -287,7 +346,7 @@
  				return true;
 	 		 }
 	 		 else
-	 			return false;
+	 			return FALSE;
 		 }
 
 		 public function delete_subscription($subscription_id) {
@@ -297,7 +356,7 @@
  				return true;
 	 		 }
 	 		 else
-	 			return false;
+	 			return FALSE;
 		 }
 	}
 ?>
