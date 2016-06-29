@@ -13,6 +13,7 @@
 <div class="modal-body">
     <form class="form-horizontal" id="addBoxer" method="POST" action="class.controllerForm.php">
         <fieldset>
+            <input type="hidden" name="action" value="addBoxer" />
             <div class="form-group">
                 <label for="inputName" class="col-lg-2 control-label">Nafn</label>
                 <div class="col-lg-8">
