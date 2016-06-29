@@ -1,6 +1,5 @@
 <?php
 /**
- * Created by PhpStorm.
  * User: gd
  * Date: 12.6.2016
  * Time: 02:23
@@ -14,4 +13,3 @@ define('DB_PASS', 'db-pass');
 define('DB_NAME', 'db-name');
 
 ?>
-
