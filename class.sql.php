@@ -224,6 +224,7 @@
             }
         }
 
+
         public function add_subscription($boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date) {
             $sql = "call add_subscription(:boxer_ID, :group_ID, :payment_ID, :subscription_ID, :bought_date, :expires_date";
             try {
