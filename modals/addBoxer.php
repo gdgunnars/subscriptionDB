@@ -61,7 +61,7 @@
                 <div class="col-lg-10 col-lg-offset-2">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="reset" class="btn btn-danger">Hreinsa</button>
-                    <button type="submit" name="addBoxer" class="btn btn-primary">Skrá Iðkanda</button>
+                    <button type="submit" name="" class="btn btn-primary">Skrá Iðkanda</button>
                 </div>
             </div>
         </fieldset>

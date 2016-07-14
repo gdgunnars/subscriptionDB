@@ -101,6 +101,7 @@ $user = true;
           <div class="modal-body">
               <form class="form-horizontal" id="addSubscription" name="addSubscription" method="POST" action="class.controllerForm.php">
                   <fieldset>
+                      <input type="hidden" name="action" value="addSubscription" />
                       <div class="form-group">
                           <label for="inputID" class="col-lg-2 control-label">ID</label>
                           <div class="col-lg-10">

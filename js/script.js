@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $('form#addSubscription').on('submit', function() {
+    /*$('form#addSubscription').on('submit', function() {
         var form = $(this);
         event.preventDefault();
         var data = "form_name=addSubscription&" + form.serialize();
@@ -34,7 +34,7 @@ $(document).ready(function(){
                 }
             }
         });
-    });
+    });*/
 
 
   $('form#addBoxer').on('submit', function() {
