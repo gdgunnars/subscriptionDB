@@ -6,19 +6,31 @@ include_once "common/head.php";
 include_once "common/scripts.php";
 
 $newSQL = new newSQL();
-$arrayOfBoxers = $newSQL->list_boxers();
-if($arrayOfBoxers != false){
-    $boxers_list = '';
-    foreach($arrayOfBoxers as $k=>$v){
-        $boxers_list .= "<tr>
-                          <td><a href='user.php?boxerID=$v[0]'><strong> $v[1] </strong></a></td>
-                          <td> $v[2] </td>
-                          <td> $v[3] </td>
-                          <td> $v[4] </td>
-                        </tr>";
+
+if(!empty($_POST['action'])):
+    $return = $newSQL->add_boxer(utf8_decode($_POST['name']), utf8_decode($_POST['kt']), utf8_decode($_POST['phone']), utf8_decode($_POST['email']), 'img' , utf8_decode($_POST['contact_name']), utf8_decode($_POST['contact_phone']), utf8_decode($_POST['contact_email']));
+    echo $return;
+    echo "\n printed return";
+    /*if($newSQL->add_boxer(utf8_decode($_POST['name']), utf8_decode($_POST['kt']), utf8_decode($_POST['phone']), utf8_decode($_POST['email']), " " , utf8_decode($_POST['contact_name']), utf8_decode($_POST['contact_phone']), utf8_decode($_POST['contact_email']))) {
+              echo json_encode(1);
+            }
+    else {
+        echo json_encode(0);
+    }*/
+else:
+    $arrayOfBoxers = $newSQL->list_boxers();
+    if($arrayOfBoxers != false){
+        $boxers_list = '';
+        foreach($arrayOfBoxers as $k=>$v){
+            $boxers_list .= "<tr>
+                              <td><a href='user.php?boxerID=$v[0]'><strong> $v[1] </strong></a></td>
+                              <td> $v[2] </td>
+                              <td> $v[3] </td>
+                              <td> $v[4] </td>
+                            </tr>";
+        }
     }
-}
-include_once "common/nav-def.php";
+    include_once "common/nav-def.php";
 ?>
 
     <h1><center><img src="img/HFHLogo-192x192.png" alt="hfh logo"> Yfirlitskerfi Hnefaleikafélags Hafnarfjarðar </center></h1>
@@ -53,5 +65,6 @@ include_once "common/nav-def.php";
     </script>
 
 <?php
-include_once "common/footer.php";
+    include_once "common/footer.php";
+endif;
 ?>

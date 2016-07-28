@@ -209,7 +209,7 @@
                 return FALSE;
         }
 
-		public function update_image($id, $imgPath) {
+		/*public function update_image($id, $imgPath) {
             $sql = "call update_img(:id, :path";
             try{
                 $stmt = $this->_db->prepare($sql);
@@ -222,28 +222,36 @@
             catch(PDOException $e){
                 return FALSE;
             }
+        }*/
+
+        public function update_image($id, $imgPath) {
+            try {
+                $stmt = $this->_db->prepare("UPDATE Boxer SET image = ? WHERE ID = ?");
+                $stmt->execute(array($imgPath, $id));
+                $stmt->closeCursor();
+                return true;
+            }
+            catch(PDOException $e){
+                return FALSE;
+            }
         }
 
+        public function add_subscription($boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date){
+            $stmt = $this->_db->prepare("INSERT INTO Subscriptions(boxer_ID, group_ID, payment_ID, subscription_ID, bought_date,expires_date) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->execute(array($boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date));
+            $new_id = $this->_db->lastInsertId();
+            $stmt->closeCursor();
+            return $new_id;
 
-        public function add_subscription($boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date) {
-            $sql = "call add_subscription(:boxer_ID, :group_ID, :payment_ID, :subscription_ID, :bought_date, :expires_date";
-            try {
-                $stmt = $this->_db->prepare($sql);
-                $stmt->bindParam(":boxer_ID", $boxer_ID, PDO::PARAM_INT);
-                $stmt->bindParam(":group_ID", $group_ID, PDO::PARAM_INT);
-                $stmt->bindParam(":payment_ID", $payment_ID, PDO::PARAM_INT);
-                $stmt->bindParam(":subscription_ID", $subscription_ID, PDO::PARAM_INT);
-                $stmt->bindParam(":bought_date", $bought_date, PDO::PARAM_STR);
-                $stmt->bindParam(":expires_date", $expires_date, PDO::PARAM_STR);
-                $stmt->execute();
-                if($stmt->rowCount() != 0) {
-                    return TRUE;
-                }
-                return FALSE;
-            }
-            catch (PDOException $e) {
-                return FALSE;
-            }
+        }
+
+        public function add_boxer($name, $kt, $phone, $email, $image, $contact_name, $contact_phone, $contact_email) {
+            $stmt = $this->_db->prepare("INSERT INTO Boxer(name, kt, phone, email, image, contact_name, contact_phone, contact_email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            //stmt->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $stmt->execute(array($name, $kt, $phone, $email, $image, $contact_name, $contact_phone, $contact_email));
+            $new_id = $this->_db->lastInsertId();
+            $stmt->closeCursor();
+            return $new_id;
         }
 
 
@@ -274,7 +282,7 @@
 		 *
 		 * ---------- Allar Add skipanir koma hér ------------------------
 		 */
-		 public function add_boxer($name, $kt, $phone, $email, $image, $contact_name, $contact_phone, $contact_email) {
+		 /*public function add_boxer($name, $kt, $phone, $email, $image, $contact_name, $contact_phone, $contact_email) {
 			 $query = sprintf("call add_boxer('%s','%s','%s','%s','%s','%s','%s','%s')", $name, $kt, $phone, $email, $image, $contact_name, $contact_phone, $contact_email);
 			 $result = mysqli_query($this->connection,$query);
 			 if(mysqli_affected_rows($this->connection) == 1){
@@ -282,7 +290,7 @@
 	 		 }
 	 		 else
 	 			return FALSE;
-		 }
+		 }*/
 
 		 public function add_group($group_name) {
 			 $query = sprintf("call add_group('%s')", $group_name);
