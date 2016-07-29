@@ -24,30 +24,23 @@ include_once "common/scripts.php";
             <ul class="nav navbar-nav">
                 <?php
                 if(isset($user)): ?>
-                <li><a href="index.php">Yfirlit <span class="sr-only">(current)</span></a></li>
-                <li><a href="modals/addBoxer.php" data-toggle="modal" data-target="#addBoxerModal">Nýskrá iðkanda</a></li>
+                <li><a href="index.php"><i class="fa fa-users fa-lg" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
+                <li><a href="modals/addBoxer.php" data-toggle="modal" data-target="#addBoxerModal"><i class="fa fa-user-plus fa-lg" aria-hidden="true"></i></a></li>
                 <li class="active"><a>
                         <?php if(!isset($name)){print 'No username found';} else print $name ?>
                 <span class="sr-only">(current)</span></a></li>
-                <li class="active"><a href="#addSubscriptionModal" class="btn btn-success" role="button" data-toggle="modal" data-target="#addSubscriptionModal"> Kaupa Áskrift </a></li>
-                <li class="active"><a href="#updateInfo" class="btn btn-info" role="button" data-toggle="modal" data-target="#updateInfo"> Breyta upplýsingum </a></li>
-                <li class="active"><a href="#" class="btn btn-warning" role="button" data-toggle="modal" data-target="#"> Senda SMS </a></li>
+                <li class="active"><a href="#addSubscriptionModal" class="btn btn-success" role="button" data-toggle="modal" data-target="#addSubscriptionModal"><i class="fa fa-ticket fa-lg" aria-hidden="true"></i></a></li>
+                <li class="active"><a href="#updateInfo" class="btn btn-info" role="button" data-toggle="modal" data-target="#updateInfo"><i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></a> </li>
+                <li class="active"><a href="#" class="btn btn-warning" role="button" data-toggle="modal" data-target="#">&nbsp&nbsp<i class="fa fa-mobile fa-lg" aria-hidden="true">&nbsp</i></a></li>
                 <?php
                 else:
-                    echo '<li class="active"><a href="">Yfirlit <span class="sr-only">(current)</span></a></li>
-                          <li><a href="modals/addBoxer.php" data-toggle="modal" data-target="#addBoxerModal">Nýskrá iðkanda</a></li>';
+                    echo '<li class="active"><a href=""><i class="fa fa-users fa-lg" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
+                          <li><a href="modals/addBoxer.php" data-toggle="modal" data-target="#addBoxerModal"><i class="fa fa-user-plus fa-lg" aria-hidden="true"></i></a></li>';
                 endif;
                 ?>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Senda tilkynningu <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="#tilkynningar">Senda tilkynningu á netfang eða SMS</a></li>
-                        <li class="divider"></li>
-                        <li><a href="modals/contact.php" data-toggle="modal" data-target="#contact">Senda tilkynningu á vefstjóra</a></li>
-                    </ul>
-                </li>
+                <li class="active"><a href="modals/contact.php" class="btn btn-danger" role="button" data-toggle="modal" data-target="#contact"><i class="fa fa-bug fa-lg" aria-hidden="true"></i></a></li>
                 <li><a href="http://www.hfh.is">Vefsíða HFH</a></li>
             </ul>
         </div>
