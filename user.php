@@ -1,39 +1,49 @@
 <?php
-$pageTitle = "Greiðsluupplýsingar";
+$pageTitle = "Greiðsluyfirlit";
 include_once "common/head.php";
 include_once "common/scripts.php";
 
 
 $user = true;
-    if(!empty($_GET['boxerID'])):
-        include_once "common/base.php";
-        include_once "class.sql.php";
-        $id = $_GET['boxerID'];
+if(!empty($_POST['action'])):
+    include_once "class.sql.php";
+    $newSQL = new newSQL();
+    if($return = $newSQL->add_subscription($_POST['boxer_id'],$_POST['group_id'], $_POST['paymentType_id'], $_POST['subscriptionType_id'], date("Y-m-d", strtotime($_POST['begin_date'])), date("Y-m-d", strtotime($_POST['end_date'])))) {
+        echo json_encode($return);
+    }
+    else {
+        echo json_encode(0);
+    }
 
-        $newSQL = new newSQL();
-        $fullInfoOfBoxer = $newSQL->list_full_boxer_info($id);
-        if($fullInfoOfBoxer){
-            $name = UTF8_ENCODE($fullInfoOfBoxer['Name']);
-            $infoSideBar = "<div class='panel-group'>"
-                . "<div class='panel panel-success'>"
-                . "<div class='panel-heading'>" . UTF8_ENCODE($fullInfoOfBoxer['Name']) . "</div>"
-                . "<div class='panel-body' id='infoKT'><strong>kt:</strong>" . UTF8_ENCODE($fullInfoOfBoxer['kt']) ."</div>"
-                . "<div class='panel-body'><strong>Sími:</strong>" . $fullInfoOfBoxer['phone'] . "</div>"
-                . "<div class='panel-body'><strong>Veffang:</strong>" . UTF8_ENCODE($fullInfoOfBoxer['email']) . "</div><hr />"
-                . "<div class='panel-body'><strong>Tengiliður: </strong>" . UTF8_ENCODE($fullInfoOfBoxer['contact_name']) . "</div>"
-                . "<div class='panel-body'><strong>Sími:</strong>" . $fullInfoOfBoxer['contact_phone'] . "</div>"
-                . "<div class='panel-body'><strong>Veffang:</strong>" . UTF8_ENCODE($fullInfoOfBoxer['contact_email']) . "</div></div></div>";
+elseif(!empty($_GET['boxerID'])):
+    include_once "common/base.php";
+    include_once "class.sql.php";
+    $id = $_GET['boxerID'];
+
+    $newSQL = new newSQL();
+    $fullInfoOfBoxer = $newSQL->list_full_boxer_info($id);
+    if($fullInfoOfBoxer){
+        $name = UTF8_ENCODE($fullInfoOfBoxer['Name']);
+        $infoSideBar = "<div class='panel-group'>"
+            . "<div class='panel panel-success'>"
+            . "<div class='panel-heading'>" . UTF8_ENCODE($fullInfoOfBoxer['Name']) . "</div>"
+            . "<div class='panel-body' id='infoKT'><strong>kt:</strong>" . UTF8_ENCODE($fullInfoOfBoxer['kt']) ."</div>"
+            . "<div class='panel-body'><strong>Sími:</strong>" . $fullInfoOfBoxer['phone'] . "</div>"
+            . "<div class='panel-body'><strong>Veffang:</strong>" . UTF8_ENCODE($fullInfoOfBoxer['email']) . "</div><hr />"
+            . "<div class='panel-body'><strong>Tengiliður: </strong>" . UTF8_ENCODE($fullInfoOfBoxer['contact_name']) . "</div>"
+            . "<div class='panel-body'><strong>Sími:</strong>" . $fullInfoOfBoxer['contact_phone'] . "</div>"
+            . "<div class='panel-body'><strong>Veffang:</strong>" . UTF8_ENCODE($fullInfoOfBoxer['contact_email']) . "</div></div></div>";
+    }
+
+    $listOfPayedSubscriptions = $newSQL->list_payed_subscriptions($id);
+    if($listOfPayedSubscriptions){
+      $subscriptions ='';
+      foreach($listOfPayedSubscriptions as $k=>$v){
+          $subscriptions .= "<tr><td>$v[2]</td><td>$v[3]</td><td>$v[4]</td><td>$v[5]</td><td>$v[6]</td></tr>";
         }
+    }
 
-        $listOfPayedSubscriptions = $newSQL->list_payed_subscriptions($id);
-        if($listOfPayedSubscriptions){
-          $subscriptions ='';
-          foreach($listOfPayedSubscriptions as $k=>$v){
-              $subscriptions .= "<tr><td>$v[2]</td><td>$v[3]</td><td>$v[4]</td><td>$v[5]</td><td>$v[6]</td></tr>";
-            }
-        }
-
-        include_once "common/nav-def.php";
+    include_once "common/nav-def.php";
 ?>
 
   <div class="container">
@@ -64,7 +74,7 @@ $user = true;
     </div>
     <!-- Greiðslu upplýsingar -->
     <div class="col-md-9">
-      <h3><center> Greiðsluupplýsingar</center></h3>
+      <h3><center> Greiðsluyfirlit</center></h3>
       <table id="subscription_info" class="table table-striped table-hover" width="100%">
         <thead>
             <tr>
@@ -96,10 +106,10 @@ $user = true;
 
           <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="addSubscriptionLabel">Kaupa áskrift</h4>
+              <h4 class="modal-title" id="addSubscriptionLabel"><i class="fa fa-ticket fa-lg" aria-hidden="true"></i> Kaupa áskrift</h4>
           </div>
           <div class="modal-body">
-              <form class="form-horizontal" id="addSubscription" name="addSubscription" method="POST" action="class.controllerForm.php">
+              <form class="form-horizontal" id="addSubscription" name="addSubscription" method="POST" action="user.php">
                   <fieldset>
                       <input type="hidden" name="action" value="addSubscription" />
                       <div class="form-group">

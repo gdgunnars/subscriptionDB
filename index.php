@@ -8,15 +8,12 @@ include_once "common/scripts.php";
 $newSQL = new newSQL();
 
 if(!empty($_POST['action'])):
-    $return = $newSQL->add_boxer(utf8_decode($_POST['name']), utf8_decode($_POST['kt']), utf8_decode($_POST['phone']), utf8_decode($_POST['email']), 'img' , utf8_decode($_POST['contact_name']), utf8_decode($_POST['contact_phone']), utf8_decode($_POST['contact_email']));
-    echo $return;
-    echo "\n printed return";
-    /*if($newSQL->add_boxer(utf8_decode($_POST['name']), utf8_decode($_POST['kt']), utf8_decode($_POST['phone']), utf8_decode($_POST['email']), " " , utf8_decode($_POST['contact_name']), utf8_decode($_POST['contact_phone']), utf8_decode($_POST['contact_email']))) {
-              echo json_encode(1);
+    if($return = $newSQL->add_boxer(utf8_decode($_POST['name']), utf8_decode($_POST['kt']), utf8_decode($_POST['phone']), utf8_decode($_POST['email']), " " , utf8_decode($_POST['contact_name']), utf8_decode($_POST['contact_phone']), utf8_decode($_POST['contact_email']))) {
+              echo json_encode($return);
             }
     else {
         echo json_encode(0);
-    }*/
+    }
 else:
     $arrayOfBoxers = $newSQL->list_boxers();
     if($arrayOfBoxers != false){
