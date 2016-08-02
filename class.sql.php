@@ -14,9 +14,6 @@
 
         /**
          * Checks for a database object and creates one if none is found
-         *
-         * @param object $db
-         * @return void
          */
         public function __construct($db=NULL) {
             if(is_object($db)) {
@@ -28,98 +25,77 @@
             }
         }
 
-		/**
-		 * @return array|bool
-		 * Lists all the boxers that are in the database.
-         */
-		public function list_boxers(){
-            $sql = "call list_boxers()";
-            try {
-                $stmt = $this->_db->prepare($sql);
-                $stmt->execute();
-                $rows = $stmt->fetchAll();
-                $stmt->closeCursor();
-                return $rows;
-            }
-            catch(PDOException $e) {
-                return FALSE;
-            }
+
+		public function list_boxers() {
+		    $stmt = $this->_db->prepare("SELECT Boxer.ID, Boxer.Name, Boxer.kt, Boxer.phone, Boxer.email, Boxer.image
+                            FROM Boxer
+                            ORDER BY Boxer.name ASC");
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            $stmt->closeCursor();
+            return $result;
         }
 
 		/**
-		 * @param $id
-		 * @return bool|mixed
 		 * List full detail of boxer with the given id
          */
-		public function list_full_boxer_info($id){
-            $sql = "call list_full_boxer_info(:id)";
-            try {
-                $stmt = $this->_db->prepare($sql);
-                $stmt->bindParam(":id",$id,PDO::PARAM_STR);
-                $stmt->execute();
-                $row = $stmt->fetch();
-                $stmt->closeCursor();
-                if(!empty($row)) {
-                    return $row;
-                }
-                else
-                    return FALSE;
+		public function list_full_boxer_info($id) {
+		    $stmt = $this->_db->prepare("SELECT Boxer.ID, Boxer.Name, Boxer.kt, Boxer.phone, Boxer.email, Boxer.image, Boxer.contact_name, Boxer.contact_phone, Boxer.contact_email
+                                            FROM Boxer
+                                            WHERE Boxer.ID = ?
+                                            ORDER BY Boxer.name ASC;");
+            $stmt->execute(array($id));
+            $result = $stmt->fetch();
+            $stmt->closeCursor();
+            if(!empty($result)) {
+                return $result;
             }
-            catch(PDOException $e) {
+            else
                 return FALSE;
-            }
         }
 
 		/**
-		 * @param $id
-		 * @return array|bool
-		 * Gives an array of all subscription that a user had payed for
+		 * Returns an array of all subscription that a user had payed for
          */
-		public function list_payed_subscriptions($id){
-            $sql = "call list_subscriptions_for_person(:id)";
-            try {
-                $stmt = $this->_db->prepare($sql);
-                $stmt->bindParam(":id",$id,PDO::PARAM_STR);
-                $stmt->execute();
-                $rows = $stmt->fetchAll();
-                $stmt->closeCursor();
-                if(!empty($rows)){
-                    return $rows;
-                }
-                else
-                    return FALSE;
+		public function list_payed_subscriptions($id) {
+		    $stmt = $this->_db->prepare("SELECT Subscriptions.ID, Boxer.name, Groups.type, Payment_type.type, Subscription_type.type, Subscriptions.bought_date, Subscriptions.expires_date
+                                            FROM Subscriptions
+                                            LEFT JOIN Boxer ON Boxer.ID = Subscriptions.boxer_ID
+                                            LEFT JOIN Groups ON Groups.ID = Subscriptions.group_ID
+                                            LEFT JOIN Payment_type ON Payment_type.ID = Subscriptions.Payment_ID
+                                            LEFT JOIN Subscription_type ON Subscription_type.ID = Subscriptions.Subscription_ID
+                                            WHERE Boxer.id = ?
+                                            ORDER BY Subscriptions.ID DESC");
+            $stmt->execute(array($id));
+            $result = $stmt->fetchAll();
+            $stmt->closeCursor();
+            if(!empty($result)) {
+                return $result;
             }
-            catch(PDOException $e) {
+            else
                 return FALSE;
-            }
         }
 
 		/**
 		 * @return array|bool
-		 * Gives a list of all groups that users can be assigned to
+		 * Returns a list of all groups that users can be assigned to
          */
 		public function list_groups(){
-            $sql = "call list_groups()";
-            try {
-                $stmt = $this->_db->prepare($sql);
-                $stmt->execute();
-                $rows = $stmt->fetchAll();
-                $stmt->closeCursor();
-                if(!empty($rows)){
-                    return $rows;
-                }
-                else
-                    return FALSE;
+		    $stmt = $this->_db->prepare("SELECT * FROM Groups ORDER BY Groups.type ASC");
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            $stmt->closeCursor();
+            if(!empty($result)){
+                return $result;
             }
-            catch(PDOException $e) {
+            else
                 return FALSE;
-            }
         }
 
 		/**
-		 * @return bool|string
-		 * gives an option list for a select html tag of groups available
+		 * Returns an option list for a select html tag of groups available
          */
+
 		public function combo_box_group() {
             if($groups = $this->list_groups()) {
                 $dropDown = utf8_decode('<option selected disabled> Veldu hóp </option>');
@@ -133,30 +109,22 @@
         }
 
 		/**
-		 * @return array|bool
-		 * gives a list of all payment types that users can be assigned to
+		 * Returns a list of all payment types that users can be assigned to
          */
 		public function list_paymentType() {
-            $sql = "call list_payment_types()";
-            try {
-                $stmt = $this->_db->prepare($sql);
-                $stmt->execute();
-                $rows = $stmt->fetchAll();
-                $stmt->closeCursor();
-                if(!empty($rows)){
-                    return $rows;
-                }
-                else
-                    return FALSE;
+		    $stmt = $this->_db->prepare("SELECT * FROM Payment_type ORDER BY Payment_type.type ASC");
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            $stmt->closeCursor();
+            if(!empty($result)){
+                return $result;
             }
-            catch(PDOException $e) {
+            else
                 return FALSE;
-            }
         }
 
 		/**
-		 * @return bool|string
-		 * gives an option list for a select html tag of payment types available
+		 * Returns an option list for a select html tag of payment types available
          */
 		public function combo_box_paymentType() {
             if($groups = $this->list_paymentType()) {
@@ -171,31 +139,22 @@
         }
 
 		/**
-		 * @return array|bool
-		 * gives a list of all subscription types that users can be assigned to
+		 * Returns a list of all subscription types that users can be assigned to
          */
 		public function list_subscriptionType() {
-            $sql = "call list_subscription_type()";
-            try{
-                $stmt = $this->_db->prepare($sql);
-                $stmt->execute();
-                $rows = $stmt->fetchAll();
-                $stmt->closeCursor();
-                if(!empty($rows)){
-                    return $rows;
-                }
-                else
-                    return FALSE;
+            $stmt = $this->_db->prepare("SELECT * FROM Subscription_type ORDER BY Subscription_type.type ASC");
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            $stmt->closeCursor();
+            if(!empty($result)){
+                return $result;
             }
-            catch(PDOException $e) {
+            else
                 return FALSE;
-            }
-
         }
 
 		/**
-		 * @return bool|string
-		 * gives an option list for a select html tag of subscription types available
+		 * Returns an option list for a select html tag of subscription types available
          */
 		public function combo_box_subscriptionType(){
             if($groups = $this->list_subscriptionType()){
@@ -238,16 +197,17 @@
         }*/
 
         public function add_subscription($boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date) {
-            $stmt = $this->_db->prepare("INSERT INTO Subscriptions(boxer_ID, group_ID, payment_ID, subscription_ID, bought_date, expires_date) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt = $this->_db->prepare("INSERT INTO Subscriptions(boxer_ID, group_ID, payment_ID, subscription_ID, bought_date, expires_date) 
+                                          VALUES (?, ?, ?, ?, ?, ?)");
             $stmt->execute(array($boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date));
             $new_id = $this->_db->lastInsertId();
             $stmt->closeCursor();
             return $new_id;
-
         }
 
         public function add_boxer($name, $kt, $phone, $email, $image, $contact_name, $contact_phone, $contact_email) {
-            $stmt = $this->_db->prepare("INSERT INTO Boxer(name, kt, phone, email, image, contact_name, contact_phone, contact_email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt = $this->_db->prepare("INSERT INTO Boxer(name, kt, phone, email, image, contact_name, contact_phone, contact_email) 
+                                          VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             //$stmt->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $stmt->execute(array($name, $kt, $phone, $email, $image, $contact_name, $contact_phone, $contact_email));
             $new_id = $this->_db->lastInsertId();
@@ -255,118 +215,5 @@
             return $new_id;
         }
 
-
     }
-	class SQL
-	{
-		private $connection;
-		/**
-		 * Smiður klasans
-		 * Setur upp tenginu við MySQL gagangrunn
-		 *
-		 */
-		public function __construct() {
-			//$this->connection = mysqli_connect("SERVER","USERNAME","PASSWORD","DATABASE");
-			$config = parse_ini_file('hfhDbConfig.ini');
-			$this->connection = mysqli_connect($config['server'],$config['username'],$config['password'],$config['dbname'])
-				or die(mysqli_error($this->connection));
-		}
-
-		public function __desctruct() {
-			print "Destroying";
-			mysqli_close($$this->connection);
-		}
-
-		/**
-		 * Fallið tekur við upplýsingum af síðu og sendir í gagnagrunninn
-		 *
-		 *
-		 * ---------- Allar Add skipanir koma hér ------------------------
-		 */
-		 /*public function add_boxer($name, $kt, $phone, $email, $image, $contact_name, $contact_phone, $contact_email) {
-			 $query = sprintf("call add_boxer('%s','%s','%s','%s','%s','%s','%s','%s')", $name, $kt, $phone, $email, $image, $contact_name, $contact_phone, $contact_email);
-			 $result = mysqli_query($this->connection,$query);
-			 if(mysqli_affected_rows($this->connection) == 1){
- 				return true;
-	 		 }
-	 		 else
-	 			return FALSE;
-		 }*/
-
-		 public function add_group($group_name) {
-			 $query = sprintf("call add_group('%s')", $group_name);
-			 $result = mysqli_query($this->connection,$query);
-			 if(mysqli_affected_rows($this->connection) == 1){
- 				return true;
-	 		 }
-	 		 else
-	 			return FALSE;
-		 }
-
-		 public function add_payment_type($payment_type) {
-			 $query = sprintf("call add_payment_type('%s')", $payment_type);
-			 $result = mysqli_query($this->connection,$query);
-			 if(mysqli_affected_rows($this->connection) == 1){
- 				return true;
-	 		 }
-	 		 else
-	 			return FALSE;
-		 }
-
-		 public function add_subscription_type($subscription_type) {
-			 $query = sprintf("call add_subscription_type('%s')", $subscription_type);
-			 $result = mysqli_query($this->connection,$query);
-			 if(mysqli_affected_rows($this->connection) == 1){
- 				return true;
-	 		 }
-	 		 else
-	 			return FALSE;
-		 }
-
-             public function add_subscription($boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date) {
-			 $query = sprintf("call add_subscription('%s','%s','%s','%s','%s','%s')", $boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date);
-			 $result = mysqli_query($this->connection,$query);
-			 if(mysqli_affected_rows($this->connection) == 1){
- 				return true;
-	 		 }
-	 		 else
-	 			return FALSE;
-		 }
-		 /**
- 		 * Fallið tekur við upplýsingum af síðu og sendir í gagnagrunninn
- 		 *
- 		 *
- 		 * ---------- Allar Delete skipanir koma hér ------------------------
- 		 */
-
-		 public function delete_group($group_id) {
-			 $query = sprintf("call delete_group('%s')", $group_id);
-			 $result = mysqli_query($this->connection,$query);
-			 if(mysqli_affected_rows($this->connection) == 1){
- 				return true;
-	 		 }
-	 		 else
-	 			return FALSE;
-		 }
-
-		 public function delete_payment($payment_id) {
-			 $query = sprintf("call delete_payment('%s')", $payment_id);
-			 $result = mysqli_query($this->connection,$query);
-			 if(mysqli_affected_rows($this->connection) == 1){
- 				return true;
-	 		 }
-	 		 else
-	 			return FALSE;
-		 }
-
-		 public function delete_subscription($subscription_id) {
-			 $query = sprintf("call delete_subscription('%s')", $subscription_id);
-			 $result = mysqli_query($this->connection,$query);
-			 if(mysqli_affected_rows($this->connection) == 1){
- 				return true;
-	 		 }
-	 		 else
-	 			return FALSE;
-		 }
-	}
 ?>
