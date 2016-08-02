@@ -24,8 +24,8 @@ include_once "common/scripts.php";
             <ul class="nav navbar-nav">
                 <?php
                 if(isset($user)): ?>
-                <li class="active"><a href="index.php"><i class="fa fa-users fa-lg" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
-                <li class="active"><a href="modals/addBoxer.php" data-toggle="modal" data-target="#addBoxerModal"><i class="fa fa-user-plus fa-lg" aria-hidden="true"></i></a></li>
+                <li><a href="index.php"><i class="fa fa-users fa-lg" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
+                <li><a href="modals/addBoxer.php" data-toggle="modal" data-target="#addBoxerModal"><i class="fa fa-user-plus fa-lg" aria-hidden="true"></i></a></li>
                 <li class="active"><a>
                         <?php if(!isset($name)){print 'No username found';} else print $name ?>
                 <span class="sr-only">(current)</span></a></li>
