@@ -224,7 +224,7 @@
             }
         }*/
 
-        public function update_image($id, $imgPath) {
+        /*public function update_image($id, $imgPath) {
             try {
                 $stmt = $this->_db->prepare("UPDATE Boxer SET image = ? WHERE ID = ?");
                 $stmt->execute(array($imgPath, $id));
@@ -235,11 +235,10 @@
                 $stmt->closeCursor();
                 return FALSE;
             }
-        }
+        }*/
 
         public function add_subscription($boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date) {
             $stmt = $this->_db->prepare("INSERT INTO Subscriptions(boxer_ID, group_ID, payment_ID, subscription_ID, bought_date, expires_date) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $stmt->execute(array($boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date));
             $new_id = $this->_db->lastInsertId();
             $stmt->closeCursor();

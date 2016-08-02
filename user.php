@@ -1,13 +1,14 @@
 <?php
+include_once "common/base.php";
 $pageTitle = "Greiðsluyfirlit";
 include_once "common/head.php";
 include_once "common/scripts.php";
 
+include_once "class.sql.php";
+$newSQL = new newSQL();
 
 $user = true;
 if(!empty($_POST['action'])):
-    include_once "class.sql.php";
-    $newSQL = new newSQL();
     if($return = $newSQL->add_subscription($_POST['boxer_id'],$_POST['group_id'], $_POST['paymentType_id'], $_POST['subscriptionType_id'], date("Y-m-d", strtotime($_POST['begin_date'])), date("Y-m-d", strtotime($_POST['end_date'])))) {
         echo json_encode($return);
     }
@@ -16,11 +17,8 @@ if(!empty($_POST['action'])):
     }
 
 elseif(!empty($_GET['boxerID'])):
-    include_once "common/base.php";
-    include_once "class.sql.php";
     $id = $_GET['boxerID'];
 
-    $newSQL = new newSQL();
     $fullInfoOfBoxer = $newSQL->list_full_boxer_info($id);
     if($fullInfoOfBoxer){
         $name = UTF8_ENCODE($fullInfoOfBoxer['Name']);
@@ -102,14 +100,12 @@ elseif(!empty($_GET['boxerID'])):
   <div class="modal fade" id="addSubscriptionModal" tabindex="-1" role="dialog" aria-labelledby="addSubscriptionLabel">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <div id="FormStatus"></div>
-
           <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
               <h4 class="modal-title" id="addSubscriptionLabel"><i class="fa fa-ticket fa-lg" aria-hidden="true"></i> Kaupa áskrift</h4>
           </div>
           <div class="modal-body">
-              <form class="form-horizontal" id="addSubscription" name="addSubscription" method="POST" action="user.php">
+              <form class="form-horizontal" id="addSubscription" method="POST" action="user.php">
                   <fieldset>
                       <input type="hidden" name="action" value="addSubscription" />
                       <div class="form-group">
@@ -125,7 +121,7 @@ elseif(!empty($_GET['boxerID'])):
                           </div>
                       </div>
                       <div class="form-group">
-                          <label for="select" class="col-lg-2 control-label">Hópur</label>
+                          <label for="group_id" class="col-lg-2 control-label">Hópur</label>
                           <div class="col-lg-10">
                               <select class="form-control" id="group_id" name="group_id" required>
                                   <?php print UTF8_encode($newSQL->combo_box_group()); ?>
@@ -133,7 +129,7 @@ elseif(!empty($_GET['boxerID'])):
                           </div>
                       </div>
                       <div class="form-group">
-                          <label for="select" class="col-lg-2 control-label">Greiðslumáti</label>
+                          <label for="paymentType_id" class="col-lg-2 control-label">Greiðslumáti</label>
                           <div class="col-lg-10">
                               <select class="form-control" id="paymentType_id" name="paymentType_id" required>
                                   <?php print UTF8_encode($newSQL->combo_box_paymentType()); ?>
@@ -141,7 +137,7 @@ elseif(!empty($_GET['boxerID'])):
                           </div>
                       </div>
                       <div class="form-group">
-                          <label for="select" class="col-lg-2 control-label">Tegund áskriftar</label>
+                          <label for="subscriptionType_id" class="col-lg-2 control-label">Tegund áskriftar</label>
                           <div class="col-lg-10">
                               <select class="form-control" id="subscriptionType_id" name="subscriptionType_id" required>
                                   <?php print UTF8_encode($newSQL->combo_box_subscriptionType()); ?>
@@ -170,7 +166,6 @@ elseif(!empty($_GET['boxerID'])):
                   </fieldset>
               </form>
           </div>
-
       </div>
     </div>
   </div>
@@ -180,7 +175,7 @@ elseif(!empty($_GET['boxerID'])):
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="addSubscriptionLabel"><strong> Ekki búið að útfæra þennan flipa </strong></h4>
+          <h4 class="modal-title" id="updateInfoLabel"><strong> Ekki búið að útfæra þennan flipa </strong></h4>
         </div>
       </div>
     </div>

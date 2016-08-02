@@ -1,10 +1,10 @@
 <?php
 include_once "common/base.php";
 $pageTitle = "Iðkennda yfirlit";
-include_once "class.sql.php";
 include_once "common/head.php";
 include_once "common/scripts.php";
 
+include_once "class.sql.php";
 $newSQL = new newSQL();
 
 if(!empty($_POST['action'])):
