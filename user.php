@@ -48,20 +48,8 @@ elseif(!empty($_GET['boxerID'])):
     <div class="col-md-3">
       <br />
       <!-- Boxer image -->
-      <img src='<?php if(empty($fullInfoOfBoxer['image'])){ echo 'static/img-profile/no-img.png';} else echo $fullInfoOfBoxer['image'];?>' width='100%' height=''/>
-      <form action="img-upload.php" method="POST" enctype="multipart/form-data" class="form-horizontal">
-        <div class="input-group">
-            <span class="input-group-btn">
-                <span class="btn btn-default btn-file">
-                    Browse&hellip; <input type="file" name="uploadedIMG" >
-                </span>
-            </span>
-            <input type="text" class="form-control" readonly>
-        </div>
-        <input type="number" value="<?php echo $id;?>" name="id" hidden />
-        <button type="submit" name="uploadImage" class="btn btn-default form-control">Uppfæra mynd </button>
-      </form>
-      <br />
+      <img id='profile' src='<?php if(empty($fullInfoOfBoxer['image'])){ echo 'static/img-profile/no-img.png';} else echo $fullInfoOfBoxer['image'];?>' width='100%' height=''/>
+
        <!-- Boxer info -->
       <?php
         if(!$fullInfoOfBoxer){
