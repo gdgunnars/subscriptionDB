@@ -39,6 +39,7 @@ input[readonly] {
     width: 200%;
     height: 200%;
 }
+
 #bg img {
     position: absolute;
     top: 0;
@@ -48,4 +49,8 @@ input[readonly] {
     margin: auto;
     min-width: 20%;
     min-height: 20%;
+}
+
+img#profile {
+    margin-bottom: 5px;
 }
