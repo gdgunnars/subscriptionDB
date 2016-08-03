@@ -27,7 +27,7 @@ class CheckIn
     }
 
     /**
-     * Checks a user in using couple of 
+     * Checks a user in or returns an error if no subscription is valid
      * @return string
      */
     public function check_user_in(){
@@ -53,32 +53,26 @@ class CheckIn
         }
     }
 
-    public function get_id_of_kt($kt){
-        $sql = "call find_user_by_kt(:kt)";
-        if($stmt = $this->_db->prepare($sql)){
-            $stmt->bindParam(":kt", $kt, PDO::PARAM_STR);
-            $stmt->execute();
-            $row = $stmt->fetch();
-            if(!empty($row)){
-                $stmt->closeCursor();
-                return $row;
-            }
+    public function get_id_of_kt($kt) {
+        $stmt = $this->_db->prepare("select ID from Boxer where kt = ?");
+        $stmt->execute(array($kt));
+        $id = $stmt->fetch();
+        if(!empty($id)){
+            return $id;
         }
-        return false;
+        else
+            return FALSE;
     }
 
     public function get_subscription_end_date_from_id($id) {
-        $sql = "call get_newest_subscription_from_id(:id)";
-        if($stmt = $this->_db->prepare($sql)){
-            $stmt->bindParam(":id", $id, PDO::PARAM_STR);
-            $stmt->execute();
-            $result = $stmt->fetch();
-            if(!empty($result)){
-                $stmt->closeCursor();
-                return $result;
-            }
+        $stmt = $this->_db->prepare("SELECT expires_date FROM Subscriptions where boxer_ID = ? ORDER BY expires_date DESC LIMIT 1");
+        $stmt->execute(array($id));
+        $result = $stmt->fetch();
+        if(!empty($result)){
+            return $result;
         }
-        return false;
+        else
+            return FALSE;
     }
 
 }
