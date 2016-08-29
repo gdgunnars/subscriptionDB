@@ -193,7 +193,14 @@ elseif(!empty($_GET['boxerID'])):
               console.log(jsonReturn);
               if(alertifyType == 'success'){
                   alertify.success(jsonReturn.msg);
-                  $('#subscription_info tr:last').after('<tr><td>' + jsonReturn.info[2] + '</td><td>' + jsonReturn.info[3] + '</td><td>' + jsonReturn.info[4] + '</td><td>' + jsonReturn.info[5] + '</td><td>'+ jsonReturn.info[6] + '</td></tr>');
+                  var t = $('#subscription_info').DataTable();
+                  t.row.add( [
+                      jsonReturn.info[2],
+                      jsonReturn.info[3],
+                      jsonReturn.info[4],
+                      jsonReturn.info[5],
+                      jsonReturn.info[6]
+                  ] ).draw( false );
                   $('form#addSubscription')[0].reset();
                   $('#addSubscriptionModal').modal('hide');
               } else if(alertifyType == 'error') {
