@@ -70,7 +70,7 @@ class CheckIn
             $returnMsg = '<div class="checkin"><img src=\'' .$errorImage. '\' width=\'450\'>
                 <h2> ATH!</h2>
                 <h3>Áskriftin þín er runnin út,</h3>
-                <h3>vinsamlegast talaðu við afgreiðslu til að endurnýja</h3></div>>';
+                <h3>vinsamlegast talaðu við afgreiðslu til að endurnýja</h3></div>';
             $returnArray = array(
                 'status' => 'error',
                 'msg' => $returnMsg
