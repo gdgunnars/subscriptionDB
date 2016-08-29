@@ -245,11 +245,11 @@
                 return FALSE;
         }
 
-        public function add_boxer($name, $kt, $phone, $email, $image, $contact_name, $contact_phone, $contact_email) {
-            $stmt = $this->_db->prepare("INSERT INTO Boxer(name, kt, phone, email, image, contact_name, contact_phone, contact_email) 
-                                          VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        public function add_boxer($name, $kt, $phone, $email, $image, $contact_name, $contact_phone, $contact_email, $active) {
+            $stmt = $this->_db->prepare("INSERT INTO Boxer(name, kt, phone, email, image, contact_name, contact_phone, contact_email, active) 
+                                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             //$stmt->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $stmt->execute(array($name, $kt, $phone, $email, $image, $contact_name, $contact_phone, $contact_email));
+            $stmt->execute(array($name, $kt, $phone, $email, $image, $contact_name, $contact_phone, $contact_email, $active));
             $new_id = $this->_db->lastInsertId();
             $stmt->closeCursor();
             return $new_id;

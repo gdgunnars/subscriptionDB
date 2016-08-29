@@ -5,13 +5,14 @@ include_once "class.sql.php";
 $newSQL = new newSQL();
 
 if(!empty($_POST['action'])):
-    if($return = $newSQL->add_boxer(utf8_decode($_POST['name']), utf8_decode($_POST['kt']), utf8_decode($_POST['phone']), utf8_decode($_POST['email']), "img/No-image-available.png" , utf8_decode($_POST['contact_name']), utf8_decode($_POST['contact_phone']), utf8_decode($_POST['contact_email']))) {
+    if($return = $newSQL->add_boxer(utf8_decode($_POST['name']), utf8_decode($_POST['kt']), utf8_decode($_POST['phone']), utf8_decode($_POST['email']), "img/No-image-available.png" , utf8_decode($_POST['contact_name']), utf8_decode($_POST['contact_phone']), utf8_decode($_POST['contact_email']), true)) {
         header("Location: user.php?boxerID=$return");
     }
     else {
-        echo json_encode(0);
+        header("Location: index.php?error");
     }
 else:
+
     $arrayOfBoxers = $newSQL->list_boxers();
     if($arrayOfBoxers != false){
         $boxers_list = '';
@@ -27,6 +28,9 @@ else:
     include_once "common/head.php";
     include_once "common/scripts.php";
     include_once "common/nav-def.php";
+    if(isset($_GET['error'])){
+        echo '<script>$(document).ready(function(){ alertify.error("<h3> Villa kom upp í fyrirspurninni, reyndu aftur síðar </h3>"); });</script>';
+    }
 ?>
 
     <h1><center><img src="img/HFHLogo-192x192.png" alt="hfh logo"> Yfirlitskerfi Hnefaleikafélags Hafnarfjarðar </center></h1>

@@ -27,6 +27,7 @@ create table `Boxer`(
 	`contact_name` varchar(255),
 	`contact_phone` int,
 	`contact_email` varchar(255),
+	`active` bool,
 PRIMARY KEY (`ID`),
 UNIQUE (`kt`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Table containing Boxers, and their information';
