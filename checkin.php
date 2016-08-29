@@ -1,23 +1,24 @@
 <?php
 include_once "common/base.php";
-$pageTitle = "Innskráning";
-include_once "common/head.php";
-include_once "common/scripts.php";
-
-if(!empty($_POST['checkIn'])):
+if(!empty($_POST['inputID'])):
     include_once "class.checkin.php";
 
     $checkin = new CheckIn();
-    echo $checkin->check_user_in();
+    $inputID = trim($_POST['inputID']);
+    echo $checkin->check_user_in($inputID);
 else:
+    $pageTitle = "Innskráning";
+    include_once "common/head.php";
+    include_once "common/scripts.php";
 
 ?>
+
 <div id="bg">
     <img src="img/HFHLogo.png" alt="HFH Logo" />
 </div>
 <div class="container login-window">
     <div class="col-lg-12 ">
-        <form method="POST" action="">
+        <form id="checkIn" method="POST" action="">
             <div class="row">
             <fieldset class="form-group col-sm-4 col-sm-offset-4 col-xs-8 col-xs-offset-2">
                 <label for="inputID">Vinsamlegast skráðu þig inn</label>
@@ -25,19 +26,49 @@ else:
             </fieldset>
             </div>
             <div class="row">
-            <input type="submit" name="checkIn"class="btn btn-primary col-sm-4 col-sm-offset-4 col-xs-8 col-xs-offset-2" value="Innskrá" />
+            <input type="submit" name="checkin" class="btn btn-primary col-sm-4 col-sm-offset-4 col-xs-8 col-xs-offset-2" value="Innskrá" />
             </div>
         </form>
     </div>
 </div>
 
 <script>
-    $(document).ready(function(){
+    function focusOnInput(){
         var input = document.getElementById('inputID');
 
         input.focus();
         input.select();
+    };
+
+    $(document).ready(focusOnInput());
+
+    $('form#checkIn').on('submit', function() {
+        var form = $(this);
+        event.preventDefault();
+        var data = form.serialize();
+        if($.trim($('#inputID').val()) == ''){
+            alertify.log("<h2> Please provide a identification number </h2>");
+            return;
+        };
+        $.ajax({
+            url: form.attr('action'),
+            data: data,
+            method:'POST',
+            success: function(result){
+                //console.log(result);
+                var jsonReturn = JSON.parse(result);
+                $('form#checkIn')[0].reset();
+                alertifyType = jsonReturn.status;
+                if(alertifyType == 'success'){
+                    alertify.delay(8000).success(jsonReturn.msg);
+                } else if(alertifyType == 'error') {
+                    alertify.delay(8000).error(jsonReturn.msg);
+                }
+                focusOnInput();
+            }
+        });
     });
+
 </script>
 <?php
 endif;

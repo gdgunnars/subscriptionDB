@@ -51,6 +51,9 @@ input[readonly] {
     min-height: 20%;
 }
 
+div.checkin {
+    text-align: center;
+}
 img#profile {
     margin-bottom: 5px;
 }

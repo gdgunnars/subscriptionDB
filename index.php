@@ -1,16 +1,13 @@
 <?php
 include_once "common/base.php";
 $pageTitle = "Iðkennda yfirlit";
-include_once "common/head.php";
-include_once "common/scripts.php";
-
 include_once "class.sql.php";
 $newSQL = new newSQL();
 
 if(!empty($_POST['action'])):
-    if($return = $newSQL->add_boxer(utf8_decode($_POST['name']), utf8_decode($_POST['kt']), utf8_decode($_POST['phone']), utf8_decode($_POST['email']), " " , utf8_decode($_POST['contact_name']), utf8_decode($_POST['contact_phone']), utf8_decode($_POST['contact_email']))) {
-              echo json_encode($return);
-            }
+    if($return = $newSQL->add_boxer(utf8_decode($_POST['name']), utf8_decode($_POST['kt']), utf8_decode($_POST['phone']), utf8_decode($_POST['email']), "img/No-image-available.png" , utf8_decode($_POST['contact_name']), utf8_decode($_POST['contact_phone']), utf8_decode($_POST['contact_email']))) {
+        header("Location: user.php?boxerID=$return");
+    }
     else {
         echo json_encode(0);
     }
@@ -27,6 +24,8 @@ else:
                             </tr>";
         }
     }
+    include_once "common/head.php";
+    include_once "common/scripts.php";
     include_once "common/nav-def.php";
 ?>
 

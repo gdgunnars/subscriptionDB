@@ -202,7 +202,47 @@
             $stmt->execute(array($boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date));
             $new_id = $this->_db->lastInsertId();
             $stmt->closeCursor();
-            return $new_id;
+            if($new_id != 0 || !empty($new_id)) {
+                $returnedInfo = $this->get_last_inserted_subscription($new_id);
+                // Because the sql statement returns an array with decoded utf8 we have to loop through the array and encode them back
+                foreach($returnedInfo as &$v){
+                    $v = utf8_encode($v);
+                }
+                unset($v);
+                $returnMsg = '<h3> Áskrift hefur verið skráð</h3>';
+                $returnArray = array(
+                    'status' => 'success',
+                    'msg' => $returnMsg,
+                    'info' => $returnedInfo
+                );
+                return json_encode($returnArray);
+            }
+            else
+                $returnMsg = '<h3> Ekki tókst að skrá áskrift, reyndu aftur síðar</h3>';
+                $returnArray = array(
+                    'status' => 'error',
+                    'msg' => $returnMsg
+                );
+                return json_encode($returnArray);
+
+
+        }
+
+        public function get_last_inserted_subscription($sub_id) {
+            $stmt = $this->_db->prepare("SELECT Subscriptions.ID, Boxer.name, Groups.type, Payment_type.type, Subscription_type.type, Subscriptions.bought_date, Subscriptions.expires_date
+                                            FROM Subscriptions
+                                            LEFT JOIN Boxer ON Boxer.ID = Subscriptions.boxer_ID
+                                            LEFT JOIN Groups ON Groups.ID = Subscriptions.group_ID
+                                            LEFT JOIN Payment_type ON Payment_type.ID = Subscriptions.Payment_ID
+                                            LEFT JOIN Subscription_type ON Subscription_type.ID = Subscriptions.Subscription_ID
+                                            WHERE Subscriptions.ID = ?");
+            $stmt->execute(array($sub_id));
+            $result = $stmt->fetch();
+            if(!empty($result)){
+                return $result;
+            }
+            else
+                return FALSE;
         }
 
         public function add_boxer($name, $kt, $phone, $email, $image, $contact_name, $contact_phone, $contact_email) {

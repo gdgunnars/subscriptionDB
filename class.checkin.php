@@ -30,27 +30,66 @@ class CheckIn
      * Checks a user in or returns an error if no subscription is valid
      * @return string
      */
-    public function check_user_in(){
-        $kt = trim($_POST['inputID']);
-        ;
-
-        if(!$id = $this->get_id_of_kt($kt)){
-            return "<h2> Error </h2>"
-            . "<p> Sorry, you are nowhere to be found in the database</p>";
+    public function check_user_in($inputID)
+    {
+        if (empty($inputID)) {
+            $returnMsg = 'Please provide a identification number';
+            $returnArray = array(
+                'status' => 'log',
+                'msg' => $returnMsg
+            );
+            return json_encode($returnArray);
+        }
+        $errorImage = "img/warning.png";
+        $id = $this->get_id_of_kt($inputID);
+        if (!$id) {
+            $returnMsg = '<div class="checkin"><img src=\'' .$errorImage. '\' width=\'450\'>
+                <h2> ATH!</h2>
+                <h3> Þetta auðkenni er ekki til í gagnagrunninum</h3></div>';
+            $returnArray = array(
+                'status' => 'error',
+                'msg' => $returnMsg
+            );
+            return json_encode($returnArray);
         }
 
-        if(!$subDate = $this->get_subscription_end_date_from_id($id['ID'])){
-            return "<h2> Error </h2>"
-                    . "<p>Sorry, We did not find any subscription on your account</p>";
+        if (!$subDate = $this->get_subscription_end_date_from_id($id['ID'])) {
+            $returnMsg = '<div class="checkin"><img src=\'' .$errorImage. '\' width=\'450\'>
+                <h2> ATH!</h2>
+                <h3>Því miður er ekki til nein áskrift á þessum aðgangi,</h3>
+                <h3>vinsamlegast talaðu við afgreiðslu til að kaupa áskrift</h3></div>>';
+            $returnArray = array(
+                'status' => 'error',
+                'msg' => $returnMsg
+            );
+            return json_encode($returnArray);
         }
 
         $currDate = date('Y-m-d');
-        if($currDate > $subDate){
-            return "<h2> Your subscription has passed, please renew it as soon as possible </h2>";
+        if ($currDate > $subDate[0]) {
+            $returnMsg = '<div class="checkin"><img src=\'' .$errorImage. '\' width=\'450\'>
+                <h2> ATH!</h2>
+                <h3>Áskriftin þín er runnin út,</h3>
+                <h3>vinsamlegast talaðu við afgreiðslu til að endurnýja</h3></div>>';
+            $returnArray = array(
+                'status' => 'error',
+                'msg' => $returnMsg
+            );
+            return json_encode($returnArray);
         }
-        else{
-            return "<h2> You have now been signed in </h2>";
-        }
+
+        $userInfo = $this->get_info($id['ID']);
+        $image = $userInfo['image'];
+        $name = utf8_encode($userInfo['Name']);
+
+        $returnMsg = '<div class="checkin"> <img src=\'' .$image. '\' width=\'450\'">
+            <h2> Velkomin/n, '. $name .' </h2>
+            <h3> Þú hefur verið skráð/ur inn</h3></div>';
+        $returnArray=array(
+            'status' => 'success',
+            'msg' => $returnMsg
+        );
+        return json_encode($returnArray);
     }
 
     public function get_id_of_kt($kt) {
@@ -70,6 +109,17 @@ class CheckIn
         $result = $stmt->fetch();
         if(!empty($result)){
             return $result;
+        }
+        else
+            return FALSE;
+    }
+
+    public function get_info($kt) {
+        $stmt = $this->_db->prepare("SELECT Boxer.Name, Boxer.image FROM Boxer WHERE Boxer.ID = ?");
+        $stmt->execute(array($kt));
+        $id = $stmt->fetch();
+        if(!empty($id)){
+            return $id;
         }
         else
             return FALSE;

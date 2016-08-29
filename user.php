@@ -1,20 +1,15 @@
 <?php
 include_once "common/base.php";
-$pageTitle = "Greiðsluyfirlit";
-include_once "common/head.php";
-include_once "common/scripts.php";
+
 
 include_once "class.sql.php";
 $newSQL = new newSQL();
 
 $user = true;
 if(!empty($_POST['action'])):
-    if($return = $newSQL->add_subscription($_POST['boxer_id'],$_POST['group_id'], $_POST['paymentType_id'], $_POST['subscriptionType_id'], date("Y-m-d", strtotime($_POST['begin_date'])), date("Y-m-d", strtotime($_POST['end_date'])))) {
-        echo json_encode($return);
-    }
-    else {
-        echo json_encode(0);
-    }
+
+    $addedSubscription = $newSQL->add_subscription($_POST['boxer_id'],$_POST['group_id'], $_POST['paymentType_id'], $_POST['subscriptionType_id'], date("Y-m-d", strtotime($_POST['begin_date'])), date("Y-m-d", strtotime($_POST['end_date'])));
+    echo $addedSubscription;
 
 elseif(!empty($_GET['boxerID'])):
     $id = $_GET['boxerID'];
@@ -40,7 +35,9 @@ elseif(!empty($_GET['boxerID'])):
           $subscriptions .= "<tr><td>$v[2]</td><td>$v[3]</td><td>$v[4]</td><td>$v[5]</td><td>$v[6]</td></tr>";
         }
     }
-
+    $pageTitle = "Greiðsluyfirlit";
+    include_once "common/head.php";
+    include_once "common/scripts.php";
     include_once "common/nav-def.php";
 ?>
 
@@ -74,7 +71,7 @@ elseif(!empty($_GET['boxerID'])):
         <tbody>
               <?php
                 if(!$listOfPayedSubscriptions){
-                  print '<p class="text-danger">Engar Greiðsluupplýsingar fundust um þennan iðkanda</p>';
+                  print '<p class="text-danger">Engar Greiðslur fundust á þennan iðkanda</p>';
                 } else {
                   print UTF8_encode($subscriptions);
                 }?>
@@ -93,7 +90,7 @@ elseif(!empty($_GET['boxerID'])):
               <h4 class="modal-title" id="addSubscriptionLabel"><i class="fa fa-ticket fa-lg" aria-hidden="true"></i> Kaupa áskrift</h4>
           </div>
           <div class="modal-body">
-              <form class="form-horizontal" id="addSubscription" method="POST" action="user.php">
+              <form class="form-horizontal" id="addSubscription" method="POST" action="">
                   <fieldset>
                       <input type="hidden" name="action" value="addSubscription" />
                       <div class="form-group">
@@ -181,10 +178,37 @@ elseif(!empty($_GET['boxerID'])):
   $(document).ready(function() {
     $('#subscription_info').DataTable();
   } );
+
+  $('form#addSubscription').on('submit', function() {
+      var form = $(this);
+      event.preventDefault();
+      var data = "form_name=addSubscription&" + form.serialize();
+      $.ajax({
+          url: form.attr('action'),
+          data: data,
+          method:'POST',
+          success: function(result) {
+              var jsonReturn = JSON.parse(result);
+              alertifyType = jsonReturn.status;
+              console.log(jsonReturn);
+              if(alertifyType == 'success'){
+                  alertify.success(jsonReturn.msg);
+                  $('#subscription_info tr:last').after('<tr><td>' + jsonReturn.info[2] + '</td><td>' + jsonReturn.info[3] + '</td><td>' + jsonReturn.info[4] + '</td><td>' + jsonReturn.info[5] + '</td><td>'+ jsonReturn.info[6] + '</td></tr>');
+                  $('form#addSubscription')[0].reset();
+                  $('#addSubscriptionModal').modal('hide');
+              } else if(alertifyType == 'error') {
+                  alertify.error(jsonReturn.msg);
+              }
+          }
+      });
+  });
   </script>
 
 <?php
 else :
+    $pageTitle = "Greiðsluyfirlit";
+    include_once "common/head.php";
+    include_once "common/scripts.php";
     echo '<div class="modal show" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -202,5 +226,4 @@ else :
                 }
             </script>";
 endif;
-include_once "common/footer.php";
 ?>

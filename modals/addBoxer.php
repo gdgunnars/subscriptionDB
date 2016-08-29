@@ -23,7 +23,7 @@
             <div class="form-group">
                 <label for="inputSSN" class="col-lg-2 control-label">Kennitala</label>
                 <div class="col-lg-8">
-                    <input type="number" class="form-control" id="inputSSN" name="kt" placeholder="Kennitala t.d. 0102034399" maxlength="10" pattern="((0[1-9])|([12][0-9])|(3[01]))((0[1-9])|(1[0-2]))([0-9]{2})[0-9]{4}" required />
+                    <input type="number" class="form-control" id="inputSSN" name="kt" placeholder="Kennitala t.d. 0102034399" maxlength="10"  required />
                 </div>
             </div>
             <div class="form-group">
