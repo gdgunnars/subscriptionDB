@@ -57,7 +57,7 @@ class CheckIn
             $returnMsg = '<div class="checkin"><img src=\'' .$errorImage. '\' width=\'450\'>
                 <h2> ATH!</h2>
                 <h3>Því miður er ekki til nein áskrift á þessum aðgangi,</h3>
-                <h3>vinsamlegast talaðu við afgreiðslu til að kaupa áskrift</h3></div>>';
+                <h3>vinsamlegast talaðu við afgreiðslu til að kaupa áskrift</h3></div>';
             $returnArray = array(
                 'status' => 'error',
                 'msg' => $returnMsg
