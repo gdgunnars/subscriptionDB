@@ -173,7 +173,6 @@ elseif(!empty($_GET['boxerID'])):
       </div>
   </div>
 <!-- Scripts ---->
-<script src="js/file-browser.js "></script>
 <script>
   $(document).ready(function() {
     $('#subscription_info').DataTable();
@@ -190,7 +189,7 @@ elseif(!empty($_GET['boxerID'])):
           success: function(result) {
               var jsonReturn = JSON.parse(result);
               alertifyType = jsonReturn.status;
-              console.log(jsonReturn);
+              //console.log(jsonReturn);
               if(alertifyType == 'success'){
                   alertify.success(jsonReturn.msg);
                   var t = $('#subscription_info').DataTable();

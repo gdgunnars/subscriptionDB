@@ -61,6 +61,14 @@ create table `Subscriptions`(
 PRIMARY KEY (`ID`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Table that containts every purchase of a subscription';
 
+create table `Comments`(
+	`ID` int not null auto_increment,
+    `boxer_ID` int not null,
+    `comment` TEXT not null,
+PRIMARY KEY (`ID`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Table that containts a comment for an individual';
+
+
 #show tables;
 
 #################
@@ -82,3 +90,7 @@ add constraint constraint_fk_payment foreign key (payment_ID) references `Paymen
 ## connect a subscription type to a Subscription
 alter table `Subscriptions`
 add constraint constraint_fk_subscription_type foreign key (subscription_ID) references `Subscription_type`(`ID`);
+
+## connect a comment type to a Boxer
+alter table `Comments`
+add constraint constraint_fk_boxer_from_comments foreign key (boxer_ID) references `Boxer`(`ID`);
