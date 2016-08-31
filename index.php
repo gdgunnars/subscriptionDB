@@ -5,7 +5,7 @@ include_once "class.sql.php";
 $newSQL = new newSQL();
 
 if(!empty($_POST['action'])):
-    if($return = $newSQL->add_boxer(utf8_decode($_POST['name']), utf8_decode($_POST['kt']), utf8_decode($_POST['phone']), utf8_decode($_POST['email']), "img/No-image-available.png" , utf8_decode($_POST['contact_name']), utf8_decode($_POST['contact_phone']), utf8_decode($_POST['contact_email']), true)) {
+    if($return = $newSQL->add_boxer(utf8_decode($_POST['name']), utf8_decode($_POST['kt']), utf8_decode($_POST['phone']), utf8_decode($_POST['email']), "img/No-image-available.png", true)) {
         header("Location: user.php?boxerID=$return");
     }
     else {

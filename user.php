@@ -13,7 +13,7 @@ if(!empty($_POST['action'])):
         $addedSubscription = $newSQL->add_subscription($_POST['boxer_id'],$_POST['group_id'], $_POST['paymentType_id'], $_POST['subscriptionType_id'], date("Y-m-d", strtotime($_POST['begin_date'])), date("Y-m-d", strtotime($_POST['end_date'])));
         echo $addedSubscription;
     elseif($action == 'addComment'):
-        $commentAdded = $newSQL->add_comment_to_boxer($_POST['boxer_id'], $_POST['comment']);
+        $commentAdded = $newSQL->add_comment_to_boxer($_POST['boxer_id'], utf8_decode($_POST['comment']), date('Y-m-d'));
         echo $commentAdded;
     endif;
 
@@ -28,10 +28,7 @@ elseif(!empty($_GET['boxerID'])):
             . "<div class='panel-heading'>" . UTF8_ENCODE($fullInfoOfBoxer['Name']) . "</div>"
             . "<div class='panel-body' id='infoKT'><strong>kt:</strong>" . UTF8_ENCODE($fullInfoOfBoxer['kt']) ."</div>"
             . "<div class='panel-body'><strong>Sími:</strong>" . $fullInfoOfBoxer['phone'] . "</div>"
-            . "<div class='panel-body'><strong>Veffang:</strong>" . UTF8_ENCODE($fullInfoOfBoxer['email']) . "</div><hr />"
-            . "<div class='panel-body'><strong>Tengiliður: </strong>" . UTF8_ENCODE($fullInfoOfBoxer['contact_name']) . "</div>"
-            . "<div class='panel-body'><strong>Sími:</strong>" . $fullInfoOfBoxer['contact_phone'] . "</div>"
-            . "<div class='panel-body'><strong>Veffang:</strong>" . UTF8_ENCODE($fullInfoOfBoxer['contact_email']) . "</div></div></div>";
+            . "<div class='panel-body'><strong>Veffang:</strong>" . UTF8_ENCODE($fullInfoOfBoxer['email']) . "</div></div></div>";
     }
 
     $listOfPayedSubscriptions = $newSQL->list_payed_subscriptions($id);
@@ -46,7 +43,7 @@ elseif(!empty($_GET['boxerID'])):
     $comments = '';
     if($commentsRequest){
         foreach($commentsRequest as $k=>$v)
-        $comments  .= '<div class="well well-sm">'.$v['comment'].'</div>';
+        $comments  .= '<div class="well well-sm">'.utf8_encode($v['comment']).'<span class="label pull-right">'.$v['date'].'</span></div>';
     }
     $pageTitle = "Greiðsluyfirlit";
     include_once "common/head.php";
@@ -78,7 +75,7 @@ elseif(!empty($_GET['boxerID'])):
                     <input type="hidden" class="form-control" id="boxer_id" name="boxer_id" value="<?php echo $id;?>" />
                     <div class="form-group">
                         <div class="col-lg-12">
-                            <textarea class="form-control" rows="3" id="comment" name="comment" placeholder="Type your comment"></textarea>
+                            <textarea class="form-control" rows="3" id="comment" name="comment" placeholder="Byrjaðu að skrifa"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -254,7 +251,7 @@ elseif(!empty($_GET['boxerID'])):
                   alertify.logPosition("top right");
                   alertify.log(jsonReturn.msg);
                   $('form#addComment')[0].reset();
-                  $('#comments').append('<div class="well well-sm">' + jsonReturn.comment + '</div>');
+                  $('#comments').append('<div class="well well-sm">' + jsonReturn.comment + '<span class="label pull-right">' + jsonReturn.date +'</span></div>');
               } else if(alertifyType == 'error') {
                   alertify.error(jsonReturn.msg);
               }

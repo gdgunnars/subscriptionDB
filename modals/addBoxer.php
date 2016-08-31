@@ -38,25 +38,6 @@
                     <input type="email" class="form-control" id="inputEmail" name="email" placeholder="jon@gmail.com" />
                 </div>
             </div>
-            <hr>
-            <div class="form-group">
-                <label for="inputContactName" class="col-lg-2 control-label">Tengiliður</label>
-                <div class="col-lg-8">
-                    <input type="text" class="form-control" id="inputContactName" name="contact_name" placeholder="Jóna Jónsdóttir" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="inputContactPhone" class="col-lg-2 control-label">Sími tengiliðar</label>
-                <div class="col-lg-8">
-                    <input type="tel" class="form-control" id="inputContactPhone" name="contact_phone" placeholder="símanúmer" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="inputContactEmail" class="col-lg-2 control-label">Netfang tengiliðar</label>
-                <div class="col-lg-8">
-                    <input type="email" class="form-control" id="inputContactEmail" name="contact_email" placeholder="jona@gmail.com" />
-                </div>
-            </div>
             <div class="form-group">
                 <div class="col-lg-10 col-lg-offset-2">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

@@ -24,9 +24,6 @@ create table `Boxer`(
 	`phone` int,
 	`email` varchar(255),
 	`image` varchar(255),
-	`contact_name` varchar(255),
-	`contact_phone` int,
-	`contact_email` varchar(255),
 	`active` bool,
 PRIMARY KEY (`ID`),
 UNIQUE (`kt`)
@@ -65,9 +62,13 @@ create table `Comments`(
 	`ID` int not null auto_increment,
     `boxer_ID` int not null,
     `comment` TEXT not null,
+    `date` date,
 PRIMARY KEY (`ID`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Table that containts a comment for an individual';
 
+#	`contact_name` varchar(255),
+#	`contact_phone` int,
+#	`contact_email` varchar(255),
 
 #show tables;
 

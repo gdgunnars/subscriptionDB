@@ -40,7 +40,7 @@
 		 * List full detail of boxer with the given id
          */
 		public function list_full_boxer_info($id) {
-		    $stmt = $this->_db->prepare("SELECT Boxer.ID, Boxer.Name, Boxer.kt, Boxer.phone, Boxer.email, Boxer.image, Boxer.contact_name, Boxer.contact_phone, Boxer.contact_email
+		    $stmt = $this->_db->prepare("SELECT Boxer.ID, Boxer.Name, Boxer.kt, Boxer.phone, Boxer.email, Boxer.image, Boxer.active
                                             FROM Boxer
                                             WHERE Boxer.ID = ?
                                             ORDER BY Boxer.name ASC;");
@@ -245,19 +245,19 @@
                 return FALSE;
         }
 
-        public function add_boxer($name, $kt, $phone, $email, $image, $contact_name, $contact_phone, $contact_email, $active) {
-            $stmt = $this->_db->prepare("INSERT INTO Boxer(name, kt, phone, email, image, contact_name, contact_phone, contact_email, active) 
-                                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        public function add_boxer($name, $kt, $phone, $email, $image, $active) {
+            $stmt = $this->_db->prepare("INSERT INTO Boxer(name, kt, phone, email, image, active) 
+                                          VALUES (?, ?, ?, ?, ?, ?)");
             //$stmt->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $stmt->execute(array($name, $kt, $phone, $email, $image, $contact_name, $contact_phone, $contact_email, $active));
+            $stmt->execute(array($name, $kt, $phone, $email, $image, $active));
             $new_id = $this->_db->lastInsertId();
             $stmt->closeCursor();
             return $new_id;
         }
 
-        public function add_comment_to_boxer($boxerID, $comment) {
-            $stmt = $this->_db->prepare("INSERT INTO Comments(boxer_ID, comment) VALUES (?, ?)");
-            $stmt->execute(array($boxerID, $comment));
+        public function add_comment_to_boxer($boxerID, $comment, $date) {
+            $stmt = $this->_db->prepare("INSERT INTO Comments(boxer_ID, comment, date) VALUES (?, ?, ?)");
+            $stmt->execute(array($boxerID, $comment, $date));
             $new_id = $this->_db->lastInsertId();
             $stmt->closeCursor();
             $newComment = $this->get_comment_by_id($new_id);
@@ -266,11 +266,12 @@
                     $v = utf8_encode($v);
                 }
                 unset($v);
-                $returnMsg = '<h5> Athugasemd hefur verið skráð</h5>';
+                $returnMsg = '<h5delete > Athugasemd hefur verið skráð</h5delete>';
                 $returnArray = array(
                     'status' => 'success',
                     'msg' => $returnMsg,
-                    'comment' => $newComment['comment']
+                    'comment' => $newComment['comment'],
+                    'date' => $newComment['date']
                 );
                 return json_encode($returnArray);
             }
@@ -296,7 +297,7 @@
         }
 
         public function get_comment_by_id($commentID) {
-            $stmt = $this->_db->prepare("SELECT comment FROM Comments where ID = ?");
+            $stmt = $this->_db->prepare("SELECT comment, date FROM Comments where ID = ?");
             $stmt->execute(array($commentID));
             $result = $stmt->fetch();
             $stmt->closeCursor();
