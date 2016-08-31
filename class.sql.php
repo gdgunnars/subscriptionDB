@@ -266,7 +266,7 @@
                     $v = utf8_encode($v);
                 }
                 unset($v);
-                $returnMsg = '<h3> Athugasemd hefur verið skráð</h3>';
+                $returnMsg = '<h5> Athugasemd hefur verið skráð</h5>';
                 $returnArray = array(
                     'status' => 'success',
                     'msg' => $returnMsg,

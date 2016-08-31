@@ -72,6 +72,22 @@ elseif(!empty($_GET['boxerID'])):
             echo $comments;
             echo '</div>';
             ?>
+            <form class="form-horizontal" id="addComment" method="POST" action="">
+                <fieldset>
+                    <input type="hidden" name="action" value="addComment" />
+                    <input type="hidden" class="form-control" id="boxer_id" name="boxer_id" value="<?php echo $id;?>" />
+                    <div class="form-group">
+                        <div class="col-lg-12">
+                            <textarea class="form-control" rows="3" id="comment" name="comment" placeholder="Type your comment"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-12">
+                            <button type="submit" name="addComment" class="btn btn-primary">Skrá athugasemd</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
     </div>
     <!-- Greiðslu upplýsingar -->
         <div class="col-md-9">
@@ -183,43 +199,6 @@ elseif(!empty($_GET['boxerID'])):
       </div>
     </div>
   </div>
-    <!-- add-comment modal -->
-    <div class="modal fade" id="addCommentModal" tabindex="-1" role="dialog" aria-labelledby="addCommentLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="addCommentLabel"><strong> Add a comment too <?php print $name; ?> </strong></h4>
-                </div>
-                <div class="modal-body">
-                    <form class="form-horizontal" id="addComment" method="POST" action="">
-                        <fieldset>
-                            <input type="hidden" name="action" value="addComment" />
-                            <div class="form-group">
-                                <label for="inputID" class="col-lg-2 control-label">ID of User</label>
-                                <div class="col-lg-10">
-                                    <input type="text" class="form-control" id="boxer_id" name="boxer_id" value="<?php echo $id;?>" readonly />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="comment" class="col-lg-2 control-label">Iðkandi</label>
-                                <div class="col-lg-10">
-                                    <textarea class="form-control" rows="5" id="comment" name="comment" placeholder="Type your comment"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-lg-10 col-lg-offset-2">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    <button type="reset" class="btn btn-danger">Hreinsa</button>
-                                    <button type="submit" name="addComment" class="btn btn-primary">Skrá athugasemd</button>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 <!-- Scripts ---->
 <script>
   $(document).ready(function() {
@@ -270,8 +249,10 @@ elseif(!empty($_GET['boxerID'])):
               console.log(result);
               var jsonReturn = JSON.parse(result);
               alertifyType = jsonReturn.status;
+              alertify.logPosition("top right");
               if(alertifyType == 'success'){
-                  alertify.success(jsonReturn.msg);
+                  alertify.logPosition("top right");
+                  alertify.log(jsonReturn.msg);
                   $('form#addComment')[0].reset();
                   $('#comments').append('<div class="well well-sm">' + jsonReturn.comment + '</div>');
               } else if(alertifyType == 'error') {
