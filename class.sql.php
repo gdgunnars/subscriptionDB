@@ -202,7 +202,7 @@
             $stmt->execute(array($boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date));
             $new_id = $this->_db->lastInsertId();
             $stmt->closeCursor();
-            if($new_id != 0 || !empty($new_id)) {
+            if($new_id != 0 && !empty($new_id)) {
                 $returnedInfo = $this->get_last_inserted_subscription($new_id);
                 // Because the sql statement returns an array with decoded utf8 we have to loop through the array and encode them back
                 foreach($returnedInfo as &$v){
@@ -255,5 +255,56 @@
             return $new_id;
         }
 
+        public function add_comment_to_boxer($boxerID, $comment) {
+            $stmt = $this->_db->prepare("INSERT INTO Comments(boxer_ID, comment) VALUES (?, ?)");
+            $stmt->execute(array($boxerID, $comment));
+            $new_id = $this->_db->lastInsertId();
+            $stmt->closeCursor();
+            $newComment = $this->get_comment_by_id($new_id);
+            if(!empty($newComment) && $newComment != 0){
+                foreach($newComment as &$v){
+                    $v = utf8_encode($v);
+                }
+                unset($v);
+                $returnMsg = '<h3> Athugasemd hefur verið skráð</h3>';
+                $returnArray = array(
+                    'status' => 'success',
+                    'msg' => $returnMsg,
+                    'comment' => $newComment['comment']
+                );
+                return json_encode($returnArray);
+            }
+            else
+                $returnMsg = '<h3> Ekki tókst að skrá athugasemd, reyndu aftur síðar</h3>';
+            $returnArray = array(
+                'status' => 'error',
+                'msg' => $returnMsg
+            );
+            return json_encode($returnArray);
+        }
+
+        public function get_all_comments_for_boxer($id) {
+            $stmt = $this->_db->prepare("SELECT * FROM Comments where boxer_ID = ?");
+            $stmt->execute(array($id));
+            $result = $stmt->fetchAll();
+            $stmt->closeCursor();
+            if(!empty($result)) {
+                return $result;
+            }
+            else
+                return FALSE;
+        }
+
+        public function get_comment_by_id($commentID) {
+            $stmt = $this->_db->prepare("SELECT comment FROM Comments where ID = ?");
+            $stmt->execute(array($commentID));
+            $result = $stmt->fetch();
+            $stmt->closeCursor();
+            if(!empty($result)) {
+                return $result;
+            }
+            else
+                return FALSE;
+        }
     }
 ?>

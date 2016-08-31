@@ -31,7 +31,8 @@ include_once "common/scripts.php";
                 <span class="sr-only">(current)</span></a></li>
                 <li class="active"><a href="#addSubscriptionModal" class="btn btn-success" role="button" data-toggle="modal" data-target="#addSubscriptionModal"><i class="fa fa-ticket fa-lg" aria-hidden="true"></i></a></li>
                 <li class="active"><a href="#updateInfo" class="btn btn-info" role="button" data-toggle="modal" data-target="#updateInfo"><i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></a> </li>
-                <li class="active"><a href="#" class="btn btn-warning" role="button" data-toggle="modal" data-target="#">&nbsp&nbsp<i class="fa fa-mobile fa-lg" aria-hidden="true">&nbsp</i></a></li>
+                <li class="active"><a href="#addComment" class="btn btn-warning" role="button" data-toggle="modal" data-target="#addCommentModal"><i class="fa fa-comment-o fa-lg" aria-hidden="true"></i></a> </li>
+                <!--<li class="active"><a href="#" class="btn btn-warning" role="button" data-toggle="modal" data-target="#">&nbsp&nbsp<i class="fa fa-mobile fa-lg" aria-hidden="true">&nbsp</i></a></li> -->
                 <?php
                 else:
                     echo '<li class="active"><a href=""><i class="fa fa-users fa-lg" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>

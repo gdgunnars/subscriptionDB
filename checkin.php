@@ -33,15 +33,18 @@ else:
 </div>
 
 <script>
-    function focusOnInput(){
-        var input = document.getElementById('inputID');
+    // function that selects the checkin form
+    function focusOnInput(formID){
+        var input = document.getElementById(formID);
 
         input.focus();
         input.select();
     };
 
-    $(document).ready(focusOnInput());
+    // set the focus on the given ID
+    $(document).ready(focusOnInput('inputID'));
 
+    // Checking a user in
     $('form#checkIn').on('submit', function() {
         var form = $(this);
         event.preventDefault();
@@ -55,7 +58,6 @@ else:
             data: data,
             method:'POST',
             success: function(result){
-                //console.log(result);
                 var jsonReturn = JSON.parse(result);
                 $('form#checkIn')[0].reset();
                 alertifyType = jsonReturn.status;
