@@ -66,9 +66,15 @@ create table `Comments`(
 PRIMARY KEY (`ID`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Table that containts a comment for an individual';
 
-#	`contact_name` varchar(255),
-#	`contact_phone` int,
-#	`contact_email` varchar(255),
+create table `Contacts`(
+	`ID` int not null auto_increment,
+    `boxer_ID` int not null,
+    `name` varchar(255),
+  	`phone` int,
+    `email` varchar(255),
+PRIMARY KEY (`ID`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Table that containts a comment for an individual';
+
 
 #show tables;
 
@@ -95,3 +101,7 @@ add constraint constraint_fk_subscription_type foreign key (subscription_ID) ref
 ## connect a comment type to a Boxer
 alter table `Comments`
 add constraint constraint_fk_boxer_from_comments foreign key (boxer_ID) references `Boxer`(`ID`);
+
+## connect a ContactInfo type to a Boxer
+alter table `Contacts`
+add constraint constraint_fk_contact_to_boxer foreign key (boxer_ID) references `Boxer`(`ID`);

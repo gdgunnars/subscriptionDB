@@ -248,7 +248,7 @@
         public function add_boxer($name, $kt, $phone, $email, $image, $active) {
             $stmt = $this->_db->prepare("INSERT INTO Boxer(name, kt, phone, email, image, active) 
                                           VALUES (?, ?, ?, ?, ?, ?)");
-            //$stmt->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $stmt->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $stmt->execute(array($name, $kt, $phone, $email, $image, $active));
             $new_id = $this->_db->lastInsertId();
             $stmt->closeCursor();
@@ -306,6 +306,50 @@
             }
             else
                 return FALSE;
+        }
+
+        public function add_a_contact_to_boxer($boxerID, $name, $phone, $email) {
+            $stmt = $this->_db->prepare("INSERT INTO Contacts(boxer_ID, name, phone, email) VALUES (?, ?, ?, ?)");
+            $stmt->execute(array($boxerID, $name, $phone, $email));
+            $stmt->closeCursor();
+            $contact = $this->get_contact_info($boxerID);
+            if (!empty($contacts) && $contacts != 0) {
+                $returnMsg = '<h5> Tengiliður hefur verið skráður</h5>';
+                $returnArray = array(
+                    'status' => 'success',
+                    'msg' => $returnMsg,
+                    'name' => $contact['comment'],
+                    'phone' => $contact['date'],
+                    'email' => $contact['email']
+                );
+                return json_encode($returnArray);
+            } else
+                $returnMsg = '<h3> Ekki tókst að skrá athugasemd, reyndu aftur síðar</h3>';
+            $returnArray = array(
+                'status' => 'error',
+                'msg' => $returnMsg
+            );
+            return json_encode($returnArray);
+        }
+
+        public function get_contact_info($boxerID) {
+            $stmt = $this->_db->prepare("select name, phone, email from Contacts where boxer_ID = ?");
+            $stmt->execute(array($boxerID));
+            $contacts = $stmt->fetchAll();
+            $stmt->closeCursor();
+            //return var_dump($contacts);
+            if(!empty($contacts) && $contacts != 0){
+                foreach ($contacts as &$v) {
+                    foreach($v as &$k){
+                        $k = utf8_encode($k);
+                    }
+                }
+                unset ($k);
+                unset($v);
+                return $contacts;
+            }
+            else
+                return false;
         }
     }
 ?>

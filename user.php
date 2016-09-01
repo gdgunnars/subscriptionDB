@@ -31,6 +31,27 @@ elseif(!empty($_GET['boxerID'])):
             . "<div class='panel-body'><strong>Veffang:</strong>" . UTF8_ENCODE($fullInfoOfBoxer['email']) . "</div></div></div>";
     }
 
+    $boxerContacts = $newSQL->get_contact_info($id);
+    $addContact = '<a href="#addContact" class="btn" role="button" data-toggle="modal" data-target="#addContactModal"><i class="fa fa-plus fa-lg" aria-hidden="true"></i></a>';
+    $contactInfo = '<div id="contacts"><h3>&nbsp; Tengiliðir '. $addContact .' </h3>';
+    if($boxerContacts){
+        $counter = 1;
+        foreach($boxerContacts as $contact) {
+            $contactInfo .= '<div class="panel-group"><div class="panel panel-default"> '
+                            . '<div class="panel-heading"><h4 class="panel-title"">'
+                            . '<a data-toggle="collapse" href="#collapse'.$counter.'">'. $contact['name'] . '</a></h4>'
+                            . '</div>'
+                            . '<div id="collapse'.$counter.'" class="panel-collapse collapse"">'
+                            . '<ul class="list-group">'
+                            . '<li class="list-group-item">'. $contact['phone'] .'</li>'
+                            . '<li class="list-group-item">'. $contact['email'] . '</li>'
+                            . '</ul>'
+                            . '</div></div></div>';
+            $counter++;
+        }
+    }
+    $contactInfo .= '</div>';
+
     $listOfPayedSubscriptions = $newSQL->list_payed_subscriptions($id);
     if($listOfPayedSubscriptions){
       $subscriptions ='';
@@ -64,6 +85,9 @@ elseif(!empty($_GET['boxerID'])):
             } else {
               print $infoSideBar;
             }
+
+            echo $contactInfo;
+
             echo '<div id="comments">';
             echo '<h3> &nbsp; Athugasemdir</h3>';
             echo $comments;
