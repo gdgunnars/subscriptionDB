@@ -15,6 +15,9 @@ if(!empty($_POST['action'])):
     elseif($action == 'addComment'):
         $commentAdded = $newSQL->add_comment_to_boxer($_POST['boxer_id'], utf8_decode($_POST['comment']), date('Y-m-d'));
         echo $commentAdded;
+    elseif($action == 'addContact'):
+        $contactAdded = $newSQL->add_a_contact_to_boxer($_POST['boxer_id'],$_POST['name'], $_POST['phone'], $_POST['email']);
+        echo $contactAdded;
     endif;
 
 elseif(!empty($_GET['boxerID'])):
@@ -209,6 +212,55 @@ elseif(!empty($_GET['boxerID'])):
       </div>
     </div>
   </div>
+    <!--  Add Contact modal -->
+    <div class="modal fade" id="addContactModal" tabindex="-1" role="dialog" aria-labelledby="addContactLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addContactLabel">Bæta við tengilið</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="addContact" method="POST" action="">
+                        <fieldset>
+                            <input type="hidden" name="action" value="addContact" />
+                            <div class="form-group">
+                                <label for="inputID" class="col-lg-2 control-label">ID</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="boxer_id" name="boxer_id" value="<?php echo $id;?>" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactName" class="col-lg-2 control-label">Nafn</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="contactName" name="name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactPhone" class="col-lg-2 control-label">Sími</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="contactPhone" name="phone">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactEmail" class="col-lg-2 control-label">Netfang</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="contactEmail" name="email">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-10 col-lg-offset-2">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="reset" class="btn btn-danger">Hreinsa</button>
+                                    <button type="submit" name="addContact" class="btn btn-primary">Skrá tengilið</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
   <!-- Update-info modal -->
   <div class="modal fade" id="updateInfo" tabindex="-1" role="dialog" aria-labelledby="updateInfoLabel">
     <div class="modal-dialog" role="document">
