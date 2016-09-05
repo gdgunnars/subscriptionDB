@@ -313,18 +313,18 @@
             $stmt->execute(array($boxerID, $name, $phone, $email));
             $stmt->closeCursor();
             $contact = $this->get_contact_info($boxerID);
-            if (!empty($contacts) && $contacts != 0) {
+            if (!empty($contact) && $contact != 0) {
                 $returnMsg = '<h5> Tengiliður hefur verið skráður</h5>';
                 $returnArray = array(
                     'status' => 'success',
                     'msg' => $returnMsg,
-                    'name' => $contact['comment'],
-                    'phone' => $contact['date'],
+                    'name' => $contact['name'],
+                    'phone' => $contact['phone'],
                     'email' => $contact['email']
                 );
                 return json_encode($returnArray);
             } else
-                $returnMsg = '<h3> Ekki tókst að skrá athugasemd, reyndu aftur síðar</h3>';
+                $returnMsg = '<h3> Ekki tókst að skrá tengilið á notanda, reyndu aftur síðar</h3>';
             $returnArray = array(
                 'status' => 'error',
                 'msg' => $returnMsg
@@ -338,14 +338,7 @@
             $contacts = $stmt->fetchAll();
             $stmt->closeCursor();
             //return var_dump($contacts);
-            if(!empty($contacts) && $contacts != 0){
-                foreach ($contacts as &$v) {
-                    foreach($v as &$k){
-                        $k = utf8_encode($k);
-                    }
-                }
-                unset ($k);
-                unset($v);
+            if(!empty($contacts)){
                 return $contacts;
             }
             else

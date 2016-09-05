@@ -16,7 +16,7 @@ if(!empty($_POST['action'])):
         $commentAdded = $newSQL->add_comment_to_boxer($_POST['boxer_id'], utf8_decode($_POST['comment']), date('Y-m-d'));
         echo $commentAdded;
     elseif($action == 'addContact'):
-        $contactAdded = $newSQL->add_a_contact_to_boxer($_POST['boxer_id'],$_POST['name'], $_POST['phone'], $_POST['email']);
+        $contactAdded = $newSQL->add_a_contact_to_boxer($_POST['boxer_id'], utf8_decode($_POST['name']), $_POST['phone'], utf8_decode($_POST['email']));
         echo $contactAdded;
     endif;
 
@@ -42,12 +42,12 @@ elseif(!empty($_GET['boxerID'])):
         foreach($boxerContacts as $contact) {
             $contactInfo .= '<div class="panel-group"><div class="panel panel-default"> '
                             . '<div class="panel-heading"><h4 class="panel-title"">'
-                            . '<a data-toggle="collapse" href="#collapse'.$counter.'">'. $contact['name'] . '</a></h4>'
+                            . '<a data-toggle="collapse" href="#collapse'.$counter.'">'. utf8_encode($contact['name']) . '</a></h4>'
                             . '</div>'
                             . '<div id="collapse'.$counter.'" class="panel-collapse collapse"">'
                             . '<ul class="list-group">'
                             . '<li class="list-group-item">'. $contact['phone'] .'</li>'
-                            . '<li class="list-group-item">'. $contact['email'] . '</li>'
+                            . '<li class="list-group-item">'. utf8_encode($contact['email']) . '</li>'
                             . '</ul>'
                             . '</div></div></div>';
             $counter++;
@@ -188,9 +188,9 @@ elseif(!empty($_GET['boxerID'])):
                           </div>
                       </div>
                       <div class="form-group">
-                          <label for="inputDate" class="col-lg-2 control-label"> Dagsettning kaupa </label>
+                          <label for="inputDate" class="col-lg-2 control-label"> Dagsetning kaupa </label>
                           <div class="col-lg-10">
-                              <input type="date" class="form-control" id="begin_date" name="begin_date"placeholder="" required>
+                              <input type="date" class="form-control" id="begin_date" name="begin_date" value="<?php echo date('Y-m-d') ?>" placeholder="" required>
                           </div>
                       </div>
                       <div class="form-group">
@@ -224,28 +224,23 @@ elseif(!empty($_GET['boxerID'])):
                     <form class="form-horizontal" id="addContact" method="POST" action="">
                         <fieldset>
                             <input type="hidden" name="action" value="addContact" />
-                            <div class="form-group">
-                                <label for="inputID" class="col-lg-2 control-label">ID</label>
-                                <div class="col-lg-10">
-                                    <input type="text" class="form-control" id="boxer_id" name="boxer_id" value="<?php echo $id;?>" readonly />
-                                </div>
-                            </div>
+                            <input type="hidden" class="form-control" id="boxerID" name="boxer_id" value="<?php echo $id;?>" />
                             <div class="form-group">
                                 <label for="contactName" class="col-lg-2 control-label">Nafn</label>
                                 <div class="col-lg-10">
-                                    <input type="text" class="form-control" id="contactName" name="name">
+                                    <input type="text" class="form-control" id="contactName" name="name" paceholder="Jón Jónsson">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="contactPhone" class="col-lg-2 control-label">Sími</label>
                                 <div class="col-lg-10">
-                                    <input type="text" class="form-control" id="contactPhone" name="phone">
+                                    <input type="text" class="form-control" id="contactPhone" name="phone" placeholder="555-1234">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="contactEmail" class="col-lg-2 control-label">Netfang</label>
                                 <div class="col-lg-10">
-                                    <input type="text" class="form-control" id="contactEmail" name="email">
+                                    <input type="text" class="form-control" id="contactEmail" name="email" placeholder="some@mail.com">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -326,7 +321,34 @@ elseif(!empty($_GET['boxerID'])):
               if(alertifyType == 'success'){
                   alertify.logPosition("top right");
                   alertify.log(jsonReturn.msg);
+                  location.reload();
                   $('form#addComment')[0].reset();
+                  $('#comments').append('<div class="well well-sm">' + jsonReturn.comment + '<span class="label pull-right">' + jsonReturn.date +'</span></div>');
+              } else if(alertifyType == 'error') {
+                  alertify.error(jsonReturn.msg);
+              }
+          }
+      });
+  });
+
+  // Adding a contact to a boxer
+  $('form#addContact').on('submit', function() {
+      var form = $(this);
+      event.preventDefault();
+      var data = form.serialize();
+      $.ajax({
+          url: form.attr('action'),
+          data: data,
+          method:'POST',
+          success: function(result) {
+              console.log(result);
+              var jsonReturn = JSON.parse(result);
+              alertifyType = jsonReturn.status;
+              alertify.logPosition("top right");
+              if(alertifyType == 'success'){
+                  alertify.logPosition("top right");
+                  alertify.log(jsonReturn.msg);
+                  $('form#addContact')[0].reset();
                   $('#comments').append('<div class="well well-sm">' + jsonReturn.comment + '<span class="label pull-right">' + jsonReturn.date +'</span></div>');
               } else if(alertifyType == 'error') {
                   alertify.error(jsonReturn.msg);
