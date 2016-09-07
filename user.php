@@ -34,25 +34,8 @@ elseif(!empty($_GET['boxerID'])):
             . "<div class='panel-body'><strong>Veffang:</strong>" . UTF8_ENCODE($fullInfoOfBoxer['email']) . "</div></div></div>";
     }
 
-    $boxerContacts = $newSQL->get_contact_info($id);
-    $addContact = '<a href="#addContact" class="btn" role="button" data-toggle="modal" data-target="#addContactModal"><i class="fa fa-plus fa-lg" aria-hidden="true"></i></a>';
-    $contactInfo = '<div id="contacts"><h3>&nbsp; Tengiliðir '. $addContact .' </h3>';
-    if($boxerContacts){
-        foreach($boxerContacts as $contact) {
-            $contactInfo .= '<div class="panel-group"><div class="panel panel-default"> '
-                            . '<div class="panel-heading"><h4 class="panel-title">'
-                            . '<a data-toggle="collapse" href="#collapse'. $contact['ID'] .'">'. utf8_encode($contact['name']) . '</a></h4>'
-                            . '</div>'
-                            . '<div id="collapse'.$contact['ID'] .'" class="panel-collapse collapse"">'
-                            . '<ul class="list-group">'
-                            . '<li class="list-group-item">'. $contact['phone'] .'</li>'
-                            . '<li class="list-group-item">'. utf8_encode($contact['email']) . '</li>'
-                            . '</ul>'
-                            . '</div></div></div>';
-        }
-    }
-    $contactInfo .= '</div>';
 
+    $contactInfo = $newSQL->get_structured_contact_info($id);
     $subscriptions = $newSQL->get_table_of_subscriptions($id);
     $comments = $newSQL->get_structured_comments($id);
 

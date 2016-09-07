@@ -13,18 +13,7 @@ if(!empty($_POST['action']) && $_POST['action'] == 'addBoxer'):
     }
 else:
 
-    $arrayOfBoxers = $newSQL->list_boxers();
-    if($arrayOfBoxers != false){
-        $boxers_list = '';
-        foreach($arrayOfBoxers as $k=>$v){
-            $boxers_list .= "<tr>
-                              <td><a href='user.php?boxerID=$v[0]'><strong> $v[1] </strong></a></td>
-                              <td> $v[2] </td>
-                              <td> $v[3] </td>
-                              <td> $v[4] </td>
-                            </tr>";
-        }
-    }
+    $boxers_list = $newSQL->list_structured_boxer();
     include_once "common/head.php";
     include_once "common/scripts.php";
     include_once "common/nav-def.php";
@@ -46,7 +35,7 @@ else:
             </thead>
             <tbody>
             <?php
-            if(!$arrayOfBoxers){
+            if(!$boxers_list){
                 print '<p class="text-danger">There was a problem connecting to the database, contact administrator</p>';
             } else {
                 print UTF8_encode($boxers_list);

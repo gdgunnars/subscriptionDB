@@ -306,7 +306,7 @@
             return json_encode($returnArray);
         }
 
-        public function get_contact_info($boxerID) {
+        private function get_contact_info($boxerID) {
             $stmt = $this->_db->prepare("select ID, name, phone, email from Contacts where boxer_ID = ?");
             $stmt->execute(array($boxerID));
             $contacts = $stmt->fetchAll();
@@ -350,10 +350,47 @@
             if($commentsRequest){
                 foreach($commentsRequest as $k=>$v)
                     $comments  .= '<div class="well well-sm">'.utf8_encode($v['comment']).'<span class="label pull-right">'.$v['date'].'</span></div>';
-                return $comments;
             }
-            else
-                return 0;
+            return $comments;
+        }
+
+        public function get_structured_contact_info($id){
+            $boxerContacts = $this->get_contact_info($id);
+            $addContact = '<a href="#addContact" class="btn" role="button" data-toggle="modal" data-target="#addContactModal"><i class="fa fa-plus fa-lg" aria-hidden="true"></i></a>';
+            $contactInfo = '<div id="contacts"><h3>&nbsp; Tengiliðir '. $addContact .' </h3>';
+            if($boxerContacts){
+                foreach($boxerContacts as $contact) {
+                    $contactInfo .= '<div class="panel-group"><div class="panel panel-default"> '
+                        . '<div class="panel-heading"><h4 class="panel-title">'
+                        . '<a data-toggle="collapse" href="#collapse'. $contact['ID'] .'">'. utf8_encode($contact['name']) . '</a></h4>'
+                        . '</div>'
+                        . '<div id="collapse'.$contact['ID'] .'" class="panel-collapse collapse"">'
+                        . '<ul class="list-group">'
+                        . '<li class="list-group-item">'. $contact['phone'] .'</li>'
+                        . '<li class="list-group-item">'. utf8_encode($contact['email']) . '</li>'
+                        . '</ul>'
+                        . '</div></div></div>';
+                }
+            }
+            $contactInfo .= '</div>';
+            return $contactInfo;
+        }
+
+        public function list_structured_boxer(){
+            $arrayOfBoxers = $this->list_boxers();
+            if($arrayOfBoxers != false){
+                $boxers_list = '';
+                foreach($arrayOfBoxers as $k=>$v){
+                    $boxers_list .= "<tr>
+                              <td><a href='user.php?boxerID=$v[0]'><strong> $v[1] </strong></a></td>
+                              <td> $v[2] </td>
+                              <td> $v[3] </td>
+                              <td> $v[4] </td>
+                            </tr>";
+                }
+                return $boxers_list;
+            }
+            return 0;
         }
     }
 ?>
