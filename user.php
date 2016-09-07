@@ -41,7 +41,7 @@ elseif(!empty($_GET['boxerID'])):
         $counter = 1;
         foreach($boxerContacts as $contact) {
             $contactInfo .= '<div class="panel-group"><div class="panel panel-default"> '
-                            . '<div class="panel-heading"><h4 class="panel-title"">'
+                            . '<div class="panel-heading"><h4 class="panel-title">'
                             . '<a data-toggle="collapse" href="#collapse'.$counter.'">'. utf8_encode($contact['name']) . '</a></h4>'
                             . '</div>'
                             . '<div id="collapse'.$counter.'" class="panel-collapse collapse"">'
@@ -330,7 +330,7 @@ elseif(!empty($_GET['boxerID'])):
           }
       });
   });
-
+    var contactCounter = 0;
   // Adding a contact to a boxer
   $('form#addContact').on('submit', function() {
       var form = $(this);
@@ -349,7 +349,12 @@ elseif(!empty($_GET['boxerID'])):
                   alertify.logPosition("top right");
                   alertify.log(jsonReturn.msg);
                   $('form#addContact')[0].reset();
-                  $('#comments').append('<div class="well well-sm">' + jsonReturn.comment + '<span class="label pull-right">' + jsonReturn.date +'</span></div>');
+                  $('#contacts').append('<div class="panel-group"><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title">'
+                        + '<a data-toggle="collapse" href="#collapse0'+ contactCounter +'">' + jsonReturn.name + '</a></h4></div>'
+                        + '<div id="collapse0' + contactCounter + '" class="panel-collapse collapse"> <ul class="list-group">'
+                        + '<li class="list-group-item">' + jsonReturn.phone + '</li><li class="list-group-item">' + jsonReturn.email + '</li></ul></div></div></div>'
+                  );
+                  contactCounter++;
               } else if(alertifyType == 'error') {
                   alertify.error(jsonReturn.msg);
               }
