@@ -39,7 +39,7 @@
 		/**
 		 * List full detail of boxer with the given id
          */
-		public function list_full_boxer_info($id) {
+		private function list_full_boxer_info($id) {
 		    $stmt = $this->_db->prepare("SELECT Boxer.ID, Boxer.Name, Boxer.kt, Boxer.phone, Boxer.email, Boxer.image, Boxer.active
                                             FROM Boxer
                                             WHERE Boxer.ID = ?
@@ -389,6 +389,21 @@
                             </tr>";
                 }
                 return $boxers_list;
+            }
+            return 0;
+        }
+
+        public function list_structured_boxer_info($id, &$name){
+            $fullInfoOfBoxer = $this->list_full_boxer_info($id);
+            if($fullInfoOfBoxer){
+                $name = utf8_encode($fullInfoOfBoxer['Name']);
+                $infoSideBar = "<div class='panel-group'>"
+                    . "<div class='panel panel-success'>"
+                    . "<div class='panel-heading'>" . $fullInfoOfBoxer['Name'] . "</div>"
+                    . "<div class='panel-body' id='infoKT'><strong>kt:</strong>" . $fullInfoOfBoxer['kt'] ."</div>"
+                    . "<div class='panel-body'><strong>Sími:</strong>" . $fullInfoOfBoxer['phone'] . "</div>"
+                    . "<div class='panel-body'><strong>Veffang:</strong>" . $fullInfoOfBoxer['email'] . "</div></div></div>";
+                return $infoSideBar;
             }
             return 0;
         }

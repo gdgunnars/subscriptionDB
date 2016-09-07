@@ -23,18 +23,7 @@ if(!empty($_POST['action'])):
 elseif(!empty($_GET['boxerID'])):
     $id = $_GET['boxerID'];
 
-    $fullInfoOfBoxer = $newSQL->list_full_boxer_info($id);
-    if($fullInfoOfBoxer){
-        $name = UTF8_ENCODE($fullInfoOfBoxer['Name']);
-        $infoSideBar = "<div class='panel-group'>"
-            . "<div class='panel panel-success'>"
-            . "<div class='panel-heading'>" . UTF8_ENCODE($fullInfoOfBoxer['Name']) . "</div>"
-            . "<div class='panel-body' id='infoKT'><strong>kt:</strong>" . UTF8_ENCODE($fullInfoOfBoxer['kt']) ."</div>"
-            . "<div class='panel-body'><strong>Sími:</strong>" . $fullInfoOfBoxer['phone'] . "</div>"
-            . "<div class='panel-body'><strong>Veffang:</strong>" . UTF8_ENCODE($fullInfoOfBoxer['email']) . "</div></div></div>";
-    }
-
-
+    $infoSideBar = $newSQL->list_structured_boxer_info($id, $name);
     $contactInfo = $newSQL->get_structured_contact_info($id);
     $subscriptions = $newSQL->get_table_of_subscriptions($id);
     $comments = $newSQL->get_structured_comments($id);
@@ -53,10 +42,10 @@ elseif(!empty($_GET['boxerID'])):
 
            <!-- Boxer info -->
           <?php
-            if(!$fullInfoOfBoxer){
+            if(!$infoSideBar){
               print '<h3 class="text-danger">Engar Upplýsingar fundust um þennan notanda</h3>';
             } else {
-              print $infoSideBar;
+              print utf8_encode($infoSideBar);
             }
 
             echo $contactInfo;
