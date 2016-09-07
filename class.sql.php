@@ -348,7 +348,7 @@
         }
 
         public function get_contact_info_by_id($ID) {
-            $stmt = $this->_db->prepare("select name, phone, email from Contacts where ID = ?");
+            $stmt = $this->_db->prepare("select ID, name, phone, email from Contacts where ID = ?");
             $stmt->execute(array($ID));
             $contacts = $stmt->fetch();
             $stmt->closeCursor();

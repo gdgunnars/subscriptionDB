@@ -38,19 +38,17 @@ elseif(!empty($_GET['boxerID'])):
     $addContact = '<a href="#addContact" class="btn" role="button" data-toggle="modal" data-target="#addContactModal"><i class="fa fa-plus fa-lg" aria-hidden="true"></i></a>';
     $contactInfo = '<div id="contacts"><h3>&nbsp; Tengiliðir '. $addContact .' </h3>';
     if($boxerContacts){
-        $counter = 1;
         foreach($boxerContacts as $contact) {
             $contactInfo .= '<div class="panel-group"><div class="panel panel-default"> '
                             . '<div class="panel-heading"><h4 class="panel-title">'
-                            . '<a data-toggle="collapse" href="#collapse'.$counter.'">'. utf8_encode($contact['name']) . '</a></h4>'
+                            . '<a data-toggle="collapse" href="#collapse'. $contact['ID'] .'">'. utf8_encode($contact['name']) . '</a></h4>'
                             . '</div>'
-                            . '<div id="collapse'.$counter.'" class="panel-collapse collapse"">'
+                            . '<div id="collapse'.$contact['ID'] .'" class="panel-collapse collapse"">'
                             . '<ul class="list-group">'
                             . '<li class="list-group-item">'. $contact['phone'] .'</li>'
                             . '<li class="list-group-item">'. utf8_encode($contact['email']) . '</li>'
                             . '</ul>'
                             . '</div></div></div>';
-            $counter++;
         }
     }
     $contactInfo .= '</div>';
@@ -330,7 +328,7 @@ elseif(!empty($_GET['boxerID'])):
           }
       });
   });
-    var contactCounter = 0;
+
   // Adding a contact to a boxer
   $('form#addContact').on('submit', function() {
       var form = $(this);
@@ -350,8 +348,8 @@ elseif(!empty($_GET['boxerID'])):
                   alertify.log(jsonReturn.msg);
                   $('form#addContact')[0].reset();
                   $('#contacts').append('<div class="panel-group"><div class="panel panel-default"><div class="panel-heading"><h4 class="panel-title">'
-                        + '<a data-toggle="collapse" href="#collapse0'+ contactCounter +'">' + jsonReturn.name + '</a></h4></div>'
-                        + '<div id="collapse0' + contactCounter + '" class="panel-collapse collapse"> <ul class="list-group">'
+                        + '<a data-toggle="collapse" href="#collapse'+ jsonReturn.id +'">' + jsonReturn.name + '</a></h4></div>'
+                        + '<div id="collapse' + jsonReturn.id + '" class="panel-collapse collapse"> <ul class="list-group">'
                         + '<li class="list-group-item">' + jsonReturn.phone + '</li><li class="list-group-item">' + jsonReturn.email + '</li></ul></div></div></div>'
                   );
                   contactCounter++;
