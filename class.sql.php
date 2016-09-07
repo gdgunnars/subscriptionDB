@@ -311,8 +311,9 @@
         public function add_a_contact_to_boxer($boxerID, $name, $phone, $email) {
             $stmt = $this->_db->prepare("INSERT INTO Contacts(boxer_ID, name, phone, email) VALUES (?, ?, ?, ?)");
             $stmt->execute(array($boxerID, $name, $phone, $email));
+            $new_id = $this->_db->lastInsertId();
             $stmt->closeCursor();
-            $contact = $this->get_contact_info($boxerID);
+            $contact = $this->get_contact_info_by_id($new_id);
             if (!empty($contact) && $contact != 0) {
                 $returnMsg = '<h5> Tengiliður hefur verið skráður</h5>';
                 $returnArray = array(
@@ -338,6 +339,18 @@
             $contacts = $stmt->fetchAll();
             $stmt->closeCursor();
             //return var_dump($contacts);
+            if(!empty($contacts)){
+                return $contacts;
+            }
+            else
+                return false;
+        }
+
+        public function get_contact_info_by_id($ID) {
+            $stmt = $this->_db->prepare("select name, phone, email from Contacts where ID = ?");
+            $stmt->execute(array($ID));
+            $contacts = $stmt->fetch();
+            $stmt->closeCursor();
             if(!empty($contacts)){
                 return $contacts;
             }
