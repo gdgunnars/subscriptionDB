@@ -53,20 +53,9 @@ elseif(!empty($_GET['boxerID'])):
     }
     $contactInfo .= '</div>';
 
-    $listOfPayedSubscriptions = $newSQL->list_payed_subscriptions($id);
-    if($listOfPayedSubscriptions){
-      $subscriptions ='';
-      foreach($listOfPayedSubscriptions as $k=>$v){
-          $subscriptions .= "<tr><td>$v[2]</td><td>$v[3]</td><td>$v[4]</td><td>$v[5]</td><td>$v[6]</td></tr>";
-        }
-    }
+    $subscriptions = $newSQL->get_table_of_subscriptions($id);
+    $comments = $newSQL->get_structured_comments($id);
 
-    $commentsRequest = $newSQL->get_all_comments_for_boxer($id);
-    $comments = '';
-    if($commentsRequest){
-        foreach($commentsRequest as $k=>$v)
-        $comments  .= '<div class="well well-sm">'.utf8_encode($v['comment']).'<span class="label pull-right">'.$v['date'].'</span></div>';
-    }
     $pageTitle = "Greiðsluyfirlit";
     include_once "common/head.php";
     include_once "common/scripts.php";
@@ -126,7 +115,7 @@ elseif(!empty($_GET['boxerID'])):
                 </thead>
                 <tbody>
                       <?php
-                        if(!$listOfPayedSubscriptions){
+                        if(!$subscriptions){
                           print '<p class="text-danger">Engar Greiðslur fundust á þennan iðkanda</p>';
                         } else {
                           print UTF8_encode($subscriptions);

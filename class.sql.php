@@ -57,7 +57,7 @@
 		/**
 		 * Returns an array of all subscription that a user had payed for
          */
-		public function list_payed_subscriptions($id) {
+		private function list_payed_subscriptions($id) {
 		    $stmt = $this->_db->prepare("SELECT Subscriptions.ID, Boxer.name, Groups.type, Payment_type.type, Subscription_type.type, Subscriptions.bought_date, Subscriptions.expires_date
                                             FROM Subscriptions
                                             LEFT JOIN Boxer ON Boxer.ID = Subscriptions.boxer_ID
@@ -168,34 +168,6 @@
                 return FALSE;
         }
 
-		/*public function update_image($id, $imgPath) {
-            $sql = "call update_img(:id, :path";
-            try{
-                $stmt = $this->_db->prepare($sql);
-                $stmt->bindParam(":id",$id, PDO::PARAM_INT);
-                $stmt->bindParam(":path",$imgPath, PDO::PARAM_STR);
-                $stmt->execute();
-                $stmt->closeCursor();
-                return true;
-            }
-            catch(PDOException $e){
-                return FALSE;
-            }
-        }*/
-
-        /*public function update_image($id, $imgPath) {
-            try {
-                $stmt = $this->_db->prepare("UPDATE Boxer SET image = ? WHERE ID = ?");
-                $stmt->execute(array($imgPath, $id));
-                $stmt->closeCursor();
-                return true;
-            }
-            catch(PDOException $e){
-                $stmt->closeCursor();
-                return FALSE;
-            }
-        }*/
-
         public function add_subscription($boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date) {
             $stmt = $this->_db->prepare("INSERT INTO Subscriptions(boxer_ID, group_ID, payment_ID, subscription_ID, bought_date, expires_date) 
                                           VALUES (?, ?, ?, ?, ?, ?)");
@@ -284,7 +256,7 @@
             return json_encode($returnArray);
         }
 
-        public function get_all_comments_for_boxer($id) {
+        private function get_all_comments_for_boxer($id) {
             $stmt = $this->_db->prepare("SELECT * FROM Comments where boxer_ID = ?");
             $stmt->execute(array($id));
             $result = $stmt->fetchAll();
@@ -357,6 +329,31 @@
             }
             else
                 return false;
+        }
+
+        public function get_table_of_subscriptions($id){
+            $listOfPayedSubscriptions = $this->list_payed_subscriptions($id);
+            if($listOfPayedSubscriptions){
+                $subscriptions ='';
+                foreach($listOfPayedSubscriptions as $k=>$v){
+                    $subscriptions .= "<tr><td>$v[2]</td><td>$v[3]</td><td>$v[4]</td><td>$v[5]</td><td>$v[6]</td></tr>";
+                }
+                return $subscriptions;
+            }
+            else
+                return 0;
+        }
+
+        public function get_structured_comments($id){
+            $commentsRequest = $this->get_all_comments_for_boxer($id);
+            $comments = '';
+            if($commentsRequest){
+                foreach($commentsRequest as $k=>$v)
+                    $comments  .= '<div class="well well-sm">'.utf8_encode($v['comment']).'<span class="label pull-right">'.$v['date'].'</span></div>';
+                return $comments;
+            }
+            else
+                return 0;
         }
     }
 ?>
