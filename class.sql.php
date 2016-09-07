@@ -318,6 +318,7 @@
                 $returnArray = array(
                     'status' => 'success',
                     'msg' => $returnMsg,
+                    'id' => $contact['ID'],
                     'name' => $contact['name'],
                     'phone' => $contact['phone'],
                     'email' => $contact['email']
@@ -333,7 +334,7 @@
         }
 
         public function get_contact_info($boxerID) {
-            $stmt = $this->_db->prepare("select name, phone, email from Contacts where boxer_ID = ?");
+            $stmt = $this->_db->prepare("select ID, name, phone, email from Contacts where boxer_ID = ?");
             $stmt->execute(array($boxerID));
             $contacts = $stmt->fetchAll();
             $stmt->closeCursor();
