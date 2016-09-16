@@ -20,11 +20,12 @@ use hfh_db;
 create table `Boxer`(
 	`ID` int not null auto_increment,
 	`name` varchar(255),
-	`kt` int,
-	`phone` int,
+	`kt` char(10),
+	`phone` varchar(11),
 	`email` varchar(255),
 	`image` varchar(255),
 	`active` bool,
+	`rfid` char(10),
 PRIMARY KEY (`ID`),
 UNIQUE (`kt`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Table containing Boxers, and their information';
