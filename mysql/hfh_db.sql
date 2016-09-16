@@ -27,7 +27,7 @@ create table `Boxer`(
 	`active` bool,
 	`rfid` char(10),
 PRIMARY KEY (`ID`),
-UNIQUE (`kt`)
+UNIQUE (`kt`, `rfid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Table containing Boxers, and their information';
 
 create table `Groups`(

@@ -41,7 +41,8 @@ class CheckIn
             return json_encode($returnArray);
         }
         $errorImage = "img/warning.png";
-        $id = $this->get_id_of_kt($inputID);
+        $id = $this->get_user_id($inputID);
+
         if (!$id) {
             $returnMsg = '<div class="checkin"><img src=\'' .$errorImage. '\' width=\'450\'>
                 <h2> ATH!</h2>
@@ -92,7 +93,7 @@ class CheckIn
         return json_encode($returnArray);
     }
 
-    public function get_id_of_kt($kt) {
+    private function get_id_of_kt($kt) {
         $stmt = $this->_db->prepare("select ID from Boxer where kt = ?");
         $stmt->execute(array($kt));
         $id = $stmt->fetch();
@@ -103,7 +104,18 @@ class CheckIn
             return FALSE;
     }
 
-    public function get_subscription_end_date_from_id($id) {
+    private function get_id_of_rfid($rfid) {
+        $stmt = $this->_db->prepare("select ID from Boxer where rfid = ?");
+        $stmt->execute(array($rfid));
+        $id = $stmt->fetch();
+        if(!empty($id)){
+            return $id;
+        }
+        else
+            return FALSE;
+    }
+
+    private function get_subscription_end_date_from_id($id) {
         $stmt = $this->_db->prepare("SELECT expires_date FROM Subscriptions where boxer_ID = ? ORDER BY expires_date DESC LIMIT 1");
         $stmt->execute(array($id));
         $result = $stmt->fetch();
@@ -114,13 +126,25 @@ class CheckIn
             return FALSE;
     }
 
-    public function get_info($kt) {
+    private function get_info($kt) {
         $stmt = $this->_db->prepare("SELECT Boxer.Name, Boxer.image FROM Boxer WHERE Boxer.ID = ?");
         $stmt->execute(array($kt));
         $id = $stmt->fetch();
         if(!empty($id)){
             return $id;
         }
+        else
+            return FALSE;
+    }
+
+    private function get_user_id($input){
+        //$kt = $this->get_id_of_kt($input);
+        $kt = false;
+        $rfid = $this->get_id_of_rfid($input);
+        if($kt)
+            return $kt;
+        else if($rfid)
+            return $rfid;
         else
             return FALSE;
     }
