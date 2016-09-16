@@ -6,6 +6,7 @@
  * Time: 02:28
  */
 
+    define(root, dirname(__FILE__));
     // Set the error reporting level
     error_reporting(E_ALL);
     ini_set("display_errors", 1);
@@ -14,8 +15,7 @@
     //session_start();
 
     // Include site constants
-    include_once "inc/constants.php";
-
+    include_once (root . '/../inc/constants.php');
     // Create a database object
     try {
         $dsn = "mysql:host=".DB_HOST.";dbname=".DB_NAME;

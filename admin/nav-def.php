@@ -5,7 +5,7 @@
  * Date: 29.5.2016
  * Time: 23:36
  */
-include_once "common/scripts.php";
+include_once (fullDirPath . "/scripts.php");
 ?>
 
 <nav class="navbar navbar-default">
@@ -17,7 +17,7 @@ include_once "common/scripts.php";
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.php">Hnefaleikafélag Hafnarfjarðar</a> <img src="img/HFHLogo-48x48.png" style="margin:5px;"/>
+            <a class="navbar-brand" href="index.php">Hnefaleikafélag Hafnarfjarðar</a> <img src="../img/HFHLogo-48x48.png" style="margin:5px;"/>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -54,11 +54,4 @@ include_once "common/scripts.php";
         </div>
     </div>
 
-    <!-- Modal Contact -->
-    <div class="modal fade" id="contact" tabindex="-1" role="dialog" aria-labelledby="contactLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            </div>
-        </div>
-    </div>
 </nav>

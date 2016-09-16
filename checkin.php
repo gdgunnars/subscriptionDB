@@ -1,18 +1,33 @@
 <?php
-include_once "common/base.php";
+define(fullDirPath, dirname(__FILE__));
+include_once (fullDirPath . "/common/base.php");
 if(!empty($_POST['inputID'])):
-    include_once "class.checkin.php";
+    include_once (fullDirPath . "/class.checkin.php");
 
     $checkin = new CheckIn();
     $inputID = trim($_POST['inputID']);
     echo $checkin->check_user_in($inputID);
 else:
     $pageTitle = "Innskráning";
-    include_once "common/head.php";
-    include_once "common/scripts.php";
+  //  include_once (fullDirPath . "/common/head.php");
+  //  include_once (fullDirPath . "/common/scripts.php");
 
 ?>
-
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>HFH Yfirlit | <?php echo $pageTitle ?></title>
+    <link rel="shortcut icon" type="image/x-icon" href="../img/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- data tables stuff -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.css"/>
+    <!-- Extra CSS styles -->
+    <link rel="stylesheet" type="text/css" href="css/hfh-mgmt.css">
+</head>
+<body>
 <div id="bg">
     <img src="img/HFHLogo.png" alt="HFH Logo" />
 </div>
@@ -31,7 +46,11 @@ else:
         </form>
     </div>
 </div>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.js"></script>
+<script type="text/javascript" src="js/script.js"></script>
+<script src="https://cdn.rawgit.com/alertifyjs/alertify.js/v1.0.10/dist/js/alertify.js"></script>
 <script>
     // function that selects the checkin form
     function focusOnInput(formID){
@@ -66,7 +85,7 @@ else:
                 } else if(alertifyType == 'error') {
                     alertify.delay(8000).error(jsonReturn.msg);
                 }
-                focusOnInput();
+                focusOnInput('inputID');
             }
         });
     });
