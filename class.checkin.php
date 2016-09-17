@@ -138,8 +138,7 @@ class CheckIn
     }
 
     private function get_user_id($input){
-        //$kt = $this->get_id_of_kt($input);
-        $kt = false;
+        $kt = $this->get_id_of_kt($input);
         $rfid = $this->get_id_of_rfid($input);
         if($kt)
             return $kt;
