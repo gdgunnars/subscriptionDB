@@ -299,7 +299,7 @@ elseif(!empty($_GET['boxerID'])):
           data: data,
           method:'POST',
           success: function(result) {
-              console.log(result);
+              //console.log(result);
               var jsonReturn = JSON.parse(result);
               alertifyType = jsonReturn.status;
               alertify.logPosition("top right");

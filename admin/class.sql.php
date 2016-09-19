@@ -40,7 +40,7 @@
 		 * List full detail of boxer with the given id
          */
 		private function list_full_boxer_info($id) {
-		    $stmt = $this->_db->prepare("SELECT Boxer.ID, Boxer.Name, Boxer.kt, Boxer.phone, Boxer.email, Boxer.image, Boxer.active
+		    $stmt = $this->_db->prepare("SELECT Boxer.ID, Boxer.Name, Boxer.kt, Boxer.phone, Boxer.email, Boxer.image, Boxer.active, Boxer.rfid
                                             FROM Boxer
                                             WHERE Boxer.ID = ?
                                             ORDER BY Boxer.name ASC;");
@@ -217,13 +217,18 @@
                 return FALSE;
         }
 
-        public function add_boxer($name, $kt, $phone, $email, $image, $active) {
+        public function add_boxer($name, $kt, $phone, $email, $image, $active, $rfid) {
             $stmt = $this->_db->prepare("INSERT INTO Boxer(name, kt, phone, email, image, active) 
                                           VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            //$stmt->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $stmt->execute(array($name, $kt, $phone, $email, $image, $active));
             $new_id = $this->_db->lastInsertId();
             $stmt->closeCursor();
+            if(!empty($rfid)){
+                $stmt = $this->_db->prepare("UPDATE Boxer set rfid = ? where ID = ?");
+                $stmt->execute(array($rfid, $new_id));
+                $stmt->closeCursor();
+            }
             return $new_id;
         }
 
@@ -238,7 +243,7 @@
                     $v = utf8_encode($v);
                 }
                 unset($v);
-                $returnMsg = '<h5delete > Athugasemd hefur verið skráð</h5delete>';
+                $returnMsg = '<h5> Athugasemd hefur verið skráð</h5>';
                 $returnArray = array(
                     'status' => 'success',
                     'msg' => $returnMsg,
@@ -400,9 +405,13 @@
                 $infoSideBar = "<div class='panel-group'>"
                     . "<div class='panel panel-success'>"
                     . "<div class='panel-heading'>" . $fullInfoOfBoxer['Name'] . "</div>"
-                    . "<div class='panel-body' id='infoKT'><strong>kt:</strong>" . $fullInfoOfBoxer['kt'] ."</div>"
-                    . "<div class='panel-body'><strong>Sími:</strong>" . $fullInfoOfBoxer['phone'] . "</div>"
-                    . "<div class='panel-body'><strong>Veffang:</strong>" . $fullInfoOfBoxer['email'] . "</div></div></div>";
+                    . "<div class='panel-body' id='infoKT'><strong>kt: </strong>" . $fullInfoOfBoxer['kt'] ."</div>"
+                    . "<div class='panel-body'><strong>S&iacute;mi: </strong>" . $fullInfoOfBoxer['phone'] . "</div>"
+                    . "<div class='panel-body'><strong>Veffang: </strong>" . $fullInfoOfBoxer['email'] . "</div>";
+                if(!empty($fullInfoOfBoxer['rfid'])){
+                    $infoSideBar .= "<div class='panel-body'><strong>rfid: </strong>" .$fullInfoOfBoxer['rfid'] . "</div>";
+                }
+                $infoSideBar .= "</div></div>";
                 return $infoSideBar;
             }
             return 0;

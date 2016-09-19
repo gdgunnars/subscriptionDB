@@ -76,6 +76,13 @@ create table `Contacts`(
 PRIMARY KEY (`ID`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Table that containts a comment for an individual';
 
+create table `CheckInLog`(
+	`ID` int not null auto_increment,
+    `boxer_ID` int not null,
+    `date_logged` DATE,
+		`time_logged` TIME,
+PRIMARY KEY (`ID`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Table that keeps track of checkin for each day';
 
 #show tables;
 
@@ -106,3 +113,7 @@ add constraint constraint_fk_boxer_from_comments foreign key (boxer_ID) referenc
 ## connect a ContactInfo type to a Boxer
 alter table `Contacts`
 add constraint constraint_fk_contact_to_boxer foreign key (boxer_ID) references `Boxer`(`ID`);
+
+## connect a checkin to a Boxer
+alter table `CheckInLog`
+	add constraint constraint_fk_checkIn_to_boxer foreign key (boxer_ID) references `Boxer`(`ID`);

@@ -26,6 +26,8 @@ include_once (fullDirPath . "/scripts.php");
                 if(isset($user)): ?>
                 <li><a href="index.php"><i class="fa fa-users fa-lg" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
                 <li><a href="modals/addBoxer.php" data-toggle="modal" data-target="#addBoxerModal"><i class="fa fa-user-plus fa-lg" aria-hidden="true"></i></a></li>
+                <li><a href="modals/.php" data-toggle="modal" data-target="#addBoxerModal"><i class="fa fa-tachometer fa-lg" aria-hidden="true"></i></a></li>
+
                 <li class="active"><a>
                         <?php if(!isset($name)){print 'No username found';} else print $name ?>
                 <span class="sr-only">(current)</span></a></li>

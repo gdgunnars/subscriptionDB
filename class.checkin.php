@@ -70,10 +70,21 @@ class CheckIn
         if ($currDate > $subDate[0]) {
             $returnMsg = '<div class="checkin"><img src=\'' .$errorImage. '\' width=\'450\'>
                 <h2> ATH!</h2>
-                <h3>Áskriftin þín er runnin út,</h3>
-                <h3>vinsamlegast talaðu við afgreiðslu til að endurnýja</h3></div>';
+                <h3>Áskriftin þín er runnin út</h3>
+                <h3>Vinsamlegast talaðu við afgreiðslu til að endurnýja</h3></div>';
             $returnArray = array(
                 'status' => 'error',
+                'msg' => $returnMsg
+            );
+            return json_encode($returnArray);
+        }
+
+        // Check if the user has already logged in for today, if he has, returnes an error
+        if(!$checkIn = $this->add_log($id['ID'])){
+            $returnMsg = '<h2> ATH!</h2>
+                <h3>Þú ert nú þegar skráð/ur inn </h3>';
+            $returnArray = array(
+                'status' => 'info',
                 'msg' => $returnMsg
             );
             return json_encode($returnArray);
@@ -148,4 +159,29 @@ class CheckIn
             return FALSE;
     }
 
+    private function add_log($id){
+        $newestCheckIn = $this->get_newest_checkin($id);
+        $currDate = date('Y-m-d');
+        $checkedIn = FALSE;
+        if(!$newestCheckIn && $currDate >= $newestCheckIn){
+            $stmt = $this->_db->prepare("INSERT INTO CheckInLog(boxer_ID, date) values (?, now())");
+            $stmt->execute(array($id));
+            $stmt->closeCursor();
+            $checkedIn = TRUE;
+        }
+
+        return $checkedIn;
+    }
+
+    private function get_newest_checkin($id){
+        $stmt = $this->_db->prepare("SELECT date(CheckInLog.date) FROM CheckInLog WHERE boxer_ID = ? ORDER BY ID DESC limit 1");
+        $stmt->execute(array($id));
+        $date = $stmt->fetch();
+        $stmt->closeCursor();
+        if(!empty($id)){
+            return $date;
+        }
+        else
+            return FALSE;
+    }
 }

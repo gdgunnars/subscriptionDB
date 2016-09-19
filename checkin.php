@@ -37,7 +37,7 @@ else:
             <div class="row">
             <fieldset class="form-group col-sm-4 col-sm-offset-4 col-xs-8 col-xs-offset-2">
                 <label for="inputID">Vinsamlegast skráðu þig inn</label>
-                <input type="text" class="form-control" id="inputID" name="inputID" placeholder="kt">
+                <input type="text" class="form-control" id="inputID" name="inputID" placeholder="Auðkenni">
             </fieldset>
             </div>
             <div class="row">
@@ -84,6 +84,8 @@ else:
                     alertify.delay(8000).success(jsonReturn.msg);
                 } else if(alertifyType == 'error') {
                     alertify.delay(8000).error(jsonReturn.msg);
+                } else if(alertifyType == 'info') {
+                    alertify.delay(8000).log(jsonReturn.msg);
                 }
                 focusOnInput('inputID');
             }
