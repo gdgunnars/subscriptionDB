@@ -428,5 +428,40 @@
             else
                 return false;
         }
+
+        public function get_current_attendance(){
+            $date = date('Y-m-d');
+            $stmt = $this->_db->prepare("SELECT Boxer.ID, Boxer.name, CheckInLog.date_logged, CheckInLog.time_logged, Groups.type
+                                        FROM Boxer
+                                            INNER JOIN CheckInLog ON Boxer.ID = CheckInLog.boxer_ID
+                                            INNER JOIN Subscriptions ON Boxer.ID = Subscriptions.boxer_ID
+                                            INNER JOIN Groups ON Subscriptions.group_ID = Groups.ID
+                                        WHERE CheckInLog.date_logged = ?
+                                        GROUP BY Boxer.ID");
+            $stmt->execute(array($date));
+            $list = $stmt->fetchAll();
+            $stmt->closeCursor();
+            if(!empty($list)){
+                return $list;
+            }
+            else
+                return false;
+        }
+
+        public function list_structured_attendance(){
+            $arrayOfAttendance = $this->get_current_attendance();
+            if($arrayOfAttendance != false){
+                $boxers_list = '';
+                foreach($arrayOfAttendance as $k=>$v){
+                    $boxers_list .= "<tr>
+                              <td><a href='user.php?boxerID=$v[0]'><strong> $v[1] </strong></a></td>
+                              <td> $v[2] kl: $v[3] </td>
+                              <td> $v[4] </td>
+                            </tr>";
+                }
+                return $boxers_list;
+            }
+            return 0;
+        }
     }
 ?>

@@ -116,4 +116,4 @@ add constraint constraint_fk_contact_to_boxer foreign key (boxer_ID) references 
 
 ## connect a checkin to a Boxer
 alter table `CheckInLog`
-	add constraint constraint_fk_checkIn_to_boxer foreign key (boxer_ID) references `Boxer`(`ID`);
+add constraint constraint_fk_checkIn_to_boxer foreign key (boxer_ID) references `Boxer`(`ID`);

@@ -164,7 +164,7 @@ class CheckIn
         $currDate = date('Y-m-d');
         $checkedIn = FALSE;
         if(!$newestCheckIn && $currDate >= $newestCheckIn){
-            $stmt = $this->_db->prepare("INSERT INTO CheckInLog(boxer_ID, date) values (?, now())");
+            $stmt = $this->_db->prepare("INSERT INTO CheckInLog(boxer_ID, date_logged, time_logged) values (?, CURDATE(),CURTIME())");
             $stmt->execute(array($id));
             $stmt->closeCursor();
             $checkedIn = TRUE;
@@ -174,7 +174,7 @@ class CheckIn
     }
 
     private function get_newest_checkin($id){
-        $stmt = $this->_db->prepare("SELECT date(CheckInLog.date) FROM CheckInLog WHERE boxer_ID = ? ORDER BY ID DESC limit 1");
+        $stmt = $this->_db->prepare("SELECT date(CheckInLog.date_logged) FROM CheckInLog WHERE boxer_ID = ? ORDER BY ID DESC limit 1");
         $stmt->execute(array($id));
         $date = $stmt->fetch();
         $stmt->closeCursor();
