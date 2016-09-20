@@ -454,7 +454,7 @@
                 foreach($arrayOfAttendance as $k=>$v){
                     $boxers_list .= "<tr>
                               <td><a href='user.php?boxerID=$v[0]'><strong> $v[1] </strong></a></td>
-                              <td> $v[2] kl: $v[3] </td>
+                              <td> $v[3] </td>
                               <td> $v[4] </td>
                             </tr>";
                 }

@@ -32,7 +32,7 @@ $newSQL = new newSQL();
                     <thead>
                     <tr>
                         <th>Nafn</th>
-                        <th>Dagsettning & Tími</th>
+                        <th>Mætti kl:</th>
                         <th>Hópur</th>
                     </tr>
                     </thead>
@@ -57,7 +57,7 @@ $newSQL = new newSQL();
                     <thead>
                     <tr>
                         <th>Nafn</th>
-                        <th>Dagsettning & Tími</th>
+                        <th>Mætti kl:</th>
                         <th>Hópur</th>
                     </tr>
                     </thead>
