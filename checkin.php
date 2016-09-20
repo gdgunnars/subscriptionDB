@@ -9,9 +9,6 @@ if(!empty($_POST['inputID'])):
     echo $checkin->check_user_in($inputID);
 else:
     $pageTitle = "Innskráning";
-  //  include_once (fullDirPath . "/common/head.php");
-  //  include_once (fullDirPath . "/common/scripts.php");
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -69,7 +66,7 @@ else:
         event.preventDefault();
         var data = form.serialize();
         if($.trim($('#inputID').val()) == ''){
-            alertify.log("<h2> Please provide a identification number </h2>");
+            alertify.log("<h2> Please provide an identification number </h2>");
             return;
         };
         $.ajax({
@@ -77,6 +74,7 @@ else:
             data: data,
             method:'POST',
             success: function(result){
+                console.log(result);
                 var jsonReturn = JSON.parse(result);
                 $('form#checkIn')[0].reset();
                 alertifyType = jsonReturn.status;

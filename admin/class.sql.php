@@ -429,8 +429,7 @@
                 return false;
         }
 
-        public function get_current_attendance(){
-            $date = date('Y-m-d');
+        public function get_current_attendance($date){
             $stmt = $this->_db->prepare("SELECT Boxer.ID, Boxer.name, CheckInLog.date_logged, CheckInLog.time_logged, Groups.type
                                         FROM Boxer
                                             INNER JOIN CheckInLog ON Boxer.ID = CheckInLog.boxer_ID
@@ -448,8 +447,8 @@
                 return false;
         }
 
-        public function list_structured_attendance(){
-            $arrayOfAttendance = $this->get_current_attendance();
+        public function list_structured_attendance($date){
+            $arrayOfAttendance = $this->get_current_attendance($date);
             if($arrayOfAttendance != false){
                 $boxers_list = '';
                 foreach($arrayOfAttendance as $k=>$v){
