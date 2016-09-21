@@ -163,8 +163,7 @@ class CheckIn
         $lastCheckIn = $this->get_last_checkin($id);
         $currDate = date('Y-m-d');
         $checkedIn = FALSE;
-        //var_dump($lastCheckIn);
-        if(!$lastCheckIn || $currDate > $lastCheckIn['date_logged']){
+        if(($lastCheckIn && $currDate > $lastCheckIn['date_logged']) || (!$lastCheckIn)) {
             $stmt = $this->_db->prepare("INSERT INTO CheckInLog(boxer_ID, date_logged, time_logged) values (?, CURDATE(),CURTIME())");
             $stmt->execute(array($id));
             $stmt->closeCursor();
