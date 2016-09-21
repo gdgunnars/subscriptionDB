@@ -17,6 +17,7 @@ $newSQL = new newSQL();
     $currDate = date('Y-m-d');
     $boxers_list = $newSQL->list_structured_attendance($currDate);
     $oldBoxer_list = $newSQL->list_structured_attendance($yesterDay);
+    $framhalds = $newSQL->list_structured_attendance_for_group($currDate, utf8_decode('Framhaldshópur'));
     include_once (fullDirPath . "/head.php");
     include_once (fullDirPath . "/nav-def.php");
 
@@ -72,6 +73,30 @@ $newSQL = new newSQL();
                     </tbody>
                 </table>
             </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="well">
+                <h3> <strong><?php echo date('l d M Y'); ?></strong></h3>
+                <?php echo 'Week: ' . date('W') . ' - Day: ' . date('z') ?>
+                <br /><br />
+                <table id="boxersTable" class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>Nafn</th>
+                        <th>Mætti kl:</th>
+                        <th>Hópur</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                    if(!$oldBoxer_list){
+                        print '<p class="text-danger">Enginn hefur skráð sig inn ennþá</p>';
+                    } else {
+                        print UTF8_encode($framhalds);
+                    }
+                    ?>
+                    </tbody>
+                </table>
         </div>
     </div>
 
