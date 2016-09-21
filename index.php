@@ -2,7 +2,7 @@
 define(fullDirPath, dirname(__FILE__));
 include_once (fullDirPath . "/common/base.php");
 if(!empty($_POST['inputID'])):
-    include_once (fullDirPath . "/class.checkin.php");
+    include_once (fullDirPath . "/class.index.php");
 
     $checkin = new CheckIn();
     $inputID = trim($_POST['inputID']);
