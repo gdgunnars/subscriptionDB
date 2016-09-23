@@ -65,7 +65,7 @@ $newSQL = new newSQL();
                     <tbody>
                     <?php
                     if(!$oldBoxer_list){
-                        print '<p class="text-danger">Enginn hefur skráð sig inn ennþá</p>';
+                        print '<p class="text-danger">Enginn skráði sig inn í gær</p>';
                     } else {
                         print UTF8_encode($oldBoxer_list);
                     }
@@ -89,7 +89,7 @@ $newSQL = new newSQL();
                     </thead>
                     <tbody>
                     <?php
-                    if(!$oldBoxer_list){
+                    if(!$framhalds){
                         print '<p class="text-danger">Enginn hefur skráð sig inn ennþá</p>';
                     } else {
                         print UTF8_encode($framhalds);
