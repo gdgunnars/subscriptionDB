@@ -1,14 +1,14 @@
 <?php
 define(fullDirPath, dirname(__FILE__));
-
+define('HAS_LOADED', true);
 include_once (fullDirPath . '/../common/base.php');
 $pageTitle = "Iðkennda yfirlit";
 include_once (fullDirPath . '/class.sql.php');
 $newSQL = new newSQL();
 
 if(!empty($_POST['action']) && $_POST['action'] == 'addBoxer'):
-    $testRFID = '0003950626';
-    if($return = $newSQL->add_boxer(utf8_decode($_POST['name']), utf8_decode($_POST['kt']), utf8_decode($_POST['phone']), utf8_decode($_POST['email']), "img/No-image-available.png", true, $testRFID)) {
+    define('HAS_LOADED', true);
+    if($return = $newSQL->add_boxer(utf8_decode($_POST['name']), utf8_decode($_POST['kt']), utf8_decode($_POST['phone']), utf8_decode($_POST['email']), "img/No-image-available.png", true, utf8_decode($_POST['rfid']))) {
         header("Location: user.php?boxerID=$return");
     }
     else {

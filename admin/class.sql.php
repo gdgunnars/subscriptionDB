@@ -8,6 +8,10 @@
 	 * @version 0.0.3
 	 * @todo
 	 */
+
+    if(!defined("HAS_LOADED"))
+        exit("You do not have permission to access this class");
+
     class newSQL
     {
         private $_db;

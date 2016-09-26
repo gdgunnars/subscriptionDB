@@ -51,6 +51,12 @@ input[readonly] {
     min-height: 20%;
 }
 
+.form-group.required .control-label:after {
+    content:"*";
+    color:red;
+}
+
+
 div.checkin {
     text-align: center;
 }
