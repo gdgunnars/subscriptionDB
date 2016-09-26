@@ -6,6 +6,9 @@
  * Date: 8.6.2016
  * Time: 20:00
  */
+if(!defined("HAS_LOADED"))
+    exit("You do not have permission to access this class");
+
 class CheckIn
 {
     private $_db;
@@ -30,6 +33,7 @@ class CheckIn
      * Checks a user in or returns an error if no subscription is valid
      * @return string
      */
+
     public function check_user_in($inputID)
     {
         if (empty($inputID)) {
