@@ -6,6 +6,7 @@
  * Time: 23:36
  */
 include_once (fullDirPath . "/scripts.php");
+$user = $_SERVER['REMOTE_USER']
 ?>
 
 <nav class="navbar navbar-default">
@@ -23,13 +24,13 @@ include_once (fullDirPath . "/scripts.php");
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <?php
-                if(isset($user)): ?>
+                if(isset($boxer)): ?>
                 <li><a href="index.php"><i class="fa fa-users fa-lg" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
                 <li><a href="modals/addBoxer.php" data-toggle="modal" data-target="#addBoxerModal"><i class="fa fa-user-plus fa-lg" aria-hidden="true"></i></a></li>
                 <li><a href="attendance.php" ><i class="fa fa-tachometer fa-lg" aria-hidden="true"></i></a></li>
 
                 <li class="active"><a>
-                        <?php if(!isset($name)){print 'No username found';} else print $name ?>
+                        <?php if(!isset($boxer)){print 'No client ID found';} else print $boxer ?>
                 <span class="sr-only">(current)</span></a></li>
                 <li class="active"><a href="#addSubscriptionModal" class="btn btn-success" role="button" data-toggle="modal" data-target="#addSubscriptionModal"><i class="fa fa-ticket fa-lg" aria-hidden="true"></i></a></li>
                 <li class="active"><a href="#updateInfo" class="btn btn-info" role="button" data-toggle="modal" data-target="#updateInfo"><i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></a> </li>
@@ -43,8 +44,16 @@ include_once (fullDirPath . "/scripts.php");
                 ?>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="modals/contact.php" class="btn btn-danger" role="button" data-toggle="modal" data-target="#contact"><i class="fa fa-bug fa-lg" aria-hidden="true"></i></a></li>
-                <li><a href="http://www.hfh.is">Vefsíða HFH</a></li>
+                <?php
+                if(isset($user)):
+                    echo '<li class="active"><a>';
+                    print $user;
+                    echo '<span class="sr-only">(current)</span></a></li>';
+                else:
+                    echo '<li class="active"><a href="modals/contact.php" class="btn btn-danger" role="button" data-toggle="modal" data-target="#contact">
+                            <i class="fa fa-bug fa-lg" aria-hidden="true"></i></a></li>
+                            <li><a href="http://www.hfh.is">Vefsíða HFH</a></li>';
+                endif; ?>
             </ul>
         </div>
     </div>
