@@ -49,11 +49,13 @@ $user = $_SERVER['REMOTE_USER']
                     echo '<li class="active"><a>';
                     print $user;
                     echo '<span class="sr-only">(current)</span></a></li>';
-                else:
-                    echo '<li class="active"><a href="modals/contact.php" class="btn btn-danger" role="button" data-toggle="modal" data-target="#contact">
-                            <i class="fa fa-bug fa-lg" aria-hidden="true"></i></a></li>
-                            <li><a href="http://www.hfh.is">Vefsíða HFH</a></li>';
                 endif; ?>
+                <li class="active">
+                    <a href="modals/contact.php" class="btn btn-danger" role="button" data-toggle="modal" data-target="#contact">
+                        <i class="fa fa-bug fa-lg" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li><a href="http://www.hfh.is">Vefsíða HFH</a></li>
             </ul>
         </div>
     </div>
