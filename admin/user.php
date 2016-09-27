@@ -29,7 +29,7 @@ elseif(!empty($_GET['boxerID'])):
     $subscriptions = $newSQL->get_table_of_subscriptions($id);
     $comments = $newSQL->get_structured_comments($id);
 
-    $pageTitle = "Greiðsluyfirlit";
+    $pageTitle = "Upplýsingar & Greiðsluyfirlit";
     include_once (fullDirPath . "/head.php");
     include_once (fullDirPath . "/nav-def.php");
     ?>
