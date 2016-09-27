@@ -7,6 +7,7 @@
  */
 
 define(fullDirPath, dirname(__FILE__));
+define('HAS_LOADED', true);
 
 include_once (fullDirPath . '/../common/base.php');
 $pageTitle = "Mætingaskrá";
@@ -21,7 +22,7 @@ $newSQL = new newSQL();
     include_once (fullDirPath . "/head.php");
     include_once (fullDirPath . "/nav-def.php");
 
-    ?>
+?>
 
     <div class="container">
         <div class="col-sm-6">
