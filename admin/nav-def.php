@@ -22,27 +22,37 @@ $user = $_SERVER['REMOTE_USER']
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <!-- Left side of navbar -->
             <ul class="nav navbar-nav">
                 <?php
-                if(isset($boxer)): ?>
-                <li><a href="index.php"><i class="fa fa-users fa-lg" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
-                <li><a href="modals/addBoxer.php" data-toggle="modal" data-target="#addBoxerModal"><i class="fa fa-user-plus fa-lg" aria-hidden="true"></i></a></li>
-                <li><a href="attendance.php" ><i class="fa fa-tachometer fa-lg" aria-hidden="true"></i></a></li>
-
-                <li class="active"><a>
-                        <?php if(!isset($boxer)){print 'No client ID found';} else print $name ?>
-                <span class="sr-only">(current)</span></a></li>
-                <li class="active"><a href="#addSubscriptionModal" class="btn btn-success" role="button" data-toggle="modal" data-target="#addSubscriptionModal"><i class="fa fa-ticket fa-lg" aria-hidden="true"></i></a></li>
-                <li class="active"><a href="#updateInfo" class="btn btn-info" role="button" data-toggle="modal" data-target="#updateInfo"><i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></a> </li>
-                <!--<li class="active"><a href="#" class="btn btn-warning" role="button" data-toggle="modal" data-target="#">&nbsp&nbsp<i class="fa fa-mobile fa-lg" aria-hidden="true">&nbsp</i></a></li> -->
-                <?php
-                else:
-                    echo '<li class="active"><a href=""><i class="fa fa-users fa-lg" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
+                switch($navAction){
+                    case "boxer":
+                        echo '<li><a href="index.php"><i class="fa fa-users fa-lg" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
+                        <li><a href="modals/addBoxer.php" data-toggle="modal" data-target="#addBoxerModal"><i class="fa fa-user-plus fa-lg" aria-hidden="true"></i></a></li>
+                        <li><a href="attendance.php" ><i class="fa fa-tachometer fa-lg" aria-hidden="true"></i></a></li>';
+                        echo '<li class="active"><a>';
+                        if(empty($name)) {
+                            print 'Issue getting client name';
+                        } else echo $name;
+                        echo '<span class="sr-only">(current)</span></a></li>
+                            <li class="active"><a href="#addSubscriptionModal" class="btn btn-success" role="button" data-toggle="modal" data-target="#addSubscriptionModal"><i class="fa fa-ticket fa-lg" aria-hidden="true"></i></a></li>
+                            <li class="active"><a href="#updateInfo" class="btn btn-info" role="button" data-toggle="modal" data-target="#updateInfo"><i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></a> </li>
+                            <!--<li class="active"><a href="#" class="btn btn-warning" role="button" data-toggle="modal" data-target="#">&nbsp&nbsp<i class="fa fa-mobile fa-lg" aria-hidden="true">&nbsp</i></a></li> -->';
+                        break;
+                    case "attendance":
+                        echo '<li><a href="index.php"><i class="fa fa-users fa-lg" aria-hidden="true"></i></a></li>
                           <li><a href="modals/addBoxer.php" data-toggle="modal" data-target="#addBoxerModal"><i class="fa fa-user-plus fa-lg" aria-hidden="true"></i></a></li>
-                          <li><a href="attendance.php" ><i class="fa fa-tachometer fa-lg" aria-hidden="true"></i></a></li>';
-                endif;
+                          <li class="active"><a href="attendance.php" ><i class="fa fa-tachometer fa-lg" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>';
+                        break;
+                    default:
+                        echo '<li class="active"><a href="index.php"><i class="fa fa-users fa-lg" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
+                        <li><a href="modals/addBoxer.php" data-toggle="modal" data-target="#addBoxerModal"><i class="fa fa-user-plus fa-lg" aria-hidden="true"></i></a></li>
+                        <li><a href="attendance.php" ><i class="fa fa-tachometer fa-lg" aria-hidden="true"></i></a></li>';
+                }
                 ?>
+
             </ul>
+            <!-- right side of navbar -->
             <ul class="nav navbar-nav navbar-right">
                 <?php
                 if(isset($user)):
@@ -51,7 +61,7 @@ $user = $_SERVER['REMOTE_USER']
                     echo '<span class="sr-only">(current)</span></a></li>';
                 endif; ?>
                 <li class="active">
-                    <a href="modals/contact.php" class="btn btn-danger" role="button" data-toggle="modal" data-target="#contact">
+                    <a href="modals/contact.php" class="btn btn-danger" role="button" data-toggle="modal" data-target="#contactModal">
                         <i class="fa fa-bug fa-lg" aria-hidden="true"></i>
                     </a>
                 </li>
@@ -62,6 +72,12 @@ $user = $_SERVER['REMOTE_USER']
     <noscript>This site will have serious problems and will not work properly if javascript is disabled</noscript>
     <!-- Modal - addBoxer-->
     <div class="modal fade" id="addBoxerModal" tabindex="-1" role="dialog" aria-labelledby="addBoxerLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="contactModal" tabindex="-1" role="dialog" aria-labelledby="contactLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
             </div>

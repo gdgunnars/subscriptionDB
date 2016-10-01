@@ -11,6 +11,7 @@ define('HAS_LOADED', true);
 
 include_once (fullDirPath . '/../common/base.php');
 $pageTitle = "Mætingaskrá";
+$navAction = 'attendance';
 include_once (fullDirPath . '/class.sql.php');
 $newSQL = new newSQL();
 
@@ -21,6 +22,7 @@ $newSQL = new newSQL();
     $framhalds = $newSQL->list_structured_attendance_for_group($currDate, utf8_decode('Framhaldshópur'));
     include_once (fullDirPath . "/head.php");
     include_once (fullDirPath . "/nav-def.php");
+
 
 ?>
 

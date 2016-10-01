@@ -3,6 +3,7 @@ define(fullDirPath, dirname(__FILE__));
 define('HAS_LOADED', true);
 include_once (fullDirPath . '/../common/base.php');
 $pageTitle = "Iðkennda yfirlit";
+$navAction = '';
 include_once (fullDirPath . '/class.sql.php');
 $newSQL = new newSQL();
 

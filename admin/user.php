@@ -5,7 +5,7 @@ include_once (fullDirPath . "/../common/base.php");
 include_once (fullDirPath . "/class.sql.php");
 $newSQL = new newSQL();
 
-$boxer = true;
+$navAction = 'boxer';
 if(!empty($_POST['action'])):
 
     $action = $_POST['action'];
