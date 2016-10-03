@@ -27,27 +27,27 @@ $user = $_SERVER['REMOTE_USER']
                 <?php
                 switch($navAction){
                     case "boxer":
-                        echo '<li><a href="index.php"><i class="fa fa-users fa-lg" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
-                        <li><a href="modals/addBoxer.php" data-toggle="modal" data-target="#addBoxerModal"><i class="fa fa-user-plus fa-lg" aria-hidden="true"></i></a></li>
-                        <li><a href="attendance.php" ><i class="fa fa-tachometer fa-lg" aria-hidden="true"></i></a></li>';
+                        echo '<li data-toggle="tooltip" data-placement="bottom" title="View All Boxers"><a href="index.php"><i class="fa fa-users fa-lg" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
+                        <li data-toggle="tooltip" data-placement="bottom" title="Add Boxer"><a href="modals/addBoxer.php" data-toggle="modal" data-target="#addBoxerModal"><i class="fa fa-user-plus fa-lg" aria-hidden="true"></i></a></li>
+                        <li data-toggle="tooltip" data-placement="bottom" title="Attendance"><a href="attendance.php" ><i class="fa fa-tachometer fa-lg" aria-hidden="true"></i></a></li>';
                         echo '<li class="active"><a>';
                         if(empty($name)) {
                             print 'Issue getting client name';
                         } else echo $name;
                         echo '<span class="sr-only">(current)</span></a></li>
-                            <li class="active"><a href="#addSubscriptionModal" class="btn btn-success" role="button" data-toggle="modal" data-target="#addSubscriptionModal"><i class="fa fa-ticket fa-lg" aria-hidden="true"></i></a></li>
+                            <li class="active" data-toggle="tooltip" data-placement="bottom" title="Add a Subscription"><a href="#addSubscriptionModal" class="btn btn-success" role="button" data-toggle="modal" data-target="#addSubscriptionModal"><i class="fa fa-ticket fa-lg" aria-hidden="true"></i></a></li>
                             <li class="active"><a href="#updateInfo" class="btn btn-info" role="button" data-toggle="modal" data-target="#updateInfo"><i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></a> </li>
                             <!--<li class="active"><a href="#" class="btn btn-warning" role="button" data-toggle="modal" data-target="#">&nbsp&nbsp<i class="fa fa-mobile fa-lg" aria-hidden="true">&nbsp</i></a></li> -->';
                         break;
                     case "attendance":
-                        echo '<li><a href="index.php"><i class="fa fa-users fa-lg" aria-hidden="true"></i></a></li>
-                          <li><a href="modals/addBoxer.php" data-toggle="modal" data-target="#addBoxerModal"><i class="fa fa-user-plus fa-lg" aria-hidden="true"></i></a></li>
-                          <li class="active"><a href="attendance.php" ><i class="fa fa-tachometer fa-lg" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>';
+                        echo '<li data-toggle="tooltip" data-placement="bottom" title="View All Boxers"><a href="index.php"><i class="fa fa-users fa-lg" aria-hidden="true"></i></a></li>
+                          <li data-toggle="tooltip" data-placement="bottom" title="Add Boxer"><a href="modals/addBoxer.php" data-toggle="modal" data-target="#addBoxerModal"><i class="fa fa-user-plus fa-lg" aria-hidden="true"></i></a></li>
+                          <li class="active" data-toggle="tooltip" data-placement="bottom" title="Attendance"><a href="attendance.php" ><i class="fa fa-tachometer fa-lg" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>';
                         break;
                     default:
-                        echo '<li class="active"><a href="index.php"><i class="fa fa-users fa-lg" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
-                        <li><a href="modals/addBoxer.php" data-toggle="modal" data-target="#addBoxerModal"><i class="fa fa-user-plus fa-lg" aria-hidden="true"></i></a></li>
-                        <li><a href="attendance.php" ><i class="fa fa-tachometer fa-lg" aria-hidden="true"></i></a></li>';
+                        echo '<li class="active" data-toggle="tooltip" data-placement="bottom" title="View All Boxers"><a href="index.php"><i class="fa fa-users fa-lg" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
+                        <li data-toggle="tooltip" data-placement="bottom" title="Add Boxer"><a href="modals/addBoxer.php" data-toggle="modal" data-target="#addBoxerModal"><i class="fa fa-user-plus fa-lg" aria-hidden="true"></i></a></li>
+                        <li data-toggle="tooltip" data-placement="bottom" title="Attendance"><a href="attendance.php" ><i class="fa fa-tachometer fa-lg" aria-hidden="true"></i></a></li>';
                 }
                 ?>
 
@@ -60,7 +60,7 @@ $user = $_SERVER['REMOTE_USER']
                     print $user;
                     echo '<span class="sr-only">(current)</span></a></li>';
                 endif; ?>
-                <li class="active">
+                <li class="active" data-toggle="tooltip" data-placement="bottom" title="Report a Bug">
                     <a href="modals/contact.php" class="btn btn-danger" role="button" data-toggle="modal" data-target="#contactModal">
                         <i class="fa fa-bug fa-lg" aria-hidden="true"></i>
                     </a>
