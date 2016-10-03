@@ -93,28 +93,32 @@ PRIMARY KEY (`ID`)
 
 ## connect a Boxer to a subscription
 alter table `Subscriptions`
-add constraint constraint_fk_boxer foreign key (boxer_ID) references `Boxer`(`ID`);
+add constraint constraint_fk_boxer foreign key (boxer_ID) references `Boxer`(`ID`)
+ON DELETE CASCADE;
 
 ## connect a group to subscription
 alter table `Subscriptions`
 add constraint constraint_fk_group foreign key (group_ID) references `Groups`(`ID`);
 
-## connect a payment type to a Subscription
+## connect a payment-type to a Subscription
 alter table `Subscriptions`
 add constraint constraint_fk_payment foreign key (payment_ID) references `Payment_type`(`ID`);
 
-## connect a subscription type to a Subscription
+## connect a subscription-type to a Subscription
 alter table `Subscriptions`
 add constraint constraint_fk_subscription_type foreign key (subscription_ID) references `Subscription_type`(`ID`);
 
-## connect a comment type to a Boxer
+## connect a comment to a Boxer
 alter table `Comments`
-add constraint constraint_fk_boxer_from_comments foreign key (boxer_ID) references `Boxer`(`ID`);
+add constraint constraint_fk_boxer_from_comments foreign key (boxer_ID) references `Boxer`(`ID`)
+ON DELETE CASCADE;
 
-## connect a ContactInfo type to a Boxer
+## connect a ContactInfo to a Boxer
 alter table `Contacts`
-add constraint constraint_fk_contact_to_boxer foreign key (boxer_ID) references `Boxer`(`ID`);
+add constraint constraint_fk_contact_to_boxer foreign key (boxer_ID) references `Boxer`(`ID`)
+ON DELETE CASCADE;
 
 ## connect a checkin to a Boxer
 alter table `CheckInLog`
-add constraint constraint_fk_checkIn_to_boxer foreign key (boxer_ID) references `Boxer`(`ID`);
+add constraint constraint_fk_checkIn_to_boxer foreign key (boxer_ID) references `Boxer`(`ID`)
+ON DELETE CASCADE;
