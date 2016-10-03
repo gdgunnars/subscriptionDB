@@ -64,6 +64,7 @@ create table `Comments`(
     `boxer_ID` int not null,
     `comment` TEXT not null,
     `date` date,
+    `added_by` varchar(50),
 PRIMARY KEY (`ID`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Table that containts a comment for an individual';
 

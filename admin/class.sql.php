@@ -236,9 +236,9 @@
             return $new_id;
         }
 
-        public function add_comment_to_boxer($boxerID, $comment, $date) {
-            $stmt = $this->_db->prepare("INSERT INTO Comments(boxer_ID, comment, date) VALUES (?, ?, ?)");
-            $stmt->execute(array($boxerID, $comment, $date));
+        public function add_comment_to_boxer($boxerID, $comment, $date, $added_by) {
+            $stmt = $this->_db->prepare("INSERT INTO Comments(boxer_ID, comment, date, added_by) VALUES (?, ?, ?, ?)");
+            $stmt->execute(array($boxerID, $comment, $date, $added_by));
             $new_id = $this->_db->lastInsertId();
             $stmt->closeCursor();
             $newComment = $this->get_comment_by_id($new_id);
@@ -252,7 +252,8 @@
                     'status' => 'success',
                     'msg' => $returnMsg,
                     'comment' => $newComment['comment'],
-                    'date' => $newComment['date']
+                    'date' => $newComment['date'],
+                    'added_by' => $newComment['added_by']
                 );
                 return json_encode($returnArray);
             }
@@ -278,7 +279,7 @@
         }
 
         public function get_comment_by_id($commentID) {
-            $stmt = $this->_db->prepare("SELECT comment, date FROM Comments where ID = ?");
+            $stmt = $this->_db->prepare("SELECT comment, date, added_by FROM Comments where ID = ?");
             $stmt->execute(array($commentID));
             $result = $stmt->fetch();
             $stmt->closeCursor();
@@ -358,7 +359,7 @@
             $comments = '';
             if($commentsRequest){
                 foreach($commentsRequest as $k=>$v)
-                    $comments  .= '<div class="well well-sm">'.utf8_encode($v['comment']).'<span class="label pull-right">'.$v['date'].'</span></div>';
+                    $comments  .= '<div class="well well-sm">'.utf8_encode($v['comment']).'<span class="label pull-right">'.$v['added_by'] .' ('.$v['date'].')</span></div>';
             }
             return $comments;
         }

@@ -13,7 +13,7 @@ if(!empty($_POST['action'])):
         $addedSubscription = $newSQL->add_subscription($_POST['boxer_id'],$_POST['group_id'], $_POST['paymentType_id'], $_POST['subscriptionType_id'], date("Y-m-d", strtotime($_POST['begin_date'])), date("Y-m-d", strtotime($_POST['end_date'])));
         echo $addedSubscription;
     elseif($action == 'addComment'):
-        $commentAdded = $newSQL->add_comment_to_boxer($_POST['boxer_id'], utf8_decode($_POST['comment']), date('Y-m-d'));
+        $commentAdded = $newSQL->add_comment_to_boxer($_POST['boxer_id'], utf8_decode($_POST['comment']), date('Y-m-d'), $_SERVER['REMOTE_USER']);
         echo $commentAdded;
     elseif($action == 'addContact'):
         $contactAdded = $newSQL->add_a_contact_to_boxer($_POST['boxer_id'], utf8_decode($_POST['name']), $_POST['phone'], utf8_decode($_POST['email']));
@@ -282,7 +282,7 @@ elseif(!empty($_GET['boxerID'])):
                   alertify.log(jsonReturn.msg);
                   location.reload();
                   $('form#addComment')[0].reset();
-                  $('#comments').append('<div class="well well-sm">' + jsonReturn.comment + '<span class="label pull-right">' + jsonReturn.date +'</span></div>');
+                  $('#comments').append('<div class="well well-sm">' + jsonReturn.comment + '<span class="label pull-right">' + jsonReturn.added_by + ' (' + jsonReturn.date +')</span></div>');
               } else if(alertifyType == 'error') {
                   alertify.error(jsonReturn.msg);
               }
