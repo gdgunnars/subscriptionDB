@@ -1,9 +1,8 @@
 <?php
 define(fullDirPath, dirname(__FILE__));
+define('HAS_LOADED', true);
 include_once (fullDirPath . "/common/base.php");
 if(!empty($_POST['inputID'])):
-
-    define('HAS_LOADED', true);
     include_once (fullDirPath . "/class.checkin.php");
 
     $checkin = new CheckIn();
