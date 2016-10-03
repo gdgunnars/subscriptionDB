@@ -307,13 +307,14 @@
                     'email' => $contact['email']
                 );
                 return json_encode($returnArray);
-            } else
+            } else {
                 $returnMsg = '<h3> Ekki tókst að skrá tengilið á notanda, reyndu aftur síðar</h3>';
-            $returnArray = array(
-                'status' => 'error',
-                'msg' => $returnMsg
-            );
-            return json_encode($returnArray);
+                $returnArray = array(
+                    'status' => 'error',
+                    'msg' => $returnMsg
+                );
+                return json_encode($returnArray);
+            }
         }
 
         private function get_contact_info($boxerID) {

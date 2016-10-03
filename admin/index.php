@@ -53,7 +53,20 @@ else:
     <script>
         $(document).ready(function() {
             $('#boxersTable').DataTable();
+
+
+            if (!window.chrome) {
+                var alerted = localStorage.getItem('alerted') || '';
+                if (alerted != 'yes') {
+                    $(".navbar").before('<div class="alert alert-warning">'
+                        +'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
+                        +'<strong>ATH!</strong>Þessi síða virkar best ef notast er við chrome eða chromium vafra.</div>');
+                    localStorage.setItem('alerted','yes');
+                }
+            }
         } );
+
+
     </script>
 
 <?php

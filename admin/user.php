@@ -184,19 +184,19 @@ elseif(!empty($_GET['boxerID'])):
                         <fieldset>
                             <input type="hidden" name="action" value="addContact" />
                             <input type="hidden" class="form-control" id="boxerID" name="boxer_id" value="<?php echo $id;?>" />
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label for="contactName" class="col-lg-2 control-label">Nafn</label>
                                 <div class="col-lg-10">
-                                    <input type="text" class="form-control" id="contactName" name="name" placeholder="Jón Jónsson">
+                                    <input type="text" class="form-control" id="contactName" name="name" placeholder="Jón Jónsson" required>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label for="contactPhone" class="col-lg-2 control-label">Sími</label>
                                 <div class="col-lg-10">
-                                    <input type="text" class="form-control" id="contactPhone" name="phone" placeholder="555-1234">
+                                    <input type="text" class="form-control" id="contactPhone" name="phone" placeholder="5551234" required>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group ">
                                 <label for="contactEmail" class="col-lg-2 control-label">Netfang</label>
                                 <div class="col-lg-10">
                                     <input type="email" class="form-control" id="contactEmail" name="email" placeholder="some@mail.com">
