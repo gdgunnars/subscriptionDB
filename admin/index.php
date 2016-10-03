@@ -39,7 +39,7 @@ else:
             <tbody>
             <?php
             if(!$boxers_list){
-                print '<p class="text-danger">There was a problem connecting to the database, contact administrator</p>';
+                print '<p class="text-danger">Something went wrong and I have nothing to show :(</p>';
             } else {
                 print UTF8_encode($boxers_list);
             }
