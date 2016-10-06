@@ -17,7 +17,7 @@ if(!empty($_POST['action']) && $_POST['action'] == 'addBoxer'):
     }
 else:
 
-    $boxers_list = $newSQL->list_structured_boxer();
+    $boxers_list = $newSQL->list_structured_boxers();
     include_once (fullDirPath . "/head.php");
     include_once (fullDirPath . "/nav-def.php");
     if(isset($_GET['error'])){

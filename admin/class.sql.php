@@ -31,9 +31,9 @@
 
 
 		public function list_boxers() {
-		    $stmt = $this->_db->prepare("SELECT Boxer.ID, Boxer.Name, Boxer.kt, Boxer.phone, Boxer.email, Boxer.image
-                            FROM Boxer
-                            ORDER BY Boxer.name ASC");
+		    $stmt = $this->_db->prepare("SELECT B.ID, B.Name, B.kt, B.phone, B.email, B.image, B.active
+                            FROM Boxer B
+                            ORDER BY B.name ASC");
             $stmt->execute();
             $result = $stmt->fetchAll();
             $stmt->closeCursor();
@@ -44,10 +44,10 @@
 		 * List full detail of boxer with the given id
          */
 		private function list_full_boxer_info($id) {
-		    $stmt = $this->_db->prepare("SELECT Boxer.ID, Boxer.Name, Boxer.kt, Boxer.phone, Boxer.email, Boxer.image, Boxer.active, Boxer.rfid
-                                            FROM Boxer
-                                            WHERE Boxer.ID = ?
-                                            ORDER BY Boxer.name ASC;");
+		    $stmt = $this->_db->prepare("SELECT B.ID, B.Name, B.kt, B.phone, B.email, B.image, B.active, B.rfid
+                                            FROM Boxer B
+                                            WHERE B.ID = ?
+                                            ORDER BY B.name ASC;");
             $stmt->execute(array($id));
             $result = $stmt->fetch();
             $stmt->closeCursor();
@@ -387,17 +387,21 @@
             return $contactInfo;
         }
 
-        public function list_structured_boxer(){
+        public function list_structured_boxers(){
             $arrayOfBoxers = $this->list_boxers();
             if($arrayOfBoxers != false){
                 $boxers_list = '';
                 foreach($arrayOfBoxers as $k=>$v){
-                    $boxers_list .= "<tr>
-                              <td><a href='user.php?boxerID=$v[0]'><strong> $v[1] </strong></a></td>
-                              <td> $v[2] </td>
-                              <td> $v[3] </td>
-                              <td> $v[4] </td>
-                            </tr>";
+                    $boxers_list .= '<tr ';
+                    if($v['active'] == 0) {
+                        $boxers_list .= ' class="danger" ';
+                    }
+                    $boxers_list .=' >
+                              <td><a href="user.php?boxerID='.$v['ID'].'"><strong>'. $v['Name'] .'</strong></a></td>
+                              <td>'. $v['kt'] .'</td>
+                              <td>'. $v['phone'] .'</td>
+                              <td>'. $v['email'] .'</td>
+                            </tr>';
                 }
                 return $boxers_list;
             }
