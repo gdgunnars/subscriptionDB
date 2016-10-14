@@ -43,7 +43,7 @@
 		/**
 		 * List full detail of boxer with the given id
          */
-		private function list_full_boxer_info($id) {
+		public function list_full_boxer_info($id) {
 		    $stmt = $this->_db->prepare("SELECT B.ID, B.Name, B.kt, B.phone, B.email, B.image, B.active, B.rfid
                                             FROM Boxer B
                                             WHERE B.ID = ?
@@ -393,7 +393,8 @@
                 $boxers_list = '';
                 foreach($arrayOfBoxers as $k=>$v){
                     $boxers_list .= '<tr ';
-                    if($v['active'] == 0) {
+                    // Check the state of boolean value Active of the current user, if 0 then add Danger class
+                    if(!$v['active']) {
                         $boxers_list .= ' class="danger" ';
                     }
                     $boxers_list .=' >
@@ -441,17 +442,17 @@
 
         public function get_current_attendance($date){
             $stmt = $this->_db->prepare("SELECT B.ID, B.name, C.date_logged, C.time_logged, G.type
-                                        FROM Boxer B
-                                             INNER JOIN CheckInLog C ON B.ID = C.boxer_ID
-                                             INNER JOIN Subscriptions S ON B.ID = S.boxer_ID
-                                             INNER JOIN Groups G ON S.group_ID = G.ID
-                                         WHERE C.date_logged = ?
-                                         AND S.expires_date = (
-                                                         select max(expires_date) 
-                                                         from Subscriptions 
-                                                         where boxer_ID = B.ID  
-                                                         group by boxer_ID)
-                                         GROUP BY B.ID;");
+                                            FROM Boxer B
+                                                 INNER JOIN CheckInLog C ON B.ID = C.boxer_ID
+                                                 INNER JOIN Subscriptions S ON B.ID = S.boxer_ID
+                                                 INNER JOIN Groups G ON S.group_ID = G.ID
+                                             WHERE C.date_logged = '2016-10-14'
+                                             AND S.expires_date = (
+                                                             select max(expires_date) 
+                                                             from Subscriptions 
+                                                             where boxer_ID = B.ID  
+                                                             group by boxer_ID)
+                                             GROUP BY B.ID, C.time_logged, G.type");
             $stmt->execute(array($date));
             $list = $stmt->fetchAll();
             $stmt->closeCursor();
@@ -475,7 +476,7 @@
                                                          where boxer_ID = Boxer.ID  
                                                          group by boxer_ID)
                                          AND Groups.type = ?
-                                         GROUP BY Boxer.ID");
+                                         GROUP BY Boxer.ID, CheckInLog.time_logged, Groups.type");
             $stmt->execute(array($date, $group));
             $list = $stmt->fetchAll();
             $stmt->closeCursor();
