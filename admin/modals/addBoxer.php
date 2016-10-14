@@ -17,31 +17,31 @@
             <div class="form-group required">
                 <label for="inputName" class="col-lg-2 control-label">Nafn</label>
                 <div class="col-lg-9">
-                    <input type="text" class="form-control" id="inputName" name="name" placeholder="Jon Jonsson" required />
+                    <input type="text" class="form-control" id="inputName" name="name" placeholder="Name of Boxer" required />
                 </div>
             </div>
             <div class="form-group required">
                 <label for="inputSSN" class="col-lg-2 control-label">Kennitala</label>
                 <div class="col-lg-9">
-                    <input type="number" class="form-control" id="inputSSN" name="kt" placeholder="Kennitala t.d. 0102034399" maxlength="10"  required />
+                    <input type="number" class="form-control" id="inputSSN" name="kt" maxlength="10"  placeholder="10 digit Icelandic Kennitala" pattern="((0[1-9])|([12][0-9])|(3[01]))((0[1-9])|(1[0-2]))([0-9]{2})[0-9]{4}" required/>
                 </div>
             </div>
             <div class="form-group">
                 <label for="inputPhone" class="col-lg-2 control-label">Sími</label>
                 <div class="col-lg-9">
-                    <input type="tel" class="form-control" id="inputPhone" name="phone" placeholder="símanúmer t.d. 1231234" />
+                    <input type="tel" class="form-control" id="inputPhone" name="phone" placeholder="7 digit Icelandic phone number, f.e. 5552233" />
                 </div>
             </div>
             <div class="form-group">
                 <label for="inputEmail" class="col-lg-2 control-label">Netfang</label>
                 <div class="col-lg-9">
-                    <input type="email" class="form-control" id="inputEmail" name="email" placeholder="jon@gmail.com" />
+                    <input type="email" class="form-control" id="inputEmail" name="email" placeholder="valid email address, f.e. user@hfh.is" />
                 </div>
             </div>
             <div class="form-group">
                 <label for="inputEmail" class="col-lg-2 control-label">Rfid</label>
                 <div class="col-lg-9">
-                    <input type="text" class="form-control" id="inputRfid" name="rfid" placeholder="1234567890" />
+                    <input type="text" class="form-control" id="inputRfid" name="rfid" placeholder="RFID identity, 10 digit number" />
                 </div>
             </div>
             <div class="form-group required">
