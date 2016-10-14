@@ -18,6 +18,10 @@ if(!empty($_POST['action'])):
     elseif($action == 'addContact'):
         $contactAdded = $newSQL->add_a_contact_to_boxer($_POST['boxer_id'], utf8_decode($_POST['name']), $_POST['phone'], utf8_decode($_POST['email']));
         echo $contactAdded;
+    elseif($action == 'updateBoxer'):
+        //TODO: update the boxer with appropriate class.sql call.
+        echo "I made it";
+        echo $_POST['boxer_id'] . utf8_decode($_POST['name']) . utf8_decode($_POST['kt']) . utf8_decode($_POST['phone']) . utf8_decode($_POST['email']) . "img/No-image-available.png" . true . utf8_decode($_POST['rfid']);
     endif;
 
 elseif(!empty($_GET['boxerID'])):
@@ -223,6 +227,58 @@ elseif(!empty($_GET['boxerID'])):
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="updateInfoLabel"><strong> Ekki búið að útfæra þennan flipa </strong></h4>
         </div>
+          <?php $info = $newSQL->list_full_boxer_info($id); ?>
+          <div class="modal-body">
+              <form class="form-horizontal" id="updateBoxer" method="POST" action="user.php">
+                  <fieldset>
+                      <input type="hidden" name="action" value="updateBoxer" />
+                      <input type="hidden" class="form-control" id="boxerID" name="boxer_id" value="<?php echo $id;?>" />
+                      <div class="form-group required">
+                          <label for="inputName" class="col-lg-2 control-label">Nafn</label>
+                          <div class="col-lg-9">
+                              <input type="text" class="form-control" id="inputName" name="name" value="<?php echo utf8_encode($info['Name']); ?>" required />
+                          </div>
+                      </div>
+                      <div class="form-group required">
+                          <label for="inputSSN" class="col-lg-2 control-label">Kennitala</label>
+                          <div class="col-lg-9">
+                              <input type="number" class="form-control" id="inputSSN" name="kt" value="<?php echo utf8_encode($info['kt']); ?>" maxlength="10"  required />
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="inputPhone" class="col-lg-2 control-label">Sími</label>
+                          <div class="col-lg-9">
+                              <input type="tel" class="form-control" id="inputPhone" name="phone" value="<?php echo utf8_encode($info['phone']); ?>" />
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="inputEmail" class="col-lg-2 control-label">Netfang</label>
+                          <div class="col-lg-9">
+                              <input type="email" class="form-control" id="inputEmail" name="email" value="<?php echo utf8_encode($info['email']); ?>"/>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="inputEmail" class="col-lg-2 control-label">Rfid</label>
+                          <div class="col-lg-9">
+                              <input type="text" class="form-control" id="inputRfid" name="rfid" value="<?php echo utf8_encode($info['rfid']); ?>" />
+                          </div>
+                      </div>
+                      <div class="form-group required">
+                          <label class='col-lg-5 col-lg-offset-1 control-label'>
+                              Fylla þarf út reyti merkta
+                          </label>
+                      </div>
+
+                      <div class="form-group">
+                          <div class="col-lg-10 col-lg-offset-2">
+                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                              <button type="reset" class="btn btn-danger">Hreinsa</button>
+                              <button type="submit" name="" class="btn btn-primary">Uppfæra Iðkanda</button>
+                          </div>
+                      </div>
+                  </fieldset>
+              </form>
+          </div>
       </div>
     </div>
   </div>
