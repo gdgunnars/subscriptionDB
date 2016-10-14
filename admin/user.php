@@ -225,7 +225,7 @@ elseif(!empty($_GET['boxerID'])):
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="updateInfoLabel"><strong> Ekki búið að útfæra þennan flipa </strong></h4>
+          <h4 class="modal-title" id="updateInfoLabel"><strong> Útfærsla á þessum flipa er í vinnslu</strong></h4>
         </div>
           <?php $info = $newSQL->list_full_boxer_info($id); ?>
           <div class="modal-body">
@@ -236,31 +236,31 @@ elseif(!empty($_GET['boxerID'])):
                       <div class="form-group required">
                           <label for="inputName" class="col-lg-2 control-label">Nafn</label>
                           <div class="col-lg-9">
-                              <input type="text" class="form-control" id="inputName" name="name" value="<?php echo utf8_encode($info['Name']); ?>" required />
+                              <input type="text" class="form-control" id="inputName" name="name" value="<?php echo utf8_encode($info['Name']); ?>" placeholder="Name of Boxer" required />
                           </div>
                       </div>
                       <div class="form-group required">
                           <label for="inputSSN" class="col-lg-2 control-label">Kennitala</label>
                           <div class="col-lg-9">
-                              <input type="number" class="form-control" id="inputSSN" name="kt" value="<?php echo utf8_encode($info['kt']); ?>" maxlength="10"  required />
+                              <input type="number" class="form-control" id="inputSSN" name="kt" value="<?php echo utf8_encode($info['kt']); ?>" maxlength="10"  placeholder="10 digit Icelandic Kennitala" pattern="((0[1-9])|([1-2][0-9])|(3[01]))((0[1-9])|(1[0-2]))([0-9]{2})[0-9]{4}" required/>
                           </div>
                       </div>
                       <div class="form-group">
                           <label for="inputPhone" class="col-lg-2 control-label">Sími</label>
                           <div class="col-lg-9">
-                              <input type="tel" class="form-control" id="inputPhone" name="phone" value="<?php echo utf8_encode($info['phone']); ?>" />
+                              <input type="tel" class="form-control" id="inputPhone" name="phone" value="<?php echo utf8_encode($info['phone']); ?>" placeholder="7 digit Icelandic phone number, f.e. 5552233" />
                           </div>
                       </div>
                       <div class="form-group">
                           <label for="inputEmail" class="col-lg-2 control-label">Netfang</label>
                           <div class="col-lg-9">
-                              <input type="email" class="form-control" id="inputEmail" name="email" value="<?php echo utf8_encode($info['email']); ?>"/>
+                              <input type="email" class="form-control" id="inputEmail" name="email" value="<?php echo utf8_encode($info['email']); ?>" placeholder="valid email address, f.e. user@hfh.is"/>
                           </div>
                       </div>
                       <div class="form-group">
                           <label for="inputEmail" class="col-lg-2 control-label">Rfid</label>
                           <div class="col-lg-9">
-                              <input type="text" class="form-control" id="inputRfid" name="rfid" value="<?php echo utf8_encode($info['rfid']); ?>" />
+                              <input type="text" class="form-control" id="inputRfid" name="rfid" value="<?php echo utf8_encode($info['rfid']); ?>" placeholder="RFID identity, 10 digit number"/>
                           </div>
                       </div>
                       <div class="form-group required">
