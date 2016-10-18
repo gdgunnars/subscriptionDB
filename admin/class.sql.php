@@ -347,7 +347,9 @@
             if($listOfPayedSubscriptions){
                 $subscriptions ='';
                 foreach($listOfPayedSubscriptions as $k=>$v){
-                    $subscriptions .= "<tr><td>$v[2]</td><td>$v[3]</td><td>$v[4]</td><td>$v[5]</td><td>$v[6]</td></tr>";
+                    $beginDate = date('j M Y', strtotime($v[5]));
+                    $expireDate = date('j M Y', strtotime($v[6]));
+                    $subscriptions .= "<tr><td>$v[2]</td><td>$v[3]</td><td>$v[4]</td><td>$beginDate</td><td>$expireDate</td></tr>";
                 }
                 return $subscriptions;
             }
@@ -393,8 +395,9 @@
                 $boxers_list = '';
                 foreach($arrayOfBoxers as $k=>$v){
                     $boxers_list .= '<tr ';
-                    // Check the state of boolean value Active of the current user, if 0 then add Danger class
-                    if(!$v['active']) {
+                    // Compare today's date with the end of the newest subscription.
+                    $subDate = $this->get_newest_subscription_date($v['ID']);
+                    if(date('Y-m-d') > $subDate[0]){
                         $boxers_list .= ' class="danger" ';
                     }
                     $boxers_list .=' >
@@ -545,6 +548,19 @@
                 );
             }
             return json_encode($returnArray);
+        }
+
+        private function get_newest_subscription_date($id){
+            $stmt = $this->_db->prepare("select max(expires_date) 
+                                         from Subscriptions 
+                                         where boxer_ID = ?");
+            $stmt->execute(array($id));
+            $date = $stmt->fetch();
+            $stmt->closeCursor();
+            if(!empty($date) && $date != 0){
+                return $date;
+            } else
+                return false;
         }
     }
 ?>

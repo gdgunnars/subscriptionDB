@@ -108,7 +108,7 @@ elseif(!empty($_GET['boxerID'])):
       <div class="modal-content">
           <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="addSubscriptionLabel"><i class="fa fa-ticket fa-lg" aria-hidden="true"></i> Kaupa áskrift</h4>
+              <h4 class="modal-title" id="addSubscriptionLabel"><strong><i class="fa fa-ticket fa-lg" aria-hidden="true"></i> Kaupa áskrift</strong></h4>
           </div>
           <div class="modal-body">
               <form class="form-horizontal" id="addSubscription" method="POST" action="">
