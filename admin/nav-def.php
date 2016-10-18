@@ -36,7 +36,7 @@ $user = $_SERVER['REMOTE_USER']
                         } else echo $name;
                         echo '<span class="sr-only">(current)</span></a></li>
                             <li class="active" data-toggle="tooltip" data-placement="bottom" title="Add a Subscription"><a href="#addSubscriptionModal" class="btn btn-success" role="button" data-toggle="modal" data-target="#addSubscriptionModal"><i class="fa fa-ticket fa-lg" aria-hidden="true"></i></a></li>
-                            <li class="active"><a href="#updateInfo" class="btn btn-info" role="button" data-toggle="modal" data-target="#updateInfo"><i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></a> </li>
+                            <li class="active" data-toggle="tooltip" data-placement="bottom" title="Update user info"><a href="#updateInfo" class="btn btn-info" role="button" data-toggle="modal" data-target="#updateInfo"><i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></a> </li>
                             <!--<li class="active"><a href="#" class="btn btn-warning" role="button" data-toggle="modal" data-target="#">&nbsp&nbsp<i class="fa fa-mobile fa-lg" aria-hidden="true">&nbsp</i></a></li> -->';
                         break;
                     case "attendance":

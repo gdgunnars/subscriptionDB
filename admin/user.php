@@ -225,7 +225,7 @@ elseif(!empty($_GET['boxerID'])):
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="updateInfoLabel"><strong> Útfærsla á þessum flipa er í vinnslu</strong></h4>
+          <h4 class="modal-title" id="updateInfoLabel"><strong><i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i> Uppfæra Notanda</strong></h4>
         </div>
           <?php $info = $newSQL->list_full_boxer_info($id); ?>
           <div class="modal-body">
@@ -393,7 +393,7 @@ elseif(!empty($_GET['boxerID'])):
               if(alertifyType == 'success'){
                   alertify.logPosition("top right");
                   alertify.log(jsonReturn.msg);
-                  $('form#updateBoxer')[0].reset();
+                  //$('form#updateBoxer')[0].reset();
                   document.getElementById('boxerInfo').innerHTML = '<div class="panel panel-success">'
                       + '<div class="panel-heading">' + jsonReturn.name + '</div>'
                       + '<div class="panel-body" id="infoKT"><strong>kt: </strong>' + jsonReturn.kt + '</div>'
