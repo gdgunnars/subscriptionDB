@@ -449,7 +449,7 @@
                                                  INNER JOIN CheckInLog C ON B.ID = C.boxer_ID
                                                  INNER JOIN Subscriptions S ON B.ID = S.boxer_ID
                                                  INNER JOIN Groups G ON S.group_ID = G.ID
-                                             WHERE C.date_logged = '2016-10-14'
+                                             WHERE C.date_logged = ?
                                              AND S.expires_date = (
                                                              select max(expires_date) 
                                                              from Subscriptions 
