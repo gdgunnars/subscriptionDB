@@ -413,7 +413,7 @@
             $fullInfoOfBoxer = $this->list_full_boxer_info($id);
             if($fullInfoOfBoxer){
                 $name = utf8_encode($fullInfoOfBoxer['Name']);
-                $infoSideBar = "<div class='panel-group'>"
+                $infoSideBar = "<div class='panel-group' id='boxerInfo'>"
                     . "<div class='panel panel-success'>"
                     . "<div class='panel-heading'>" . $fullInfoOfBoxer['Name'] . "</div>"
                     . "<div class='panel-body' id='infoKT'><strong>kt: </strong>" . $fullInfoOfBoxer['kt'] ."</div>"
@@ -517,6 +517,34 @@
                 return $boxers_list;
             }
             return 0;
+        }
+
+        public function update_boxer($boxerID, $name, $kt, $phone, $email, $rfid){
+            $stmt = $this->_db->prepare("UPDATE Boxer
+                                          set name=?, kt=?, phone=?, email=?, rfid=?
+                                          where id=?");
+            $stmt->execute(array($name, $kt, $phone, $email, $rfid, $boxerID));
+            $affectedRows = $stmt->rowCount();
+            $stmt->closeCursor();
+            if ($affectedRows > 0) {
+                $returnMsg = '<h5> Upplýsingar hafa verið uppfærðar</h5>';
+                $returnArray = array(
+                    'status' => 'success',
+                    'msg' => $returnMsg,
+                    'name' => utf8_encode($name),
+                    'kt' => $kt,
+                    'phone' => $phone,
+                    'email' => $email,
+                    'rfid' => $rfid
+                );
+            } else {
+                $returnMsg = '<h3>Ekki tókst að uppfæra notanda</h3>';
+                $returnArray = array(
+                    'status' => 'error',
+                    'msg' => $returnMsg
+                );
+            }
+            return json_encode($returnArray);
         }
     }
 ?>

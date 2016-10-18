@@ -19,9 +19,9 @@ if(!empty($_POST['action'])):
         $contactAdded = $newSQL->add_a_contact_to_boxer($_POST['boxer_id'], utf8_decode($_POST['name']), $_POST['phone'], utf8_decode($_POST['email']));
         echo $contactAdded;
     elseif($action == 'updateBoxer'):
-        //TODO: update the boxer with appropriate class.sql call.
-        echo "I made it";
-        echo $_POST['boxer_id'] . utf8_decode($_POST['name']) . utf8_decode($_POST['kt']) . utf8_decode($_POST['phone']) . utf8_decode($_POST['email']) . "img/No-image-available.png" . true . utf8_decode($_POST['rfid']);
+        $updateBoxer = $newSQL->update_boxer($_POST['boxer_id'],  utf8_decode($_POST['name']), $_POST['kt'], $_POST['phone'], utf8_decode($_POST['email']), $_POST['rfid']);
+        echo $updateBoxer;
+        //var_dump($updateBoxer);
     endif;
 
 elseif(!empty($_GET['boxerID'])):
@@ -219,7 +219,7 @@ elseif(!empty($_GET['boxerID'])):
             </div>
         </div>
     </div>
-  <!-- Update-info modal -->
+  <!-- Update boxer-info modal -->
   <div class="modal fade" id="updateInfo" tabindex="-1" role="dialog" aria-labelledby="updateInfoLabel">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -229,7 +229,7 @@ elseif(!empty($_GET['boxerID'])):
         </div>
           <?php $info = $newSQL->list_full_boxer_info($id); ?>
           <div class="modal-body">
-              <form class="form-horizontal" id="updateBoxer" method="POST" action="user.php">
+              <form class="form-horizontal" id="updateBoxer" method="POST" action="">
                   <fieldset>
                       <input type="hidden" name="action" value="updateBoxer" />
                       <input type="hidden" class="form-control" id="boxerID" name="boxer_id" value="<?php echo $id;?>" />
@@ -273,7 +273,7 @@ elseif(!empty($_GET['boxerID'])):
                           <div class="col-lg-10 col-lg-offset-2">
                               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                               <button type="reset" class="btn btn-danger">Hreinsa</button>
-                              <button type="submit" name="" class="btn btn-primary">Uppfæra Iðkanda</button>
+                              <button type="submit" name="updateBoxer" class="btn btn-primary">Uppfæra Iðkanda</button>
                           </div>
                       </div>
                   </fieldset>
@@ -286,7 +286,7 @@ elseif(!empty($_GET['boxerID'])):
 <script>
   $(document).ready(function() {
     $('#subscription_info').DataTable();
-  } );
+  });
 
   // Adding a subscription to a specific boxer
   $('form#addSubscription').on('submit', function() {
@@ -376,7 +376,39 @@ elseif(!empty($_GET['boxerID'])):
           }
       });
   });
-  </script>
+  // Update a boxer
+  $('form#updateBoxer').on('submit', function() {
+      var form = $(this);
+      event.preventDefault();
+      var data = form.serialize();
+      $.ajax({
+          url: form.attr('action'),
+          data: data,
+          method:'POST',
+          success: function(result) {
+              //console.log(result);
+              var jsonReturn = JSON.parse(result);
+              alertifyType = jsonReturn.status;
+              alertify.logPosition("top right");
+              if(alertifyType == 'success'){
+                  alertify.logPosition("top right");
+                  alertify.log(jsonReturn.msg);
+                  $('form#updateBoxer')[0].reset();
+                  document.getElementById('boxerInfo').innerHTML = '<div class="panel panel-success">'
+                      + '<div class="panel-heading">' + jsonReturn.name + '</div>'
+                      + '<div class="panel-body" id="infoKT"><strong>kt: </strong>' + jsonReturn.kt + '</div>'
+                      + '<div class="panel-body"><strong>S&iacute;mi: </strong>' + jsonReturn.phone + '</div>'
+                      + '<div class="panel-body"><strong>Veffang: </strong>' + jsonReturn.email + '</div>'
+                      + ( jsonReturn.rfid != '' ? '<div class="panel-body"><strong>rfid: </strong>' + jsonReturn.rfid + '</div>' : '')
+                      + '</div>';
+                  //$('#updateBoxerModal').modal('hide');
+              } else if(alertifyType == 'error') {
+                  alertify.error(jsonReturn.msg);
+              }
+          }
+      });
+  });
+</script>
 
 <?php
 else :
