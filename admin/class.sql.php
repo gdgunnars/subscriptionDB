@@ -173,7 +173,7 @@
         }
 
         public function add_subscription($boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date) {
-            $stmt = $this->_db->prepare("INSERT INTO Subscriptions(boxer_ID, group_ID, payment_ID, subscription_ID, bought_date, expires_date) 
+            $stmt = $this->_db->prepare("INSERT INTO Subscriptions(boxer_ID, group_ID, payment_ID, subscription_ID, bought_date, expires_date)
                                           VALUES (?, ?, ?, ?, ?, ?)");
             $stmt->execute(array($boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date));
             $new_id = $this->_db->lastInsertId();
@@ -222,7 +222,7 @@
         }
 
         public function add_boxer($name, $kt, $phone, $email, $image, $active, $rfid) {
-            $stmt = $this->_db->prepare("INSERT INTO Boxer(name, kt, phone, email, image, active) 
+            $stmt = $this->_db->prepare("INSERT INTO Boxer(name, kt, phone, email, image, active)
                                           VALUES (?, ?, ?, ?, ?, ?)");
             //$stmt->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $stmt->execute(array($name, $kt, $phone, $email, $image, $active));
@@ -451,9 +451,9 @@
                                                  INNER JOIN Groups G ON S.group_ID = G.ID
                                              WHERE C.date_logged = ?
                                              AND S.expires_date = (
-                                                             select max(expires_date) 
-                                                             from Subscriptions 
-                                                             where boxer_ID = B.ID  
+                                                             select max(expires_date)
+                                                             from Subscriptions
+                                                             where boxer_ID = B.ID
                                                              group by boxer_ID)
                                              GROUP BY B.ID, C.time_logged, G.type");
             $stmt->execute(array($date));
@@ -474,9 +474,9 @@
                                              INNER JOIN Groups ON Subscriptions.group_ID = Groups.ID
                                          WHERE CheckInLog.date_logged = ?
                                          AND Subscriptions.expires_date = (
-                                                         select max(expires_date) 
-                                                         from Subscriptions 
-                                                         where boxer_ID = Boxer.ID  
+                                                         select max(expires_date)
+                                                         from Subscriptions
+                                                         where boxer_ID = Boxer.ID
                                                          group by boxer_ID)
                                          AND Groups.type = ?
                                          GROUP BY Boxer.ID, CheckInLog.time_logged, Groups.type");
@@ -551,8 +551,8 @@
         }
 
         private function get_newest_subscription_date($id){
-            $stmt = $this->_db->prepare("select max(expires_date) 
-                                         from Subscriptions 
+            $stmt = $this->_db->prepare("select max(expires_date)
+                                         from Subscriptions
                                          where boxer_ID = ?");
             $stmt->execute(array($id));
             $date = $stmt->fetch();
@@ -562,5 +562,37 @@
             } else
                 return false;
         }
+
+		public function list_structured_attendance_for_all_groups($date){
+			if($groups = $this->list_groups()) {
+				$returnArray = array();
+                foreach($groups as $group=>$g){
+					$arrayOfAttendance = $this->get_current_attendance_for_group($date, $g['type']); // Gera $g kallið skýrara með að nota g['type'] ? skoða eftir proof of conecpt
+		            if($arrayOfAttendance != false){
+		                $attendance_list = '<table id="boxersTable" class="table table-striped table-hover"><thead>
+							<h3><strong>'. $g['type'].'</strong></h3>
+							<tr>
+		                        <th>Nafn</th>
+		                        <th>M&aelig;tti kl:</th>
+		                        <th>H&oacute;pur</th>
+		                    </tr>
+		                    </thead>
+		                    <tbody>';
+		                foreach($arrayOfAttendance as $k=>$v){
+		                    $attendance_list .= "<tr>
+		                              <td><a href='user.php?boxerID=$v[0]'><strong> $v[1] </strong></a></td>
+		                              <td> $v[3] </td>
+		                              <td> $v[4] </td>
+		                            </tr>";
+		                }
+						$attendance_list .= "</tbody></table>";
+						array_push($returnArray, $attendance_list);
+                	}
+				}
+                return $returnArray;
+            }
+            else
+                return false;
+		}
     }
 ?>
