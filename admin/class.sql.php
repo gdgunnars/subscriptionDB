@@ -569,7 +569,7 @@
                 foreach($groups as $group=>$g){
 					$arrayOfAttendance = $this->get_current_attendance_for_group($date, $g['type']); // Gera $g kallið skýrara með að nota g['type'] ? skoða eftir proof of conecpt
 		            if($arrayOfAttendance != false){
-		                $attendance_list = '<table id="boxersTable" class="table table-striped table-hover"><thead>
+		                $attendance_list = '<table class="table table-striped table-hover"><thead>
 							<h3><strong>'. $g['type'].'</strong></h3>
 							<tr>
 		                        <th>Nafn</th>
@@ -591,6 +591,29 @@
 				}
                 return $returnArray;
             }
+            else
+                return false;
+		}
+
+		public function attendance_for_all_groups_json($date){
+			if($groups = $this->list_groups()) {
+				$returnArray = array();
+                foreach($groups as $group=>$g){
+					$lowerArray = array();
+					$arrayOfAttendance = $this->get_current_attendance_for_group($date, $g['type']);
+					if($arrayOfAttendance != false){
+		                foreach($arrayOfAttendance as $k=>$v){
+							$lowerArray[] = array("id" => $v['ID'],
+												"name" => utf8_encode($v[1]),
+												"time_logged" => $v['time_logged'],
+												"group" => $v['type']);
+		                }
+                	}
+					//$returnArray[] = array($g['type'] => $lowerArray);
+					$returnArray[] = $lowerArray;
+				}
+				return json_encode($returnArray);
+			}
             else
                 return false;
 		}

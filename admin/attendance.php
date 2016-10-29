@@ -14,13 +14,13 @@ $pageTitle = "Mætingaskrá";
 $navAction = 'attendance';
 include_once (fullDirPath . '/class.sql.php');
 $newSQL = new newSQL();
-
-    $yesterDay = date('Y-m-d',strtotime("-1 days"));
-    $currDate = date('Y-m-d');
-    $attendanceToday = $newSQL->list_structured_attendance($currDate);
-    $attendanceYesterday = $newSQL->list_structured_attendance($yesterDay);
-    $attendance2DaysAgo = $newSQL->list_structured_attendance(date('Y-m-d',strtotime("-2 days")));
-    //$framhalds = $newSQL->list_structured_attendance_for_group($currDate, utf8_decode('Framhaldshópur'));
+if(!empty($_GET)):
+    //print_r(json_encode($newSQL->list_structured_attendance_for_all_groups($_GET['date'])));
+    print_r($newSQL->attendance_for_all_groups_json($_GET['date']));
+else:
+    $attendanceAllGroups = $newSQL->list_structured_attendance_for_all_groups(date('Y-m-d'));
+    $attendanceYesterday = $newSQL->list_structured_attendance_for_all_groups(date('Y-m-d',strtotime("-1 days")));
+    $attendance2DaysAgo = $newSQL->list_structured_attendance_for_all_groups(date('Y-m-d',strtotime("-2 days")));
     include_once (fullDirPath . "/head.php");
     include_once (fullDirPath . "/nav-def.php");
 
@@ -32,79 +32,108 @@ $newSQL = new newSQL();
             <div class="well">
                 <h3> <strong><?php echo date('l d M Y'); ?></strong></h3>
                 <?php echo 'Week: ' . date('W') . ' - Day: ' . date('z') ?>
-                <br /><br />
-                <table id="boxersTable" class="table table-striped table-hover">
-                    <thead>
-                    <tr>
-                        <th>Nafn</th>
-                        <th>Mætti kl:</th>
-                        <th>Hópur</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                    if(!$attendanceToday){
-                        print '<p class="text-danger">Enginn hefur skráð sig inn ennþá</p>';
-                    } else {
-                        print UTF8_encode($attendanceToday);
+                <br />
+                <?php
+                if(!$attendanceAllGroups){
+                    print '<p class="text-danger">Enginn hefur skráð sig inn ennþá</p>';
+                } else {
+                    foreach($attendanceAllGroups as $g=>$a){
+                        print UTF8_encode($a);
                     }
-                    ?>
-                    </tbody>
-                </table>
+                }
+                ?>
             </div>
         </div>
-        <div class="col-sm-6">
-            <div class="well">
-                <h3> <strong><?php echo date('l d M Y', strtotime("-1 days")); ?></strong></h3>
-                <?php echo 'Week: ' . date('W', strtotime("-1 days"))  . ' - Day: ' . date('z', strtotime("-1 days")) ?>
-                <br /><br />
-                <table id="boxersTable" class="table table-striped table-hover">
-                    <thead>
-                    <tr>
-                        <th>Nafn</th>
-                        <th>Mætti kl:</th>
-                        <th>Hópur</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+        <div class="row col-sm-6">
+            <div class="col-sm-12">
+                <div class="well">
+                    <h3> <strong><?php echo date('l d M Y', strtotime("-1 days")); ?></strong></h3>
+                    <?php echo 'Week: ' . date('W', strtotime("-1 days"))  . ' - Day: ' . date('z', strtotime("-1 days")) ?>
+                    <br />
                     <?php
                     if(!$attendanceYesterday){
-                        print '<p class="text-danger">Enginn hefur skráð sig inn ennþá</p>';
+                        print '<p class="text-danger">No one signed in yesterday</p>';
                     } else {
-                        print UTF8_encode($attendanceYesterday);
+                        foreach($attendanceYesterday as $g=>$a){
+                            print UTF8_encode($a);
+                        }
                     }
                     ?>
-                    </tbody>
-                </table>
+                </div>
             </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="well">
-                <h3> <strong><?php echo date('l d M Y', strtotime("-2 days")); ?></strong></h3>
-                <?php echo 'Week: ' . date('W', strtotime("-2 days")) . ' - Day: ' . date('z', strtotime("-2 days")) ?>
-                <br /><br />
-                <table id="boxersTable" class="table table-striped table-hover">
-                    <thead>
-                    <tr>
-                        <th>Nafn</th>
-                        <th>Mætti kl:</th>
-                        <th>Hópur</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+            <div class="col-sm-12">
+                <div class="well">
+                    <h3> <strong><?php echo date('l d M Y', strtotime("-2 days")); ?></strong></h3>
+                    <?php echo 'Week: ' . date('W', strtotime("-2 days")) . ' - Day: ' . date('z', strtotime("-2 days")) ?>
+                    <br />
                     <?php
                     if(!$attendance2DaysAgo){
-                        print '<p class="text-danger">Enginn skráði sig inn í gær</p>';
+                        print '<p class="text-danger">No one signed in yesterday</p>';
                     } else {
-                        print UTF8_encode($attendance2DaysAgo);
+                        foreach($attendance2DaysAgo as $g=>$a){
+                            print UTF8_encode($a);
+                        }
                     }
                     ?>
-                    </tbody>
-                </table>
+                </div>
             </div>
         </div>
 
+        <div class="col-sm-6">
+            <div class="well">
+                <h4 id="datePickerHeader"> </h4>
+                <form class="form-horizontal">
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="inputDate" class="col-lg-4 control-label"> Veldu dagsettningu </label>
+                            <div class="col-lg-4">
+                                <input type="date" id="datePicker" class="form-control" name="attendanceDate" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+                <div id="dateData">
+                </div>
+            </div>
+        </div>
     </div>
-
+<script>
+    $("#datePicker").change(function() {
+      var date = {'date':$("#datePicker").val()};
+      event.preventDefault();
+      if($("#datePicker").val() !== ''){
+          $.ajax({
+              url: 'attendance.php',
+              data: date,
+              method:'GET',
+              success: function(result) {
+                  var rArray = JSON.parse(result);
+                  var newTables = "";
+                  for(var i = 0; i < rArray.length; i++){
+                      var secondArray = rArray[i];
+                      if (secondArray.length !== 0){
+                          newTables += '<table id="boxersTable" class="table table-striped table-hover">'
+                          + '<thead> <h3><strong>' + secondArray[0].group + '</strong></h3>'
+                          + '<tr><th> Nafn </th><th> M&aelig;tti kl: </th><th> H&oacute;pur </th></tr></thead><tbody>';
+                          for(var j = 0; j < secondArray.length; j++){
+                              newTables += '<td><a href="user.php?boxerID='+ secondArray[j].id +'">'
+                              + '<strong>' + secondArray[j].name + '</strong></a></td>'
+                              + '<td>' + secondArray[j].time_logged + '</td><td>' + secondArray[j].group + '</td></tr>';
+                          }
+                         newTables +='</tbody></table>';
+                     }
+                     if(newTables.length === 0){
+                         newTables += "<p> No one signed in on " + date.date;
+                     }
+                     document.getElementById('dateData').innerHTML = newTables;
+                     document.getElementById('datePickerHeader').innerHTML = "<strong>" + date.date + "</strong>";
+                  }
+              }
+          });
+      } else {
+          document.getElementById('dateData').innerHTML = "<p> Not a Valid Input</p>";
+      }
+    });
+</script>
 <?php
-
+endif; ?>
