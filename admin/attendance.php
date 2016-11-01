@@ -15,18 +15,14 @@ $navAction = 'attendance';
 include_once (fullDirPath . '/class.sql.php');
 $newSQL = new newSQL();
 if(!empty($_GET)):
-    //print_r(json_encode($newSQL->list_structured_attendance_for_all_groups($_GET['date'])));
     print_r($newSQL->attendance_for_all_groups_json($_GET['date']));
 else:
-    $attendanceAllGroups = $newSQL->list_structured_attendance_for_all_groups(date('Y-m-d'));
+    $attendanceToday = $newSQL->list_structured_attendance_for_all_groups(date('Y-m-d'));
     $attendanceYesterday = $newSQL->list_structured_attendance_for_all_groups(date('Y-m-d',strtotime("-1 days")));
     $attendance2DaysAgo = $newSQL->list_structured_attendance_for_all_groups(date('Y-m-d',strtotime("-2 days")));
     include_once (fullDirPath . "/head.php");
     include_once (fullDirPath . "/nav-def.php");
-
-
 ?>
-
     <div class="container">
         <div class="col-sm-12">
             <div class="well">
@@ -34,10 +30,10 @@ else:
                 <?php echo 'Week: ' . date('W') . ' - Day: ' . date('z') ?>
                 <br />
                 <?php
-                if(!$attendanceAllGroups){
+                if(!$attendanceToday){
                     print '<p class="text-danger">Enginn hefur skráð sig inn ennþá</p>';
                 } else {
-                    foreach($attendanceAllGroups as $g=>$a){
+                    foreach($attendanceToday as $g=>$a){
                         print UTF8_encode($a);
                     }
                 }
