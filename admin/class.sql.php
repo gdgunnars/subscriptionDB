@@ -32,8 +32,8 @@
 
 		public function list_boxers() {
 		    $stmt = $this->_db->prepare("SELECT B.ID, B.Name, B.kt, B.phone, B.email, B.image, B.active
-                            FROM Boxer B
-                            ORDER BY B.name ASC");
+                FROM Boxer B
+                ORDER BY B.name ASC");
             $stmt->execute();
             $result = $stmt->fetchAll();
             $stmt->closeCursor();
@@ -45,9 +45,9 @@
          */
 		public function list_full_boxer_info($id) {
 		    $stmt = $this->_db->prepare("SELECT B.ID, B.Name, B.kt, B.phone, B.email, B.image, B.active, B.rfid
-                                            FROM Boxer B
-                                            WHERE B.ID = ?
-                                            ORDER BY B.name ASC;");
+                FROM Boxer B
+                WHERE B.ID = ?
+                ORDER BY B.name ASC;");
             $stmt->execute(array($id));
             $result = $stmt->fetch();
             $stmt->closeCursor();
@@ -63,13 +63,13 @@
          */
 		private function list_payed_subscriptions($id) {
 		    $stmt = $this->_db->prepare("SELECT Subscriptions.ID, Boxer.name, Groups.type, Payment_type.type, Subscription_type.type, Subscriptions.bought_date, Subscriptions.expires_date
-                                            FROM Subscriptions
-                                            LEFT JOIN Boxer ON Boxer.ID = Subscriptions.boxer_ID
-                                            LEFT JOIN Groups ON Groups.ID = Subscriptions.group_ID
-                                            LEFT JOIN Payment_type ON Payment_type.ID = Subscriptions.Payment_ID
-                                            LEFT JOIN Subscription_type ON Subscription_type.ID = Subscriptions.Subscription_ID
-                                            WHERE Boxer.id = ?
-                                            ORDER BY Subscriptions.ID DESC");
+                FROM Subscriptions
+                LEFT JOIN Boxer ON Boxer.ID = Subscriptions.boxer_ID
+                LEFT JOIN Groups ON Groups.ID = Subscriptions.group_ID
+                LEFT JOIN Payment_type ON Payment_type.ID = Subscriptions.Payment_ID
+                LEFT JOIN Subscription_type ON Subscription_type.ID = Subscriptions.Subscription_ID
+                WHERE Boxer.id = ?
+                ORDER BY Subscriptions.ID DESC");
             $stmt->execute(array($id));
             $result = $stmt->fetchAll();
             $stmt->closeCursor();
@@ -173,7 +173,7 @@
         }
 
         public function add_subscription($boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date) {
-            $stmt = $this->_db->prepare("INSERT INTO Subscriptions(boxer_ID, group_ID, payment_ID, subscription_ID, bought_date, expires_date) 
+            $stmt = $this->_db->prepare("INSERT INTO Subscriptions(boxer_ID, group_ID, payment_ID, subscription_ID, bought_date, expires_date)
                                           VALUES (?, ?, ?, ?, ?, ?)");
             $stmt->execute(array($boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date));
             $new_id = $this->_db->lastInsertId();
@@ -222,9 +222,8 @@
         }
 
         public function add_boxer($name, $kt, $phone, $email, $image, $active, $rfid) {
-            $stmt = $this->_db->prepare("INSERT INTO Boxer(name, kt, phone, email, image, active) 
+            $stmt = $this->_db->prepare("INSERT INTO Boxer(name, kt, phone, email, image, active)
                                           VALUES (?, ?, ?, ?, ?, ?)");
-            //$stmt->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $stmt->execute(array($name, $kt, $phone, $email, $image, $active));
             $new_id = $this->_db->lastInsertId();
             $stmt->closeCursor();
@@ -322,7 +321,6 @@
             $stmt->execute(array($boxerID));
             $contacts = $stmt->fetchAll();
             $stmt->closeCursor();
-            //return var_dump($contacts);
             if(!empty($contacts)){
                 return $contacts;
             }
@@ -347,7 +345,9 @@
             if($listOfPayedSubscriptions){
                 $subscriptions ='';
                 foreach($listOfPayedSubscriptions as $k=>$v){
-                    $subscriptions .= "<tr><td>$v[2]</td><td>$v[3]</td><td>$v[4]</td><td>$v[5]</td><td>$v[6]</td></tr>";
+                    $beginDate = date('j M Y', strtotime($v[5]));
+                    $expireDate = date('j M Y', strtotime($v[6]));
+                    $subscriptions .= "<tr><td>$v[2]</td><td>$v[3]</td><td>$v[4]</td><td>$beginDate</td><td>$expireDate</td></tr>";
                 }
                 return $subscriptions;
             }
@@ -393,8 +393,9 @@
                 $boxers_list = '';
                 foreach($arrayOfBoxers as $k=>$v){
                     $boxers_list .= '<tr ';
-                    // Check the state of boolean value Active of the current user, if 0 then add Danger class
-                    if(!$v['active']) {
+                    // Compare today's date with the end of the newest subscription.
+                    $subDate = $this->get_newest_subscription_date($v['ID']);
+                    if(date('Y-m-d') > $subDate[0]){
                         $boxers_list .= ' class="danger" ';
                     }
                     $boxers_list .=' >
@@ -442,17 +443,17 @@
 
         public function get_current_attendance($date){
             $stmt = $this->_db->prepare("SELECT B.ID, B.name, C.date_logged, C.time_logged, G.type
-                                            FROM Boxer B
-                                                 INNER JOIN CheckInLog C ON B.ID = C.boxer_ID
-                                                 INNER JOIN Subscriptions S ON B.ID = S.boxer_ID
-                                                 INNER JOIN Groups G ON S.group_ID = G.ID
-                                             WHERE C.date_logged = '2016-10-14'
-                                             AND S.expires_date = (
-                                                             select max(expires_date) 
-                                                             from Subscriptions 
-                                                             where boxer_ID = B.ID  
-                                                             group by boxer_ID)
-                                             GROUP BY B.ID, C.time_logged, G.type");
+                FROM Boxer B
+                     INNER JOIN CheckInLog C ON B.ID = C.boxer_ID
+                     INNER JOIN Subscriptions S ON B.ID = S.boxer_ID
+                     INNER JOIN Groups G ON S.group_ID = G.ID
+                 WHERE C.date_logged = ?
+                 AND S.expires_date = (
+                                 select max(expires_date)
+                                 from Subscriptions
+                                 where boxer_ID = B.ID
+                                 group by boxer_ID)
+                 GROUP BY B.ID, C.time_logged, G.type");
             $stmt->execute(array($date));
             $list = $stmt->fetchAll();
             $stmt->closeCursor();
@@ -465,18 +466,18 @@
 
         public function get_current_attendance_for_group($date, $group){
             $stmt = $this->_db->prepare("SELECT Boxer.ID, Boxer.name, CheckInLog.date_logged, CheckInLog.time_logged, Groups.type
-                                        FROM Boxer
-                                             INNER JOIN CheckInLog ON Boxer.ID = CheckInLog.boxer_ID
-                                             INNER JOIN Subscriptions ON Boxer.ID = Subscriptions.boxer_ID
-                                             INNER JOIN Groups ON Subscriptions.group_ID = Groups.ID
-                                         WHERE CheckInLog.date_logged = ?
-                                         AND Subscriptions.expires_date = (
-                                                         select max(expires_date) 
-                                                         from Subscriptions 
-                                                         where boxer_ID = Boxer.ID  
-                                                         group by boxer_ID)
-                                         AND Groups.type = ?
-                                         GROUP BY Boxer.ID, CheckInLog.time_logged, Groups.type");
+                FROM Boxer
+                     INNER JOIN CheckInLog ON Boxer.ID = CheckInLog.boxer_ID
+                     INNER JOIN Subscriptions ON Boxer.ID = Subscriptions.boxer_ID
+                     INNER JOIN Groups ON Subscriptions.group_ID = Groups.ID
+                 WHERE CheckInLog.date_logged = ?
+                 AND Subscriptions.expires_date = (
+                                 select max(expires_date)
+                                 from Subscriptions
+                                 where boxer_ID = Boxer.ID
+                                 group by boxer_ID)
+                 AND Groups.type = ?
+                 GROUP BY Boxer.ID, CheckInLog.time_logged, Groups.type");
             $stmt->execute(array($date, $group));
             $list = $stmt->fetchAll();
             $stmt->closeCursor();
@@ -546,5 +547,72 @@
             }
             return json_encode($returnArray);
         }
+
+        private function get_newest_subscription_date($id){
+            $stmt = $this->_db->prepare("select max(expires_date)
+                                         from Subscriptions
+                                         where boxer_ID = ?");
+            $stmt->execute(array($id));
+            $date = $stmt->fetch();
+            $stmt->closeCursor();
+            if(!empty($date) && $date != 0){
+                return $date;
+            } else
+                return false;
+        }
+
+		public function list_structured_attendance_for_all_groups($date){
+			if($groups = $this->list_groups()) {
+				$returnArray = array();
+                foreach($groups as $group=>$g){
+					$arrayOfAttendance = $this->get_current_attendance_for_group($date, $g['type']);
+		            if($arrayOfAttendance != false){
+		                $attendance_list = '<table class="table table-striped table-hover"><thead>
+							<h3><strong>'. $g['type'].'</strong></h3>
+							<tr>
+		                        <th>Nafn</th>
+		                        <th>M&aelig;tti kl:</th>
+		                        <th>H&oacute;pur</th>
+		                    </tr>
+		                    </thead>
+		                    <tbody>';
+		                foreach($arrayOfAttendance as $k=>$v){
+		                    $attendance_list .= "<tr>
+		                              <td><a href='user.php?boxerID=$v[0]'><strong> $v[1] </strong></a></td>
+		                              <td> $v[3] </td>
+		                              <td> $v[4] </td>
+		                            </tr>";
+		                }
+						$attendance_list .= "</tbody></table>";
+						array_push($returnArray, $attendance_list);
+                	}
+				}
+                return $returnArray;
+            }
+            else
+                return false;
+		}
+
+		public function attendance_for_all_groups_json($date){
+			if($groups = $this->list_groups()) {
+				$returnArray = array();
+                foreach($groups as $group=>$g){
+					$lowerArray = array();
+					$arrayOfAttendance = $this->get_current_attendance_for_group($date, $g['type']);
+					if($arrayOfAttendance != false){
+		                foreach($arrayOfAttendance as $k=>$v){
+							$lowerArray[] = array("id" => $v['ID'],
+												"name" => utf8_encode($v[1]),
+												"time_logged" => $v['time_logged'],
+												"group" => $v['type']);
+		                }
+                	}
+					$returnArray[] = $lowerArray;
+				}
+				return json_encode($returnArray);
+			}
+            else
+                return false;
+		}
     }
 ?>

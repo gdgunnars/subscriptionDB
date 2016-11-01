@@ -21,7 +21,6 @@ if(!empty($_POST['action'])):
     elseif($action == 'updateBoxer'):
         $updateBoxer = $newSQL->update_boxer($_POST['boxer_id'],  utf8_decode($_POST['name']), $_POST['kt'], $_POST['phone'], utf8_decode($_POST['email']), $_POST['rfid']);
         echo $updateBoxer;
-        //var_dump($updateBoxer);
     endif;
 
 elseif(!empty($_GET['boxerID'])):
@@ -108,7 +107,7 @@ elseif(!empty($_GET['boxerID'])):
       <div class="modal-content">
           <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="addSubscriptionLabel"><i class="fa fa-ticket fa-lg" aria-hidden="true"></i> Kaupa áskrift</h4>
+              <h4 class="modal-title" id="addSubscriptionLabel"><strong><i class="fa fa-ticket fa-lg" aria-hidden="true"></i> Kaupa áskrift</strong></h4>
           </div>
           <div class="modal-body">
               <form class="form-horizontal" id="addSubscription" method="POST" action="">
@@ -393,7 +392,6 @@ elseif(!empty($_GET['boxerID'])):
               if(alertifyType == 'success'){
                   alertify.logPosition("top right");
                   alertify.log(jsonReturn.msg);
-                  //$('form#updateBoxer')[0].reset();
                   document.getElementById('boxerInfo').innerHTML = '<div class="panel panel-success">'
                       + '<div class="panel-heading">' + jsonReturn.name + '</div>'
                       + '<div class="panel-body" id="infoKT"><strong>kt: </strong>' + jsonReturn.kt + '</div>'
