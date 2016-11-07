@@ -89,6 +89,7 @@ else:
                     </fieldset>
                 </form>
                 <div id="dateData">
+                    <p> Please select a date </p>
                 </div>
             </div>
         </div>

@@ -20,6 +20,6 @@
    <!-- data tables stuff -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/bs/jq-2.2.0,dt-1.10.11,b-1.1.2,b-print-1.1.2,fh-3.1.1/datatables.min.css"/>
     <!-- Extra CSS styles -->
-    <link rel="stylesheet" type="text/css" href="../css/hfh-mgmt.css">
+    <link rel="stylesheet" type="text/css" href="../css/admin.css">
 </head>
 <body>
