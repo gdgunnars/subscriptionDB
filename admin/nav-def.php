@@ -8,7 +8,11 @@
 include_once (fullDirPath . "/scripts.php");
 $user = $_SERVER['REMOTE_USER']
 ?>
-
+<noscript>
+    <div class="alert alert-warning">
+        <strong>Warning!</strong> Your seem to have Javascript disabled, this site will not work properly without Javascript
+    </div>
+</noscript>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -69,7 +73,6 @@ $user = $_SERVER['REMOTE_USER']
             </ul>
         </div>
     </div>
-    <noscript>This site will have serious problems and will not work properly if javascript is disabled</noscript>
     <!-- Modal - addBoxer-->
     <div class="modal fade" id="addBoxerModal" tabindex="-1" role="dialog" aria-labelledby="addBoxerLabel">
         <div class="modal-dialog" role="document">
