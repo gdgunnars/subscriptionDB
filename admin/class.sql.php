@@ -178,6 +178,7 @@
             $stmt->execute(array($boxer_ID, $group_ID, $payment_ID, $subscription_ID, $bought_date, $expires_date));
             $new_id = $this->_db->lastInsertId();
             $stmt->closeCursor();
+            $this->change_status_of_boxer($boxer_ID, true);
             if($new_id != 0 && !empty($new_id)) {
                 $returnedInfo = $this->get_last_inserted_subscription($new_id);
                 // Because the sql statement returns an array with decoded utf8 we have to loop through the array and encode them back
@@ -403,6 +404,7 @@
                               <td>'. $v['kt'] .'</td>
                               <td>'. $v['phone'] .'</td>
                               <td>'. $v['email'] .'</td>
+                              <td> <button onclick="deactivateBoxer('.$v['ID'].')" id="deactivateBoxer" class="btn btn-default" role="button" data-toggle="tooltip" data-placement="bottom" title="Deactivate Boxer"><i class="fa fa-chain-broken" aria-hidden="true"></i></button> </td>
                             </tr>';
                 }
                 return $boxers_list;
@@ -614,5 +616,16 @@
             else
                 return false;
 		}
+
+        public function change_status_of_boxer($id, $status){
+            $stmt = $this->_db->prepare("UPDATE Boxer set active = ? where ID = ?");
+            $stmt->execute(array($status, $id));
+            $affectedRows = $stmt->rowCount();
+            $stmt->closeCursor();
+            if ($affectedRows > 0) {
+                return true;
+            } else
+                return false;
+        }
     }
 ?>

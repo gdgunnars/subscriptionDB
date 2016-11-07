@@ -15,6 +15,9 @@ if(!empty($_POST['action']) && $_POST['action'] == 'addBoxer'):
     else {
         header("Location: index.php?error");
     }
+elseif(!empty($_POST['action']) && $_POST['action'] == 'deactivateBoxer'):
+    //echo "I made it to deactivation";
+    echo $newSQL->change_status_of_boxer($_POST['ID'], false);
 else:
 
     $boxers_list = $newSQL->list_structured_boxers();
@@ -24,7 +27,6 @@ else:
         echo '<script>$(document).ready(function(){ alertify.error("<h3> Villa kom upp í fyrirspurninni, reyndu aftur síðar </h3>"); });</script>';
     }
 ?>
-
     <h1><center><img src="../img/HFHLogo-192x192.png" alt="hfh logo"> Yfirlitskerfi Hnefaleikafélags Hafnarfjarðar </center></h1>
     <div class="container">
         <table id="boxersTable" class="table table-striped table-hover">
@@ -34,6 +36,7 @@ else:
                 <th>Kennitala</th>
                 <th>Sími</th>
                 <th>Netfang</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -66,6 +69,24 @@ else:
             }
         } );
 
+        function deactivateBoxer(id){
+            $.ajax({
+                type: 'POST',
+                url: 'index.php',
+                data: {
+                    'action' : 'deactivateBoxer',
+                    'ID' : id
+                }
+            }).done(function(success) {
+                alertifyType = "success";
+                alertify.logPosition("top right");
+                alertify.log("User has been deactivated");
+            }).fail(function() {
+                alertifyType = "error";
+                alertify.logPosition("top right");
+                alertify.log("Something went wrong, please try again later");
+            });
+        }
 
     </script>
 
