@@ -64,7 +64,7 @@ else:
                     <br />
                     <?php
                     if(!$attendance2DaysAgo){
-                        print '<p class="text-danger">No one signed in yesterday</p>';
+                        print '<p class="text-danger">No one signed in 2 days ago</p>';
                     } else {
                         foreach($attendance2DaysAgo as $g=>$a){
                             print UTF8_encode($a);
