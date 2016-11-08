@@ -54,28 +54,32 @@ else:
         </table>
     </div>
     <hr />
-    <div class="container">
-        <h3>Un-active Users</h3>
-        <table id="unactiveBoxers" class="table table-striped table-hover">
-            <thead>
-            <tr>
-                <th>Nafn</th>
-                <th>Kennitala</th>
-                <th>Sími</th>
-                <th>Netfang</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php
-            if(!$unactive_list){
-                print '<p class="text-danger">I have nothing to show :(</p>';
-            } else {
-                print UTF8_encode($unactive_list);
-            }
-            ?>
-            </tbody>
-        </table>
+
+    <div  class="container">
+        <h3>Un-Active Users <button data-toggle="collapse" data-target="#unactiveBoxerDiv" class="btn btn-default">Show/Hide Un-Active Users</button></h3>
+        <div id="unactiveBoxerDiv" class="collapsing">
+
+            <table id="unactiveBoxers" class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>Nafn</th>
+                    <th>Kennitala</th>
+                    <th>Sími</th>
+                    <th>Netfang</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                if(!$unactive_list){
+                    print '<p class="text-danger">I have nothing to show :(</p>';
+                } else {
+                    print UTF8_encode($unactive_list);
+                }
+                ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 
 
