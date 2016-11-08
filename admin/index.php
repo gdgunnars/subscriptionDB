@@ -16,9 +16,9 @@ if(!empty($_POST['action']) && $_POST['action'] == 'addBoxer'):
         header("Location: index.php?error");
     }
 elseif(!empty($_POST['action']) && $_POST['action'] == 'deactivateBoxer'):
-    echo $newSQL->change_status_of_boxer($_POST['ID'], false);
+    echo $newSQL->change_status_of_boxer($_POST['ID'], 0);
 elseif(!empty($_POST['action']) && $_POST['action'] == 'activateBoxer'):
-    echo $newSQL->change_status_of_boxer($_POST['ID'], true);
+    echo $newSQL->change_status_of_boxer($_POST['ID'], 1);
 else:
 
     $active_list = $newSQL->list_structured_active_boxers();
@@ -115,7 +115,7 @@ else:
             }).done(function(success) {
                 alertify.logPosition("top right");
                 alertify.success("User has been deactivated");
-                //location.reload();
+                location.reload();
             }).fail(function() {
                 alertify.logPosition("top right");
                 alertify.error("Something went wrong, please try again later");
@@ -133,7 +133,7 @@ else:
             }).done(function(success) {
                 alertify.logPosition("top right");
                 alertify.success("User has been activated");
-                //location.reload();
+                location.reload();
             }).fail(function() {
                 alertify.logPosition("top right");
                 alertify.error("Something went wrong, please try again later");
