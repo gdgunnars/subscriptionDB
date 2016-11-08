@@ -15,7 +15,7 @@ $navAction = 'attendance';
 include_once (fullDirPath . '/class.sql.php');
 $newSQL = new newSQL();
 if(!empty($_GET)):
-    print_r($newSQL->attendance_for_all_groups_json($_GET['date']));
+    echo $newSQL->attendance_for_all_groups_json($_GET['date']);
 else:
     $attendanceToday = $newSQL->list_structured_attendance_for_all_groups(date('Y-m-d'));
     $attendanceYesterday = $newSQL->list_structured_attendance_for_all_groups(date('Y-m-d',strtotime("-1 days")));
@@ -104,6 +104,7 @@ else:
               data: date,
               method:'GET',
               success: function(result) {
+                  console.log(result);
                   var rArray = JSON.parse(result);
                   var newTables = "";
                   for(var i = 0; i < rArray.length; i++){
@@ -124,7 +125,7 @@ else:
                      }
                      document.getElementById('dateData').innerHTML = newTables;
                      document.getElementById('datePickerHeader').innerHTML = "<strong>" + date.date + "</strong>";
-                  }
+                 }
               }
           });
       } else {

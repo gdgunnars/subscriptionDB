@@ -676,10 +676,12 @@
 							$lowerArray[] = array("id" => $v['ID'],
 												"name" => utf8_encode($v[1]),
 												"time_logged" => $v['time_logged'],
-												"group" => $v['type']);
+												"group" => utf8_encode($v['type']));
 		                }
                 	}
-					$returnArray[] = $lowerArray;
+                    if(!empty($lowerArray)){
+                        $returnArray[] = $lowerArray;
+                    }
 				}
 				return json_encode($returnArray);
 			}
