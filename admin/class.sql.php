@@ -324,9 +324,9 @@
                     'status' => 'success',
                     'msg' => $returnMsg,
                     'id' => $contact['ID'],
-                    'name' => $contact['name'],
+                    'name' => utf8_encode($contact['name']),
                     'phone' => $contact['phone'],
-                    'email' => $contact['email']
+                    'email' => utf8_encode($contact['email'])
                 );
                 return json_encode($returnArray);
             } else {
