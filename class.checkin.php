@@ -67,6 +67,7 @@ class CheckIn
                 'status' => 'error',
                 'msg' => $returnMsg
             );
+            $this->add_log($id['ID']);
             return json_encode($returnArray);
         }
 
@@ -80,6 +81,7 @@ class CheckIn
                 'status' => 'error',
                 'msg' => $returnMsg
             );
+            $this->add_log($id['ID']);
             return json_encode($returnArray);
         }
 
