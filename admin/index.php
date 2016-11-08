@@ -115,7 +115,7 @@ else:
             }).done(function(success) {
                 alertify.logPosition("top right");
                 alertify.success("User has been deactivated");
-                location.reload();
+                //location.reload();
             }).fail(function() {
                 alertify.logPosition("top right");
                 alertify.error("Something went wrong, please try again later");
@@ -133,7 +133,7 @@ else:
             }).done(function(success) {
                 alertify.logPosition("top right");
                 alertify.success("User has been activated");
-                location.reload();
+                //location.reload();
             }).fail(function() {
                 alertify.logPosition("top right");
                 alertify.error("Something went wrong, please try again later");
