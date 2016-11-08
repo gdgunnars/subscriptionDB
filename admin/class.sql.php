@@ -40,6 +40,28 @@
             return $result;
         }
 
+        public function list_active_boxers() {
+		    $stmt = $this->_db->prepare("SELECT B.ID, B.Name, B.kt, B.phone, B.email, B.image, B.active
+                FROM Boxer B
+                WHERE B.active = 1
+                ORDER BY B.name ASC");
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            $stmt->closeCursor();
+            return $result;
+        }
+
+        public function list_unactive_boxers() {
+		    $stmt = $this->_db->prepare("SELECT B.ID, B.Name, B.kt, B.phone, B.email, B.image, B.active
+                FROM Boxer B
+                WHERE B.active = 0
+                ORDER BY B.name ASC");
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            $stmt->closeCursor();
+            return $result;
+        }
+
 		/**
 		 * List full detail of boxer with the given id
          */
@@ -405,6 +427,54 @@
                               <td>'. $v['phone'] .'</td>
                               <td>'. $v['email'] .'</td>
                               <td> <button onclick="deactivateBoxer('.$v['ID'].')" id="deactivateBoxer" class="btn btn-default" role="button" data-toggle="tooltip" data-placement="bottom" title="Deactivate Boxer"><i class="fa fa-chain-broken" aria-hidden="true"></i></button> </td>
+                            </tr>';
+                }
+                return $boxers_list;
+            }
+            return 0;
+        }
+
+        public function list_structured_active_boxers(){
+            $arrayOfBoxers = $this->list_active_boxers();
+            if($arrayOfBoxers != false){
+                $boxers_list = '';
+                foreach($arrayOfBoxers as $k=>$v){
+                    $boxers_list .= '<tr ';
+                    // Compare today's date with the end of the newest subscription.
+                    $subDate = $this->get_newest_subscription_date($v['ID']);
+                    if(date('Y-m-d') > $subDate[0]){
+                        $boxers_list .= ' class="danger" ';
+                    }
+                    $boxers_list .=' >
+                              <td><a href="user.php?boxerID='.$v['ID'].'"><strong>'. $v['Name'] .'</strong></a></td>
+                              <td>'. $v['kt'] .'</td>
+                              <td>'. $v['phone'] .'</td>
+                              <td>'. $v['email'] .'</td>
+                              <td> <button onclick="deactivateBoxer('.$v['ID'].')" id="deactivateBoxer" class="btn btn-default" role="button" data-toggle="tooltip" data-placement="bottom" title="Deactivate Boxer"><i class="fa fa-chain-broken" aria-hidden="true"></i></button> </td>
+                            </tr>';
+                }
+                return $boxers_list;
+            }
+            return 0;
+        }
+
+        public function list_structured_unactive_boxers(){
+            $arrayOfBoxers = $this->list_unactive_boxers();
+            if($arrayOfBoxers != false){
+                $boxers_list = '';
+                foreach($arrayOfBoxers as $k=>$v){
+                    $boxers_list .= '<tr ';
+                    // Compare today's date with the end of the newest subscription.
+                    $subDate = $this->get_newest_subscription_date($v['ID']);
+                    if(date('Y-m-d') > $subDate[0]){
+                        $boxers_list .= ' class="danger" ';
+                    }
+                    $boxers_list .=' >
+                              <td><a href="user.php?boxerID='.$v['ID'].'"><strong>'. $v['Name'] .'</strong></a></td>
+                              <td>'. $v['kt'] .'</td>
+                              <td>'. $v['phone'] .'</td>
+                              <td>'. $v['email'] .'</td>
+                              <td> <button onclick="activateBoxer('.$v['ID'].')" id="activateBoxer" class="btn btn-default" role="button" data-toggle="tooltip" data-placement="bottom" title="Activate Boxer"><i class="fa fa-link" aria-hidden="true"></i></button> </td>
                             </tr>';
                 }
                 return $boxers_list;
