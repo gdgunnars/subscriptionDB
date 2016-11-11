@@ -98,9 +98,11 @@ class CheckIn
 
         $userInfo = $this->get_info($id['ID']);
         $image = $userInfo['image'];
+        if(empty($image))
+            $image = "img/No-image-available.png";
         $name = utf8_encode($userInfo['Name']);
 
-        $returnMsg = '<div class="checkin"> <img src=\'' .$image. '\' width=\'450\'">
+        $returnMsg = '<div class="checkin"> <img src=\'admin/' .$image. '\' width=\'450\'">
             <h2> Velkomin/n, '. $name .' </h2>
             <h3> Þú hefur verið skráð/ur inn</h3></div>';
         $returnArray=array(
