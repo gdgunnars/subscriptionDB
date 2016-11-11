@@ -699,5 +699,27 @@
             } else
                 return false;
         }
+
+        public function update_image($boxerID, $path){
+            $stmt = $this->_db->prepare("UPDATE Boxer set image=? where id=?");
+            $stmt->execute(array($path, $boxerID));
+            $affectedRows = $stmt->rowCount();
+            $stmt->closeCursor();
+            if ($affectedRows > 0) {
+                $returnMsg = '<h5> Image has been changed</h5>';
+                $returnArray = array(
+                    'status' => 'success',
+                    'msg' => $returnMsg,
+                    'path' => $path,
+                );
+            } else {
+                $returnMsg = '<h3>Error updating image</h3>';
+                $returnArray = array(
+                    'status' => 'error',
+                    'msg' => $returnMsg
+                );
+            }
+            return json_encode($returnArray);
+        }
     }
 ?>
