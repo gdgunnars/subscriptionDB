@@ -9,7 +9,7 @@ $newSQL = new newSQL();
 
 if(!empty($_POST['action']) && $_POST['action'] == 'addBoxer'):
     define('HAS_LOADED', true);
-    if($return = $newSQL->add_boxer(utf8_decode($_POST['name']), utf8_decode($_POST['kt']), utf8_decode($_POST['phone']), utf8_decode($_POST['email']), "img/No-image-available.png", true, utf8_decode($_POST['rfid']))) {
+    if($return = $newSQL->add_boxer(utf8_decode($_POST['name']), utf8_decode($_POST['kt']), utf8_decode($_POST['phone']), utf8_decode($_POST['email']), "", true, utf8_decode($_POST['rfid']))) {
         header("Location: user.php?boxerID=$return");
     }
     else {
