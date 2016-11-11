@@ -21,6 +21,9 @@ if(!empty($_POST['action'])):
     elseif($action == 'updateBoxer'):
         $updateBoxer = $newSQL->update_boxer($_POST['boxer_id'],  utf8_decode($_POST['name']), $_POST['kt'], $_POST['phone'], utf8_decode($_POST['email']), $_POST['rfid']);
         echo $updateBoxer;
+    elseif($action == 'updateImage'):
+        $updateImage = $newSQL->update_image($_POST['boxer_id'], $_POST['path']);
+        echo $updateImage;
     endif;
 
 elseif(!empty($_GET['boxerID'])):
@@ -41,8 +44,13 @@ elseif(!empty($_GET['boxerID'])):
         <div class="col-md-3">
             <br />
           <!-- Boxer image -->
-          <img id='profile' src='<?php if(empty($userImage['image'])){ echo '../static/img-profile/no-img.png';} else echo "../" . $userImage['image'];?>' width='100%' height=''/>
-
+            <div class="slim" data-service="async.php" data-ratio="1:1" data-size="300,300" data-did-upload="imageUpload">
+                <input type="file" name="slim[]"/>
+                <?php if(!empty($userImage['image'])){
+                    echo '<img src="'.$userImage['image'] . '" alt="Profile Picture">';
+                }
+                ?>
+            </div>
            <!-- Boxer info -->
           <?php
             if(!$infoSideBar){
@@ -283,9 +291,34 @@ elseif(!empty($_GET['boxerID'])):
   </div>
 <!-- Scripts ---->
 <script>
-  $(document).ready(function() {
-    $('#subscription_info').DataTable();
-  });
+    $(document).ready(function() {
+        $('#subscription_info').DataTable();
+    });
+
+    function imageUpload(error, data, response) {
+        $.ajax({
+            type: 'POST',
+            url: 'user.php',
+            data: {
+                'action' : 'updateImage',
+                // Getting the location, splitting it at ? with search, splitting the result at = and getting the righthandside (boxerID)
+                'boxer_id' : window.location.search.split("=")[1],
+                'path' : response.path
+            }
+        }).done(function(result) {
+            var jsonReturn = JSON.parse(result);
+            alertify.logPosition("top right");
+            alertifyType = jsonReturn.status;
+            if(alertifyType == 'success'){
+                alertify.success(jsonReturn.msg);
+            } else if(alertifyType == 'error') {
+                alertify.error(jsonReturn.msg);
+            }
+        }).fail(function() {
+            alertify.logPosition("top right");
+            alertify.error("Something went wrong, please try again later");
+        });
+    }
 
   // Adding a subscription to a specific boxer
   $('form#addSubscription').on('submit', function() {
