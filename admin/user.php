@@ -45,14 +45,12 @@ elseif(!empty($_GET['boxerID'])):
             <br />
           <!-- Boxer image -->
             <div class="slim" data-service="async.php" data-ratio="1:1" data-size="300,300" data-did-upload="imageUpload">
-                <input type="file"/>
+                <input type="file" name="slim[]"/>
                 <?php if(!empty($userImage['image'])){
                     echo '<img src="'.$userImage['image'] . '" alt="Profile Picture">';
                 }
                 ?>
             </div>
-          <!-- <img id='profile' src='<?php //if(empty($userImage['image'])){ echo '../static/img-profile/no-img.png';} else echo "../" . $userImage['image'];?>' width='100%' height=''/> -->
-
            <!-- Boxer info -->
           <?php
             if(!$infoSideBar){
@@ -297,11 +295,7 @@ elseif(!empty($_GET['boxerID'])):
         $('#subscription_info').DataTable();
     });
 
-    console.log(window.location.search.split("=")[1]);
-
-
     function imageUpload(error, data, response) {
-        console.log(response.path);
         $.ajax({
             type: 'POST',
             url: 'user.php',
