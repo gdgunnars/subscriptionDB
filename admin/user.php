@@ -296,28 +296,30 @@ elseif(!empty($_GET['boxerID'])):
     });
 
     function imageUpload(error, data, response) {
-        $.ajax({
-            type: 'POST',
-            url: 'user.php',
-            data: {
-                'action' : 'updateImage',
-                // Getting the location, splitting it at ? with search, splitting the result at = and getting the righthandside (boxerID)
-                'boxer_id' : window.location.search.split("=")[1],
-                'path' : response.path
-            }
-        }).done(function(result) {
-            var jsonReturn = JSON.parse(result);
-            alertify.logPosition("top right");
-            alertifyType = jsonReturn.status;
-            if(alertifyType == 'success'){
-                alertify.success(jsonReturn.msg);
-            } else if(alertifyType == 'error') {
-                alertify.error(jsonReturn.msg);
-            }
-        }).fail(function() {
-            alertify.logPosition("top right");
-            alertify.error("Something went wrong, please try again later");
-        });
+        if (error == null) {
+            $.ajax({
+                type: 'POST',
+                url: 'user.php',
+                data: {
+                    'action' : 'updateImage',
+                    // Getting the location, splitting it at ? with search, splitting the result at = and getting the righthandside (boxerID)
+                    'boxer_id' : window.location.search.split("=")[1],
+                    'path' : response.path
+                }
+            }).done(function(result) {
+                var jsonReturn = JSON.parse(result);
+                alertify.logPosition("top right");
+                alertifyType = jsonReturn.status;
+                if(alertifyType == 'success'){
+                    alertify.success(jsonReturn.msg);
+                } else if(alertifyType == 'error') {
+                    alertify.error(jsonReturn.msg);
+                }
+            }).fail(function() {
+                alertify.logPosition("top right");
+                alertify.error("Something went wrong, please try again later");
+            });
+        }
     }
 
   // Adding a subscription to a specific boxer
