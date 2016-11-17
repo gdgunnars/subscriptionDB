@@ -97,9 +97,12 @@ class CheckIn
         }
 
         $userInfo = $this->get_info($id['ID']);
-        $image = 'admin/'.$userInfo['image'];
-        if(empty($imge))
+        
+        if(empty($userInfo['image']))
             $image = "img/No-image-available.png";
+        else
+            $image = 'admin/'.$userInfo['image'];
+
         $name = utf8_encode($userInfo['Name']);
 
         $returnMsg = '<div class="checkin"> <img src=\'' .$image. '\' width=\'450\'">
