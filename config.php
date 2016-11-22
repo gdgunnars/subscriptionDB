@@ -7,7 +7,7 @@ class ConfigClass {
         $CONFIG['USER_IMAGE_PATH'] = sprintf("/%s/%s", $p[count($p)-1], 'static/img-usr');
         $CONFIG['STATIC_IMAGES'] = sprintf("/%s/%s", $p[count($p)-1], 'static/img');
 
-        $CONFIG['FRONTPAGE_LOGO'] = sprintf("%s/%s", $CONFIG['STATIC_IMAGES'], "HFHLogo-192x192.png");
+        $CONFIG['MGMT_FRONTPAGE_LOGO'] = sprintf("%s/%s", $CONFIG['STATIC_IMAGES'], "HFHLogo-192x192.png");
         $CONFIG['CHECKIN_LOGO'] = sprintf("%s/%s", $CONFIG['STATIC_IMAGES'], "HFHLogo.png");
 
         return $CONFIG;

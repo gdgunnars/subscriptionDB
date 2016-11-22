@@ -22,6 +22,8 @@ else:
     $attendance2DaysAgo = $newSQL->list_structured_attendance_for_all_groups(date('Y-m-d',strtotime("-2 days")));
     include_once (fullDirPath . "/head.php");
     include_once (fullDirPath . "/nav-def.php");
+    require_once (fullDirPath . "/../config.php");
+    $config = ConfigClass::getConfig();
 ?>
     <div class="container">
         <div class="col-sm-12">

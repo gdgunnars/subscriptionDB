@@ -31,7 +31,7 @@ else:
     require_once (fullDirPath . "/../config.php");
     $config = ConfigClass::getConfig();
 ?>
-    <h1><center><img src="../static/img/HFHLogo-192x192.png" alt="hfh logo"> Yfirlitskerfi Hnefaleikafélags Hafnarfjarðar </center></h1>
+    <h1><center><img src="<?php echo $config['MGMT_FRONTPAGE_LOGO']; ?>" alt="hfh logo"> Yfirlitskerfi Hnefaleikafélags Hafnarfjarðar </center></h1>
     <div class="container">
         <h3>Active Users</h3>
         <table id="activeBoxers" class="table table-striped table-hover">
