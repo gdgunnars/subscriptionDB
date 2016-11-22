@@ -1,7 +1,6 @@
 <?php
 class ConfigClass {
     public static function getConfig() {
-        //hér skilgreiningur $CONFIG og svo endaru á return $CONFIG;
         $CONFIG['BASE_PATH'] = dirname(__FILE__);
         $CONFIG['SAVING_USER_IMAGES'] = sprintf("%s/%s", $CONFIG['BASE_PATH'], 'static/img-usr');
         $p = explode("/", $CONFIG['BASE_PATH']);
