@@ -13,7 +13,5 @@ class ConfigClass {
 
         return $CONFIG;
     }
-    // $CONFIG['BASE_STATIC'] = '/var/www/site/static';
-    // $CONFIG['ADMIN_USER_IMAGES'] = sprintf("%s/%s", $CONFIG['BASE_STATIC'], 'admin/images';
 }
 ?>
