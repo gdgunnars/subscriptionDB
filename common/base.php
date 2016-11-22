@@ -6,7 +6,7 @@
  * Time: 02:28
  */
 
-    define(root, dirname(__FILE__));
+    define('root', dirname(__FILE__));
     // Set the error reporting level
     error_reporting(E_ALL);
     ini_set("display_errors", 1);

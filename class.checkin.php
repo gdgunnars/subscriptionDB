@@ -8,6 +8,7 @@
  */
 if(!defined("HAS_LOADED"))
     exit("You do not have permission to access this class");
+require_once (fullDirPath . "/config.php");
 
 class CheckIn
 {
@@ -34,8 +35,9 @@ class CheckIn
      * @return string
      */
 
-    public function check_user_in($inputID)
-    {
+    public function check_user_in($inputID) {
+        $config = ConfigClass::getConfig();
+
         if (empty($inputID)) {
             $returnMsg = 'Please provide a identification number';
             $returnArray = array(
@@ -44,7 +46,7 @@ class CheckIn
             );
             return json_encode($returnArray);
         }
-        $errorImage = "img/warning.png";
+        $errorImage = sprintf("%s/%s", $config['STATIC_IMAGES'], "warning.png");
         $id = $this->get_user_id($inputID);
 
         if (!$id) {
@@ -97,11 +99,11 @@ class CheckIn
         }
 
         $userInfo = $this->get_info($id['ID']);
-        
+
         if(empty($userInfo['image']))
-            $image = "img/No-image-available.png";
+                $image = sprintf("%s/%s", $config['STATIC_IMAGES'], "No-image-available.png");
         else
-            $image = 'admin/'.$userInfo['image'];
+            $image = sprintf("%s/%s", $config['USER_IMAGE_PATH'], $userInfo['image']);
 
         $name = utf8_encode($userInfo['Name']);
 

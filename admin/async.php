@@ -2,8 +2,10 @@
 
 // Uncomment if you want to allow posts from other domains
 // header('Access-Control-Allow-Origin: *');
-
+define('fullDirPath', dirname(__FILE__));
 require_once('slim.php');
+require_once (fullDirPath . "/../config.php");
+$config = ConfigClass::getConfig();
 
 // Get posted data, if something is wrong, exit
 try {
@@ -83,7 +85,9 @@ $data = $image['output']['data'];
 
 // If you want to prevent Slim from adding a unique id to the file name add false as the fourth parameter.
 // $file = Slim::saveFile($data, $name, 'tmp/', false);
-$file = Slim::saveFile($data, $name);
+//$file = Slim::saveFile($data, $name);
+$file = Slim::saveFile($data, $name, sprintf("%s/", $config['SAVING_USER_IMAGES']));
+
 
 // Return results as JSON
 Slim::outputJSON(array(

@@ -13,7 +13,7 @@
 <head>
     <meta charset="utf-8">
     <title>HFH Yfirlit | <?php echo $pageTitle ?></title>
-    <link rel="shortcut icon" type="image/x-icon" href="../img/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="../static/img/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">

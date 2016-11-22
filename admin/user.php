@@ -1,5 +1,5 @@
 <?php
-define(fullDirPath, dirname(__FILE__));
+define('fullDirPath', dirname(__FILE__));
 define('HAS_LOADED', true);
 include_once (fullDirPath . "/../common/base.php");
 include_once (fullDirPath . "/class.sql.php");
@@ -35,6 +35,9 @@ elseif(!empty($_GET['boxerID'])):
     $subscriptions = $newSQL->get_table_of_subscriptions($id);
     $comments = $newSQL->get_structured_comments($id);
 
+    require_once (fullDirPath . "/../config.php");
+    $config = ConfigClass::getConfig();
+
     $pageTitle = "Upplýsingar & Greiðsluyfirlit";
     include_once (fullDirPath . "/head.php");
     include_once (fullDirPath . "/nav-def.php");
@@ -47,7 +50,7 @@ elseif(!empty($_GET['boxerID'])):
             <div class="slim" data-service="async.php" data-ratio="1:1" data-size="300,300" data-did-upload="imageUpload">
                 <input type="file" name="slim[]"/>
                 <?php if(!empty($userImage['image'])){
-                    echo '<img src="'.$userImage['image'] . '" alt="Profile Picture">';
+                    echo '<img src="'. sprintf('%s/%s', $config['USER_IMAGE_PATH'], $userImage['image'] ) . '" alt="Profile Picture">';
                 }
                 ?>
             </div>
@@ -304,7 +307,7 @@ elseif(!empty($_GET['boxerID'])):
                     'action' : 'updateImage',
                     // Getting the location, splitting it at ? with search, splitting the result at = and getting the righthandside (boxerID)
                     'boxer_id' : window.location.search.split("=")[1],
-                    'path' : response.path
+                    'path' : response.file
                 }
             }).done(function(result) {
                 var jsonReturn = JSON.parse(result);

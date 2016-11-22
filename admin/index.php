@@ -28,8 +28,10 @@ else:
     if(isset($_GET['error'])){
         echo '<script>$(document).ready(function(){ alertify.error("<h3> Villa kom upp í fyrirspurninni, reyndu aftur síðar </h3>"); });</script>';
     }
+    require_once (fullDirPath . "/../config.php");
+    $config = ConfigClass::getConfig();
 ?>
-    <h1><center><img src="../img/HFHLogo-192x192.png" alt="hfh logo"> Yfirlitskerfi Hnefaleikafélags Hafnarfjarðar </center></h1>
+    <h1><center><img src="../static/img/HFHLogo-192x192.png" alt="hfh logo"> Yfirlitskerfi Hnefaleikafélags Hafnarfjarðar </center></h1>
     <div class="container">
         <h3>Active Users</h3>
         <table id="activeBoxers" class="table table-striped table-hover">
