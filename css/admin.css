@@ -34,3 +34,8 @@ div.checkin {
 img#profile {
     margin-bottom: 5px;
 }
+
+.form-group.required .control-label:after {
+    content:"*";
+    color:red;
+}
