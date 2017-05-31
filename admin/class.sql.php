@@ -560,6 +560,42 @@
                 return false;
         }
 
+        public function get_attendance_for_user($user){
+            $stmt = $this->_db->prepare("SELECT B.ID, B.name, C.date_logged, C.time_logged, G.type
+                FROM Boxer B
+                	 INNER JOIN CheckInLog C ON B.ID = C.boxer_ID
+                	 INNER JOIN Subscriptions S ON B.ID = S.boxer_ID
+                	 INNER JOIN Groups G ON S.group_ID = G.ID
+                 WHERE B.ID = ?
+                 GROUP BY B.ID, C.date_logged, C.time_logged, G.type;");
+            $stmt->execute(array($user));
+            $list = $stmt->fetchAll();
+            $stmt->closeCursor();
+            if(!empty($list)){
+                return $list;
+            }
+            else
+                return false;
+        }
+
+        public function get_attendance_count_for_user_in_month($user){
+            $date = date('Y-m-01');
+            $stmt = $this->_db->prepare("SELECT count(B.ID)
+                FROM Boxer B
+                	 INNER JOIN CheckInLog C ON B.ID = C.boxer_ID
+                 WHERE B.ID = ?
+                 AND C.date_logged > ?
+                 GROUP BY B.ID");
+            $stmt->execute(array($user, $date));
+            $list = $stmt->fetch();
+            $stmt->closeCursor();
+            if(!empty($list)){
+                return $list;
+            }
+            else
+                return [0];
+        }
+
         public function list_structured_attendance($date){
             $arrayOfAttendance = $this->get_current_attendance($date);
             if($arrayOfAttendance != false){
@@ -591,6 +627,24 @@
             }
             return 0;
         }
+
+        public function list_structured_attendance_for_user($user){
+            $arrayOfAttendance = $this->get_attendance_for_user($user);
+            if($arrayOfAttendance != false){
+                $boxers_list = '';
+                foreach($arrayOfAttendance as $k=>$v){
+                    $boxers_list .= "<tr>
+                              <td> $v[0] </td>
+                              <td> $v[1] </td>
+                              <td> $v[2] </td>
+                              <td> $v[3] </td>
+                            </tr>";
+                }
+                return $boxers_list;
+            }
+            return 0;
+        }
+
 
         public function update_boxer($boxerID, $name, $kt, $phone, $email, $rfid){
             $stmt = $this->_db->prepare("UPDATE Boxer
