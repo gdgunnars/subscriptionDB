@@ -34,6 +34,9 @@ elseif(!empty($_GET['boxerID'])):
     $contactInfo = $newSQL->get_structured_contact_info($id);
     $subscriptions = $newSQL->get_table_of_subscriptions($id);
     $comments = $newSQL->get_structured_comments($id);
+    $CheckIns = $newSQL->list_structured_attendance_for_user($id);
+    $checkinCountsForMonth = $newSQL->get_attendance_count_for_user_in_month($id);
+    $percentageOfMonth = ($checkinCountsForMonth[0] / date('t')) * 100;
 
     require_once (fullDirPath . "/../config.php");
     $config = ConfigClass::getConfig();
@@ -53,6 +56,12 @@ elseif(!empty($_GET['boxerID'])):
                     echo '<img src="'. sprintf('%s/%s', $config['USER_IMAGE_PATH'], $userImage['image'] ) . '" alt="Profile Picture">';
                 }
                 ?>
+            </div>
+            <?php echo 'Mæting:'; ?>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $percentageOfMonth,'%';?>">
+                    <?php echo $checkinCountsForMonth[0],'/', date('t'); ?>
+                </div>
             </div>
            <!-- Boxer info -->
           <?php
@@ -85,8 +94,8 @@ elseif(!empty($_GET['boxerID'])):
                     </div>
                 </fieldset>
             </form>
-    </div>
-    <!-- Greiðslu upplýsingar -->
+        </div>
+        <!-- Greiðslu upplýsingar -->
         <div class="col-md-9">
             <h3><center> Greiðsluyfirlit</center></h3>
             <table id="subscription_info" class="table table-striped table-hover" width="100%">
@@ -296,6 +305,7 @@ elseif(!empty($_GET['boxerID'])):
 <script>
     $(document).ready(function() {
         $('#subscription_info').DataTable();
+        $('#checkin_info').DataTable();
     });
 
     function imageUpload(error, data, response) {
