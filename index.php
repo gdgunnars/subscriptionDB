@@ -51,7 +51,7 @@ else:
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
-        <script src="https://cdn.rawgit.com/alertifyjs/alertify.js/v1.0.10/dist/js/alertify.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/alertifyjs/alertify.js@v1.0.10/dist/js/alertify.js"></script>
         <script>
             // function that selects the checkin form
             function focusOnInput(formID){
